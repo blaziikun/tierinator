@@ -1,0 +1,70 @@
+/*
+ * src/features/tier-board/chart.css
+ *
+ * A chart (#tsec.chart, chart.ts): the tier rows become cells of a grid,
+ * --chart-cols across, each with its label as a band across the top and its
+ * tiles wrapping underneath. The rows' own markup and colours are reused.
+ */
+
+/* every cell takes two grid rows (band, tiles) through a subgrid, so the bands in a row line up even when one wraps or has a subtitle */
+#tsec.chart {
+    display: grid;
+    /* a cell is never narrower than one tile; past that the grid scrolls sideways rather than losing its shape */
+    grid-template-columns: repeat(var(--chart-cols, 3), minmax(calc(var(--sz) * var(--tile-wf, 1) + 34px), 1fr));
+    /* max-content: cells clip (overflow: hidden), so auto rows would shrink to fit the screen instead of scrolling */
+    grid-auto-rows: max-content;
+    align-content: start;
+    column-gap: max(var(--rowgap), 6px);
+    row-gap: 0;
+    overflow-x: auto;
+}
+
+#tsec.chart .trow {
+    grid-row: span 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: subgrid;
+    min-width: 0;
+    min-height: 0;
+    margin-bottom: max(var(--rowgap), 6px);
+}
+
+#tsec.chart .tlbl {
+    grid-column: 1 / -1;
+    width: auto;
+    min-width: 0;
+    min-height: 36px;
+    padding: 6px 10px;
+}
+
+#tsec.chart .tcont {
+    min-height: calc(var(--sz) * var(--tile-hf, 1) * 1.5 + 20px);
+}
+
+#tsec.chart .tctrl {
+    justify-content: flex-start;
+}
+
+@media (max-width: 720px) {
+    #tsec.chart {
+        grid-template-columns: repeat(var(--chart-cols, 3), minmax(calc(var(--sz) * var(--tile-wf, 1) + 30px), 1fr));
+    }
+    #tsec.chart .tcont {
+        min-height: calc(var(--sz) * var(--tile-hf, 1) + 24px);
+    }
+    /* a column of buttons would take a fifth of a phone-sized cell: they sit in its corner instead */
+    #tsec.chart .trow {
+        grid-template-columns: minmax(0, 1fr);
+        position: relative;
+    }
+    #tsec.chart .tctrl {
+        position: absolute;
+        right: 3px;
+        bottom: 3px;
+        flex-direction: row;
+        padding: 2px;
+        border-left: 0;
+        border-radius: var(--r);
+        background: color-mix(in srgb, var(--s1) 85%, transparent);
+    }
+}

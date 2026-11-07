@@ -1,0 +1,510 @@
+/*
+ * src/features/studio/studio.css
+ *
+ * The studio: its bar and list, sprite cards, folding sections, Show ▾ chips, forms bar.
+ */
+
+.sr.var {
+    padding-left: 22px;
+}
+
+.sr.var .srname::before {
+    content: "↳ ";
+    color: var(--muted);
+}
+
+.sr.hidv {
+    opacity: 0.55;
+}
+
+#studio {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+#stbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--s1);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.stg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+#srcinfo {
+    font-size: 0.846rem;
+    color: var(--muted);
+    max-width: 300px;
+}
+
+#srcinfo b {
+    color: var(--cyan);
+}
+
+#stbody {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    min-height: 0;
+}
+
+#stlist {
+    width: 250px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+    background: var(--s1);
+    min-height: 0;
+}
+
+.stlf {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.stlf input {
+    width: 100%;
+}
+
+.stlf select {
+    flex: 1;
+}
+
+#stprog {
+    padding: 6px 10px;
+    font-size: 0.846rem;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+}
+
+#stprog .bar {
+    height: 4px;
+    background: var(--bg);
+    border-radius: 2px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+#stprog .bar i {
+    display: block;
+    height: 100%;
+    background: var(--cyan);
+    width: 0;
+}
+
+#strows {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.sr {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 10px;
+    cursor: pointer;
+    font-size: 0.923rem;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 38px;
+}
+
+.sr:hover {
+    background: var(--hover);
+}
+
+.sr img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* the Pokédex number is a code: the site's monospace, so the column lines up */
+.sr .srn {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.769rem;
+    min-width: 34px;
+}
+
+.sr .srname {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sr .srok {
+    margin-left: auto;
+    color: var(--cyan);
+    visibility: hidden;
+}
+
+.sr.picked .srok {
+    visibility: visible;
+}
+
+.sr.cur {
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+#stmain {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 18px 30px;
+    min-width: 0;
+}
+
+.sthead {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.sthead .big {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+    background: var(--s1);
+    border-radius: var(--r-panel);
+    border: 1px solid var(--border);
+}
+
+.sthead h2 {
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    font-size: 1.55rem;
+    letter-spacing: -0.01em;
+}
+
+.sthead .meta {
+    font-size: 0.846rem;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+.sthead .cur {
+    font-size: 0.846rem;
+    color: var(--cyan);
+    margin-top: 4px;
+}
+
+.sthead .acts {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
+.stsec h4 {
+    font-size: 0.846rem;
+    color: var(--muted);
+    margin: 18px 0 8px;
+    font-weight: var(--w-ui);
+}
+
+.stsec h4 em {
+    font-style: normal;
+    color: var(--border2);
+    margin-left: 6px;
+}
+
+.stsec h4 {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stsec h4::before {
+    content: "▾";
+    font-size: 0.8em;
+    color: var(--border2);
+    transition: transform 0.15s;
+}
+
+.stsec h4:hover {
+    color: var(--text);
+}
+
+.stsec.coll h4::before {
+    transform: rotate(-90deg);
+}
+
+.stsec.coll .stgrid {
+    display: none;
+}
+
+#studio.nolist #stlist {
+    display: none;
+}
+
+#fchips {
+    gap: 6px;
+}
+
+.stgrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.vc {
+    width: calc(var(--vc) + 18px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+    border-radius: var(--r-panel);
+    border: 1.5px solid var(--border);
+    background: var(--s1);
+    cursor: pointer;
+    transition: border-color 0.1s;
+}
+
+.vc:hover {
+    border-color: color-mix(in srgb, var(--cyan) 50%, transparent);
+}
+
+.vc .vimg {
+    width: var(--vc);
+    height: var(--vc);
+    border-radius: calc(var(--r) * 0.8);
+    background: repeating-conic-gradient(color-mix(in srgb, var(--text) 5%, transparent) 0 25%, transparent 0 50%) 0 0 / 16px 16px;
+}
+
+.vc img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.vc .vl {
+    font-size: 0.846rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+}
+
+.vc .vl b {
+    color: var(--text);
+}
+
+.vc.chosen {
+    border-color: var(--cyan);
+    background: color-mix(in srgb, var(--cyan) 10%, transparent);
+}
+
+.vc.chosen .vl::before {
+    content: "✓ ";
+    color: var(--cyan);
+}
+
+.vc.missing {
+    opacity: 0.22;
+    cursor: default;
+}
+
+.vc {
+    position: relative;
+}
+
+.vc .fav {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 2;
+    padding: 0 5px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--s1) 85%, transparent);
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.12s;
+}
+
+.vc:hover .fav,
+.vc .fav.on {
+    opacity: 1;
+}
+
+.vc .fav.on {
+    color: #f5c518;
+    border-color: #f5c518;
+}
+
+.stgrid.mine .vc.unpicked {
+    opacity: 0.55;
+}
+
+.vc.missing img {
+    visibility: hidden;
+}
+
+.vc.busy {
+    opacity: 0.5;
+}
+
+.netnote {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 14px 0 4px;
+    padding: 12px 14px;
+    border-radius: var(--r-panel);
+    border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    font-size: 0.923rem;
+    line-height: 1.55;
+}
+
+.netnote .nmsg {
+    flex: 1;
+    min-width: 240px;
+}
+
+.netnote b {
+    color: var(--text);
+}
+
+.fbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    margin: 14px 0 2px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-panel);
+    background: var(--s1);
+}
+
+.fchips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+}
+
+.fchip {
+    border-radius: 999px;
+    font-size: 0.846rem;
+}
+
+.fchip.on {
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    color: var(--text);
+}
+
+.gadd .gaddi {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--muted);
+    border: 1.5px dashed var(--border2);
+    background: none;
+}
+
+.gadd:hover .gaddi {
+    color: var(--cyan);
+    border-color: var(--cyan);
+}
+
+.gdel {
+    margin-left: 6px;
+    padding: 0 5px;
+    font-size: 0.769rem;
+    line-height: 1.3;
+}
+
+label.fcat {
+    align-items: flex-start;
+    white-space: normal;
+}
+
+label.fcat input {
+    margin-top: 3px;
+}
+
+#formpanel {
+    max-width: 330px;
+}
+
+.sr .srpc {
+    margin-left: auto;
+    font-size: 0.769rem;
+    color: var(--muted);
+}
+
+#stmain .cstmore {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 18px 0 0;
+}
+
+@media (max-width: 720px) {
+    #stbody {
+        flex-direction: column;
+    }
+    #stlist {
+        width: auto;
+        height: 36vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    #stbar {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    #stbar .stg {
+        flex-wrap: nowrap;
+        flex-shrink: 0;
+    }
+    #srcinfo {
+        max-width: none;
+        white-space: nowrap;
+    }
+}
+
+/* Card grids that sit right under a header; small grey notes in a header. */
+
+.stgrid.spaced {
+    padding-top: 14px;
+}
+
+.meta.small {
+    font-size: 11px;
+    color: var(--muted);
+}

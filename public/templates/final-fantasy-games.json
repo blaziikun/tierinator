@@ -1,0 +1,30 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "final-fantasy-games",
+    "title": "Final Fantasy games",
+    "category": "Games",
+    "description": "The numbered games and a few favourite spin-offs and remakes.",
+    "items": [
+        { "name": "Final Fantasy", "wiki": "Final Fantasy (video game)" },
+        { "name": "Final Fantasy II", "wiki": "Final Fantasy II" },
+        { "name": "Final Fantasy III", "wiki": "Final Fantasy III" },
+        { "name": "Final Fantasy IV", "wiki": "Final Fantasy IV" },
+        { "name": "Final Fantasy V", "wiki": "Final Fantasy V" },
+        { "name": "Final Fantasy VI", "wiki": "Final Fantasy VI" },
+        { "name": "Final Fantasy VII", "wiki": "Final Fantasy VII" },
+        { "name": "Final Fantasy VIII", "wiki": "Final Fantasy VIII" },
+        { "name": "Final Fantasy IX", "wiki": "Final Fantasy IX" },
+        { "name": "Final Fantasy X", "wiki": "Final Fantasy X" },
+        { "name": "Final Fantasy X-2", "wiki": "Final Fantasy X-2" },
+        { "name": "Final Fantasy XI", "wiki": "Final Fantasy XI" },
+        { "name": "Final Fantasy XII", "wiki": "Final Fantasy XII" },
+        { "name": "Final Fantasy XIII", "wiki": "Final Fantasy XIII" },
+        { "name": "Final Fantasy XIV", "wiki": "Final Fantasy XIV" },
+        { "name": "Final Fantasy XV", "wiki": "Final Fantasy XV" },
+        { "name": "Final Fantasy XVI", "wiki": "Final Fantasy XVI" },
+        { "name": "Final Fantasy Tactics", "wiki": "Final Fantasy Tactics" },
+        { "name": "Final Fantasy VII Remake", "wiki": "Final Fantasy VII Remake" },
+        { "name": "Final Fantasy VII Rebirth", "wiki": "Final Fantasy VII Rebirth" }
+    ]
+}

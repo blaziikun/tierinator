@@ -1,0 +1,636 @@
+/*
+ * src/features/tier-board/board.css
+ *
+ * The tier board: tier rows and labels, tiles, the pool (bottom bar or sidebar) and
+ * its resize handle, dragging, box selection, the selection bar, the hover tip,
+ * tier editor swatches.
+ */
+
+#main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+#main.sb {
+    flex-direction: row;
+}
+
+#tsec {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--rowgap);
+    min-height: 0;
+}
+
+.trow {
+    display: flex;
+    align-items: stretch;
+    min-height: calc(var(--sz) * var(--tile-hf, 1) + 12px);
+    border-radius: var(--r);
+    overflow: hidden;
+    border: 1.5px solid transparent;
+    flex-shrink: 0;
+}
+
+.trow.dov {
+    border-color: var(--text);
+}
+
+.tlbl {
+    width: var(--lw);
+    min-width: var(--lw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 2px;
+    padding: 6px 10px;
+    flex-shrink: 0;
+}
+
+.tlbl:hover {
+    filter: brightness(1.06);
+}
+
+.tlbl-main {
+    font-family: var(--font-head);
+    font-weight: var(--w-label);
+    font-size: var(--fs-label);
+    letter-spacing: var(--ls-label);
+    text-transform: var(--tt-label);
+    line-height: 1.1;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.tlbl-sub {
+    font-size: 0.769rem;
+    opacity: 0.8;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.tcont {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 2px;
+    padding: 5px;
+    min-width: 0;
+}
+
+.tctrl {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+    padding: 4px 3px;
+    background: var(--s1);
+    border-left: 1px solid var(--border);
+}
+
+.tctrl button {
+    min-width: 22px;
+    padding: 0 5px;
+    font-size: 0.846rem;
+    line-height: 1.6;
+    background: none;
+    border-color: transparent;
+    color: var(--muted);
+    border-radius: var(--r-chip);
+}
+
+.tctrl button:hover {
+    background: var(--hover);
+    border-color: transparent;
+    color: var(--text);
+}
+
+.pi {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* --tile-wf, --tile-hf and --tile-ratio come from the list's tile shape (tile-shape.ts) */
+    width: calc(var(--sz) * var(--tile-wf, 1));
+    cursor: pointer;
+    border-radius: calc(var(--r) * 0.7);
+    border: 1.5px solid transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.pi:hover {
+    background: var(--hover);
+}
+
+.pi.sel {
+    border-color: var(--cyan);
+    background: color-mix(in srgb, var(--cyan) 14%, transparent);
+}
+
+.pi.dsrc {
+    opacity: 0.35;
+}
+
+.pi.ins-b {
+    box-shadow: -3px 0 0 var(--cyan);
+}
+
+.pi.ins-a {
+    box-shadow: 3px 0 0 var(--cyan);
+}
+
+.pi .pimg {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--tile-ratio, 1);
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.pi img {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--tile-fit, contain);
+    display: block;
+    pointer-events: none;
+}
+
+.pi img.whole {
+    object-fit: contain;
+}
+
+.pi img.crop {
+    position: absolute;
+    object-fit: fill;
+    max-width: none;
+}
+
+.pl {
+    display: none;
+    font-size: var(--lbl-fs, 9px);
+    margin-top: var(--lbl-gap, 1px);
+    color: var(--muted);
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.25;
+    padding: 0 1px 1px;
+}
+
+body.lbl-name .pl,
+body.lbl-num .pl,
+body.lbl-both .pl {
+    display: block;
+}
+
+body.lbl-name .pnum,
+body.lbl-num .pname {
+    display: none;
+}
+
+body.lbl-both .pnum {
+    margin-right: 3px;
+    opacity: 0.7;
+}
+
+#pgrid .pi {
+    width: calc(var(--psz) * var(--tile-wf, 1));
+}
+
+#pgrid:empty[data-empty="new"]::before {
+    content: "Nothing here yet. Use Add items to upload pictures, type a list, search the web or pull in a whole wiki category (Bakugan, Ben 10, Beyblade…). You can also drop or paste images anywhere on the page.";
+    color: var(--muted);
+    font-size: 0.923rem;
+    padding: 18px 8px;
+    line-height: 1.6;
+}
+
+#psplit {
+    flex-shrink: 0;
+    height: 7px;
+    margin: -3px 0;
+    cursor: ns-resize;
+    position: relative;
+    z-index: 5;
+    touch-action: none;
+}
+
+#psplit::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 2px;
+    width: 36px;
+    height: 3px;
+    margin-left: -18px;
+    border-radius: 2px;
+    background: var(--border2);
+    transition: background 0.15s;
+}
+
+#psplit:hover::after,
+#psplit.on::after {
+    background: var(--cyan);
+}
+
+#main.sb #psplit {
+    height: auto;
+    width: 7px;
+    margin: 0 -3px;
+    cursor: ew-resize;
+}
+
+#main.sb #psplit::after {
+    left: 2px;
+    top: 50%;
+    width: 3px;
+    height: 36px;
+    margin: -18px 0 0;
+}
+
+body.barsoff #psplit {
+    display: none;
+}
+
+#main.resizing #psec {
+    transition: none;
+}
+
+#main.resizing,
+#main.resizing * {
+    cursor: inherit !important;
+    user-select: none;
+}
+
+#psec {
+    flex-shrink: 0;
+    border-top: 1px solid var(--border);
+    background: var(--s1);
+    display: flex;
+    flex-direction: column;
+    height: var(--poolh, 38vh);
+    transition:
+        height 0.2s,
+        opacity 0.2s;
+    min-height: 0;
+}
+
+#psec.hbar {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    border: none;
+}
+
+#psec.dov {
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--cyan) 55%, transparent);
+}
+
+#main.sb #psec {
+    height: auto;
+    /* on a phone the pool never takes more than about half the screen */
+    width: min(var(--poolw, 320px), 46vw);
+    min-width: 150px;
+    border-top: none;
+    border-left: 1px solid var(--border);
+}
+
+#main.sb #psec.hbar {
+    width: 0;
+    min-width: 0;
+}
+
+#pfilt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+#psearch {
+    width: 150px;
+}
+
+/* beside the tiers the pool is narrow: the search takes its own line, full width */
+#main.sb #psearch {
+    flex: 1 1 100%;
+}
+
+/* the Tags switch sits among buttons, so it's their size rather than a small chip's */
+#pfilt .chip {
+    padding: 4px 10px;
+    font-size: 0.923rem;
+    border-radius: var(--r-ctl);
+}
+
+/* the order menu's button keeps one width whichever order it names, so the buttons after it don't jump */
+#psortbtn {
+    min-width: 15ch;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+#pcount {
+    color: var(--muted);
+    font-size: 0.846rem;
+    font-variant-numeric: tabular-nums;
+    margin-left: auto;
+}
+
+#pgrid {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 2px;
+    padding: 7px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+#dghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-ctl);
+    padding: 5px 12px;
+    font-size: 0.923rem;
+    color: var(--text);
+    box-shadow: var(--lift);
+}
+
+body.dragging,
+body.dragging * {
+    cursor: grabbing !important;
+}
+
+#marq {
+    position: fixed;
+    z-index: 9998;
+    display: none;
+    pointer-events: none;
+    border: 1.5px solid var(--cyan);
+    background: color-mix(in srgb, var(--cyan) 12%, transparent);
+    border-radius: 3px;
+}
+
+#tsec,
+#pgrid {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.tgap {
+    position: relative;
+    height: 0;
+    margin: calc(var(--rowgap) / -2) 0;
+    z-index: 6;
+    flex-shrink: 0;
+}
+
+.tgap::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: var(--lw);
+    top: -9px;
+    height: 18px;
+}
+
+.tadd {
+    position: absolute;
+    left: calc(var(--lw) / 2 - 12px);
+    top: -12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 15px;
+    line-height: 1;
+    opacity: 0;
+    transform: scale(0.7);
+    transition:
+        opacity 0.12s,
+        transform 0.12s;
+    background: var(--s2);
+    border: 1px solid var(--border2);
+    box-shadow: var(--lift);
+}
+
+.tgap:hover .tadd,
+.tadd:focus-visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.tadd:hover {
+    background: var(--accent);
+    color: var(--on-accent);
+    border-color: var(--accent);
+}
+
+.pi.hit {
+    outline: 2px solid var(--cyan);
+    outline-offset: 1px;
+    background: color-mix(in srgb, var(--cyan) 20%, transparent);
+}
+
+.pi.flash {
+    animation: flash 1.1s ease 2;
+}
+
+@keyframes flash {
+    50% {
+        transform: scale(1.18);
+        box-shadow: 0 0 0 4px var(--cyan);
+    }
+}
+
+#psec.phid {
+    display: none !important;
+}
+
+body.pooloff #psplit {
+    display: none;
+}
+
+#selbar {
+    position: fixed;
+    top: 62px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 5px 5px 5px 14px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    z-index: 800;
+    box-shadow: var(--lift);
+    font-size: 0.923rem;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+#selcount {
+    font-weight: var(--w-strong);
+    font-variant-numeric: tabular-nums;
+    margin-right: 4px;
+}
+
+#selbar.show {
+    display: flex;
+}
+
+#selbar .hint {
+    color: var(--muted);
+    margin-right: 6px;
+}
+
+/* phones: the buttons matter more than the hint; closer together so they fit on one row, a second if they must */
+@media (max-width: 720px) {
+    #selbar {
+        width: max-content;
+        max-width: calc(100vw - 16px);
+        gap: 4px;
+        padding: 4px 4px 4px 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #selbar button {
+        padding: 4px 8px;
+    }
+
+    #selbar .hint {
+        display: none;
+    }
+}
+
+@media (pointer: coarse) and (max-width: 720px) {
+    /* with finger-sized buttons the bar is too tall to sit over the first tier: it goes to the bottom, under the
+       thumb, and the toast moves up above it while it shows */
+    #selbar {
+        top: auto;
+        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+
+    body:has(#selbar.show) #toast {
+        bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* with finger-sized controls the pool's tools would fill half the pool: one row that scrolls sideways,
+       like the top bar, so the pictures keep the room */
+    #pfilt {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    #pfilt > * {
+        flex-shrink: 0;
+    }
+
+    #pfilt > #psearch {
+        flex: 0 0 170px;
+    }
+}
+
+#tip {
+    position: fixed;
+    z-index: 9000;
+    pointer-events: none;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 8px 12px 8px 8px;
+    box-shadow: var(--lift);
+}
+
+/* the tile's shape, but always the whole picture: the tip shows what a filled tile crops off */
+#tip img {
+    width: calc(72px * var(--tile-wf, 1));
+    height: calc(72px * var(--tile-hf, 1));
+    object-fit: contain;
+}
+
+#tip b {
+    display: block;
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    font-size: 1.077rem;
+}
+
+#tip span {
+    font-size: 0.846rem;
+    color: var(--muted);
+}
+
+.swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.sw {
+    width: 22px;
+    height: 22px;
+    border-radius: calc(var(--r) * 0.6);
+    cursor: pointer;
+    border: 2px solid var(--border);
+}
+
+.sw:hover,
+.sw.act {
+    border-color: var(--text);
+}
+
+.sw.act {
+    box-shadow: 0 0 0 2px var(--cyan);
+}
+
+.sw.swadd {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--muted);
+    border-style: dashed;
+}
+
+@media (max-width: 720px) {
+    #tsec {
+        padding: 8px;
+    }
+    .tlbl {
+        width: calc(var(--lw) * 0.78);
+        min-width: calc(var(--lw) * 0.78);
+    }
+    .tlbl-main {
+        font-size: calc(var(--fs-label) * 0.78);
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "id": "/",
+    "name": "Tierinator",
+    "short_name": "Tierinator",
+    "description": "Make tier lists of anything: your own pictures, characters from any wiki, or a ready-made pack. Free, no sign-up, share with a link.",
+    "lang": "en",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "theme_color": "#0b0b0c",
+    "background_color": "#0b0b0c",
+    "icons": [
+        { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+        { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+        { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ]
+}

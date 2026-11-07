@@ -1,0 +1,48 @@
+name: Suggest a template
+description: A ready-made list for the template gallery
+title: "Template: "
+labels: [template]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Templates are lists anyone can rank, with pictures from Wikipedia. Good ones are family-friendly, about 10 to 60 items, and not already covered by another template. You can also add one yourself by pull request: see [docs/templates.md](https://github.com/blaziikun/tierinator/blob/main/docs/templates.md).
+    - type: input
+      id: name
+      attributes:
+          label: Template name
+          placeholder: Dog breeds
+      validations:
+          required: true
+    - type: dropdown
+      id: category
+      attributes:
+          label: Category
+          options:
+              - Animals
+              - Food and drink
+              - Games
+              - Music
+              - Places
+              - Space
+              - Sports
+              - Technology
+              - Something else (say which in the notes)
+      validations:
+          required: true
+    - type: textarea
+      id: items
+      attributes:
+          label: Items
+          description: One per line, as they should read on the tiles. If a name could mean several things, add its Wikipedia page after a "|".
+          placeholder: |
+              Mercury | Mercury (planet)
+              Venus
+              Earth
+      validations:
+          required: true
+    - type: textarea
+      id: notes
+      attributes:
+          label: Notes
+          description: Optional. Where the list comes from, tiers it should have, anything else.

@@ -1,0 +1,23 @@
+# public/_headers
+# ─────────────────────────────────────────────────────────────────────────────
+#  Security headers for every page, sent by Cloudflare (Workers static assets).
+#  The same file is used by `pnpm preview` and the end-to-end tests, so the
+#  tests run under exactly these rules. See docs/security.md for why each one.
+# ─────────────────────────────────────────────────────────────────────────────
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https:; worker-src 'self'; object-src 'none'; media-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types tierinator-html tierinator-sw
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), hid=(), midi=(), display-capture=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# file names include a content hash, so they can be cached forever
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# the service worker is asked for on every visit, so a new version is noticed at once
+/sw.js
+  Cache-Control: no-cache

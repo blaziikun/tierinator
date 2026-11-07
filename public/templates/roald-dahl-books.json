@@ -1,0 +1,29 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "roald-dahl-books",
+    "title": "Roald Dahl books",
+    "category": "Books",
+    "description": "From The BFG to The Twits: the stories and rhymes, plus his memoirs.",
+    "items": [
+        { "name": "James and the Giant Peach", "wiki": "James and the Giant Peach" },
+        { "name": "Charlie and the Chocolate Factory", "wiki": "Charlie and the Chocolate Factory" },
+        { "name": "The Magic Finger", "wiki": "The Magic Finger" },
+        { "name": "Fantastic Mr Fox", "wiki": "Fantastic Mr Fox" },
+        { "name": "Charlie and the Great Glass Elevator", "wiki": "Charlie and the Great Glass Elevator" },
+        { "name": "Danny, the Champion of the World", "wiki": "Danny, the Champion of the World" },
+        { "name": "The Enormous Crocodile", "wiki": "The Enormous Crocodile" },
+        { "name": "The Twits", "wiki": "The Twits" },
+        { "name": "George’s Marvellous Medicine", "wiki": "George's Marvellous Medicine" },
+        { "name": "The BFG", "wiki": "The BFG" },
+        { "name": "Revolting Rhymes", "wiki": "Revolting Rhymes" },
+        { "name": "Dirty Beasts", "wiki": "Dirty Beasts" },
+        { "name": "The Witches", "wiki": "The Witches (novel)" },
+        { "name": "The Giraffe and the Pelly and Me", "wiki": "The Giraffe and the Pelly and Me" },
+        { "name": "Boy", "wiki": "Boy: Tales of Childhood" },
+        { "name": "Going Solo", "wiki": "Going Solo" },
+        { "name": "Matilda", "wiki": "Matilda (novel)" },
+        { "name": "Esio Trot", "wiki": "Esio Trot" },
+        { "name": "The Minpins", "wiki": "The Minpins" }
+    ]
+}

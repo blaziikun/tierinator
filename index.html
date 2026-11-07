@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="referrer" content="no-referrer" />
+        <meta name="description" content="Make tier lists of anything: your own pictures, characters from any wiki, or a ready-made pack. Free, no sign-up, share with a link." />
+        <meta name="color-scheme" content="dark" />
+        <meta name="theme-color" content="#0b0b0c" />
+        <title>Tierinator: tier lists for anything</title>
+        <link rel="canonical" href="https://tierinator.sayel.dev/" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" id="favicon" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <!-- link previews (X, Discord, iMessage…) -->
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Tierinator" />
+        <meta property="og:title" content="Tierinator: tier lists for anything" />
+        <meta property="og:description" content="Your own pictures, characters from any wiki, or a ready-made pack. Free, no sign-up, share with a link." />
+        <meta property="og:url" content="https://tierinator.sayel.dev/" />
+        <meta property="og:image" content="https://tierinator.sayel.dev/og.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Tierinator: a tier list with SS, S, A, B and C rows" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <script type="module" src="/src/main.ts"></script>
+    </head>
+    <body class="lbl-off">
+<noscript><p style="padding:24px;max-width:640px">Tierinator makes tier lists of anything: your own pictures, characters from any wiki, or a ready-made pack. It runs entirely in your browser, so it needs JavaScript switched on.</p></noscript>
+<!-- ═════════ TOP BAR (features/layout/top-bar.ts) ═════════ -->
+<div id="toolbar">
+  <div class="tbg" data-bar="logo"><div class="logo two" id="logo"></div></div>
+  <div class="tbg" data-bar="list"><button id="listbtn" title="Your tier lists, new list, packs [L]">Tier list ▾</button></div>
+  <div class="tbg" data-bar="file"><button id="filebtn" title="Save, load, share or export this list; back up all lists">File ▾</button><input type="file" id="loadinp" accept=".json,.zip,application/json,application/zip" class="hid"></div>
+  <div class="tbg" data-bar="tabs"><div class="tabs"><button id="tab-tier" class="on">Tier list</button><button id="tab-studio" title="Browse every item's picture choices [T]">Studio</button></div></div>
+  <div class="tbg tvo" data-bar="size"><span class="tbl">Tiers</span><input type="range" id="szsl" title="Sprite size in your tiers" min="28" max="160" value="64" step="4"><span id="szval" style="font-size:11px;color:var(--muted);min-width:38px">64px</span></div>
+  <div class="tbg tvo" data-bar="labels"><select id="lblsel" title="Labels under sprites"><option value="off">Labels: off</option><option value="name">Labels: name</option><option value="num">Labels: No.</option><option value="both">Labels: both</option></select></div>
+  <div class="tbg tvo" data-bar="hover"><button id="hoverbtn" title="Show name and number when hovering a sprite">Hover: Off</button></div>
+  <div class="tbg tvo" data-bar="undo"><button id="undobtn" title="Undo (Ctrl/⌘+Z)">↶</button><button id="redobtn" title="Redo (Ctrl/⌘+Shift+Z)">↷</button></div>
+  <div class="tbg tvo" data-bar="tier"><button id="addtbtn" title="Add a tier at the bottom (hover the gap between two tier labels to insert one there)">Add tier</button></div>
+  <div class="tbg tvo" data-bar="stream"><button id="streambtn" title="Rank live on video: just the tiers, big, one item at a time [V]">Stream mode</button></div>
+  <div class="tbg" data-bar="style"><button id="stylebtn" title="Theme, fonts, sizes, presets, top bar layout [S]">Style</button></div>
+  <div class="tbg" data-bar="keys"><button id="keysbtn" title="Keyboard shortcuts [?]">⌨</button></div>
+  <div class="tbg tvo" data-bar="pool"><button id="poolplacebtn" aria-haspopup="menu" aria-expanded="false" aria-controls="poolmenu" title="Where the pool goes: beside or below the tiers [B], or hidden [P]">Pool ▾</button></div>
+  <div class="tbg tvo" data-bar="hidebar"><button id="hbbtn" title="Hide the top bar [H]">Hide bar</button></div>
+</div>
+<!-- Pool menu (features/layout/layout.ts) -->
+<div id="poolmenu" class="pop menu" role="menu" aria-label="Where the pool goes">
+  <button role="menuitemradio" aria-checked="false" data-choice="side">Beside the tiers <kbd>B</kbd></button>
+  <button role="menuitemradio" aria-checked="false" data-choice="below">Below the tiers <kbd>B</kbd></button>
+  <button role="menuitemradio" aria-checked="false" data-choice="hidden">Hidden <kbd>P</kbd></button>
+</div>
+<!-- File menu (features/files/files.ts) -->
+<div id="filepop" class="pop menu">
+  <button id="savebtn" title="Download this list with its tiers and look: a .json file, or a .zip when it has your own pictures">Save list <kbd>Ctrl S</kbd></button>
+  <button id="loadbtn" title="Open a saved list, a backup, a pack or a sprites zip">Load… <kbd>Ctrl O</kbd></button>
+  <hr>
+  <button id="sharebtn" title="A link with the whole list in it: anyone who opens it sees your list and can keep a copy">Copy share link</button>
+  <button id="expbtn" title="A picture (PNG or SVG), a PDF, or a spreadsheet (CSV) of this list">Export image, PDF or CSV… <kbd>E</kbd></button>
+  <hr>
+  <button id="backupbtn" title="One file with every list, your own pictures, saved themes, palette and layout">Back up all lists…</button>
+  <button id="aboutbtn" data-open="aboutm" title="What's kept in this browser and what's sent where, credits, and deleting everything">About &amp; privacy</button>
+</div>
+
+<!-- ═════════ SHARED LIST BAR (features/share) ═════════ -->
+<div id="sharebar" class="hid" role="status"><span>You're looking at a shared list. Keep a copy to make it yours; otherwise it's gone when you close it.</span><button id="sharepics" class="hid"></button><button id="sharekeep" class="accent">Keep a copy</button><button id="shareclose">Close</button></div>
+
+<!-- ═════════ TIER VIEW ═════════ -->
+<div id="main">
+  <!-- start screen (features/start): a first visit's three ways in -->
+  <div id="start" class="hid"><div id="startbox">
+    <h1>Make a tier list</h1>
+    <p>Of anything. It stays in your browser: no account, no sign-up.</p>
+    <div id="startways">
+      <button id="startown"><b>Your own things</b><span>Upload pictures, type a list, or search the web and wikis</span></button>
+      <button id="startgal"><b>Browse templates</b><span>Ready-made lists to rank: planets, dog breeds, flags and more</span></button>
+      <button id="startpk"><b>Pokémon pack</b><span>Every Pokémon and form, with sprites from every game</span></button>
+      <button id="startfile"><b>Open a file</b><span>A list or backup you saved before</span></button>
+    </div>
+    <p class="note" id="startlinks"><button id="startempty" class="link">Start with an empty list</button><button class="link" data-open="aboutm">About &amp; privacy</button></p>
+  </div></div>
+  <div id="tsec" tabindex="0" role="region" aria-label="Tiers" aria-describedby="tsechint"></div><p id="tsechint" class="hid">Use the arrow keys to move between items, Space to select, a number to send to a tier.</p>
+  <div id="psplit" title="Drag to resize; double-click to reset"></div>
+  <div id="psec">
+    <div id="pfilt">
+      <input type="search" id="psearch" placeholder="Search name or #…">
+      <button id="psortbtn" aria-haspopup="menu" aria-expanded="false" aria-controls="psortmenu" title="The order the pool shows items in (your ranking doesn't change)">Order added ▾</button>
+      <button id="addbtn" class="accent" title="Upload, paste, type or search the web for items">Add items</button>
+      <button id="varbtn" class="cstonly" title="Variants of the same character: combine or split them, like Pokémon forms">Variants ▾</button><button id="tagdotbtn" class="chip" title="Show or hide the coloured tag dots on pictures">Tags</button><button id="qrbtn" title="Rank what the pool is showing, one at a time [Q]">Quick rank</button><button id="statsbtn" title="Stats: favourite types, gens, legendaries, sprites… [I]">Stats</button>
+      <select id="gensel" class="pkonly" aria-label="Generation"><option value="all">All generations</option></select>
+      <select id="typesel" class="pkonly" aria-label="Type"><option value="all">All types</option></select>
+      <button id="hitbtn" class="cbtn hid" title="Jump to matching ranked Pokémon (Enter)"></button>
+      <select id="tagsel" class="hid" title="Filter by tag"></select>
+      <button id="selallbtn" title="Select every item the pool is showing">Select visible</button>
+      <button id="clrselbtn" class="hid">Clear selection</button>
+      <button id="formbtn" class="pkonly" title="Choose which forms count as separate Pokémon">Forms ▾</button>
+      <button id="resetbtn" title="Send everything ranked back to the pool">Reset list</button>
+      <span class="tbl" style="margin-left:6px">Pool size</span><input type="range" id="pszsl" min="24" max="128" step="4" title="Sprite size in the pool">
+      <span id="pcount"></span><span id="status" style="margin-left:12px">Loading…</span>
+    </div>
+    <div id="pgrid" tabindex="0" role="region" aria-label="Pool: items not ranked yet"></div>
+  </div>
+</div>
+
+<!-- ═════════ STUDIO VIEW ═════════ -->
+<div id="studio" class="hid">
+  <div id="stbar">
+    <div class="stg pkonly"><div class="tabs"><button id="vm-mine" class="on">My sprites</button><button id="vm-mon">By Pokémon</button><button id="vm-style">By Style</button></div></div>
+    <div class="stg cstonly"><div class="tabs"><button id="cvm-pick" class="on">Pick pictures</button><button id="cvm-all">All picks</button></div></div>
+    <div class="stg cstonly"><button id="cstdups" title="Items with the same name (e.g. Four Arms from different series): merge each into one item that keeps every picture">Find duplicates</button><button id="cstweb" title="Search the web for more pictures of this item (uses the source picked in Add items → Search the web)">Find more pictures</button><button id="cstadd" title="Add your own pictures as choices (or paste / drop them here)">Add pictures</button><button id="cstnew" title="Make a brand-new item">New item</button></div>
+    <div class="stg pkonly"><button id="showbtn" title="Choose which kinds of sprites to show">Show ▾ <span id="showcount" class="note"></span></button><button class="chip" id="favquick" data-filter="favs" title="Only your ★ favourites">★ Favourites</button></div>
+    <div class="stg"><span class="tbl">Card</span><input type="range" id="vcsl" min="48" max="256" step="8" value="96"></div>
+    <div class="stg" style="margin-left:auto"><button id="stlistbtn" title="Show or hide the list beside the pictures">◧ List</button><button id="stcollbtn" title="Collapse or expand every section">⊟ Collapse all</button><button id="stmore" class="pkonly" title="Sprite source, trim, sprite packs">⋯ More ▾</button></div>
+  </div>
+  <div id="showpop" class="pop" style="max-width:360px"><h3>Show these sprites</h3><div class="stg" id="fchips"></div>
+    <div class="edbtns" style="justify-content:flex-start"><button id="fdef" title="Everything except back sprites and Mystery Dungeon">Default</button><button id="fall">Everything</button><button id="fbasic">Just the games</button></div>
+    <div class="note">Section headings can be clicked to fold them away too.</div></div>
+  <div id="stmorepop" class="pop" style="max-width:340px">
+    <h3>Sprite source</h3><span id="srcinfo"><b>Online</b>: PokeAPI sprites on GitHub</span>
+    <div class="edbtns" style="justify-content:flex-start"><button id="zipbtn" title="Use your downloaded sprites zip (works offline, faster)">Load sprites zip</button><button id="dirbtn" title="Use an unzipped sprites folder">Load folder</button></div>
+    <input type="file" id="zipinp" accept=".zip" class="hid"><input type="file" id="dirinp" webkitdirectory multiple class="hid">
+    <label class="ck" title="Crop the empty transparent border around a picked sprite so the Pokémon fills its square"><input type="checkbox" id="trimck" checked> Trim padding on picked sprites</label>
+    <h3>Sprite pack</h3><div class="edbtns" style="justify-content:flex-start"><button class="cbtn" id="packexp">Export sprite pack</button><button id="packimp">Import pack</button></div><input type="file" id="packinp" accept=".zip" class="hid">
+  </div>
+  <div id="stbody">
+    <aside id="stlist">
+      <div class="stlf">
+        <input type="search" id="stq" placeholder="Search name or #…">
+        <select id="stgen" class="pkonly" aria-label="Generation"><option value="all">All generations</option></select>
+        <select id="cststat" class="cstonly"><option value="all">All</option><option value="multi">With several pictures</option><option value="merged">Merged</option><option value="text">No picture yet</option></select>
+        <select id="ststat" class="pkonly"><option value="all">All</option><option value="unpicked">Not picked</option><option value="picked">Picked</option></select>
+      </div>
+      <div id="stprog">Picked 0 / 0<div class="bar"><i></i></div></div>
+      <div id="strows"></div>
+    </aside>
+    <section id="stmain"></section>
+  </div>
+</div>
+
+<!-- ═════════ FLOATING BITS: find bar, drag ghost, box selection, hover tip, selection bar ═════════ -->
+<div id="findbox"><button id="findfab" title="Find an item in your tiers [F]"><span>Find</span> <kbd>F</kbd></button><div id="findbar" class="hid"><input type="search" id="findin" placeholder="Find in your tiers…" autocomplete="off" spellcheck="false"><span id="findcnt"></span><button id="findpool" class="hid" title="Open the pool with this search"></button><button id="findnext" class="hid" title="Next match (Enter), previous (Shift+Enter)">↓</button><button id="findx" title="Close and clear (Esc)">✕</button></div></div>
+<button id="htoggle" title="Bring the top bar back">▾ Show bar <kbd>H</kbd></button>
+<div id="dghost"></div>
+<div id="marq"></div>
+<div id="tip"><img alt="" data-px><div><b></b><span></span><i class="tipnote"></i></div></div>
+<div id="selbar"><span id="selcount">0 selected</span><span class="hint">Drag them, or click a tier label</span><button id="seltag">Tag</button><button id="selmerge" class="hid" title="Group these as variants of one character: keep them separate or combine them into one entry (undo any time)">Group</button><button id="seltopool">To pool</button><button id="seldel" class="danger hid" title="Delete these items from the list (you can undo)">Delete</button><button id="selclr" title="Clear the selection (Esc)" aria-label="Clear the selection">✕</button></div>
+<!-- the pool's order (features/tier-board/board.ts) -->
+<div id="psortmenu" class="pop menu" role="menu" aria-label="Pool order">
+  <button role="menuitemradio" aria-checked="false" data-choice="added">Order added</button>
+  <button role="menuitemradio" aria-checked="false" data-choice="az">A to Z</button>
+  <button role="menuitemradio" aria-checked="false" data-choice="za">Z to A</button>
+  <button role="menuitemradio" aria-checked="false" data-choice="shuffled">Shuffled</button>
+</div>
+<!-- ═════════ POPOVERS ═════════ -->
+<div id="tagpop" class="pop"><h3>Tag selected items</h3><div class="note">Tap a tag to add it to all selected (tap again to remove). Type a new one below.</div>
+  <div class="tagrow" id="tagpoplist"></div><div class="edr"><input type="text" id="tagpopin" maxlength="24" placeholder="New tag… (Enter)" list="taglist"></div></div>
+<datalist id="taglist"></datalist>
+
+<!-- tier editor -->
+<div id="ted" class="pop">
+  <h3>Edit tier</h3>
+  <div class="edr"><label>Label</label><input aria-label="Label" type="text" id="edlbl" maxlength="40"></div>
+  <div class="edr"><label>Subtitle</label><input aria-label="Subtitle" type="text" id="edsub" maxlength="60" placeholder="optional"></div>
+  <div class="swatches" id="swatches"></div>
+  <div class="edr"><label>Custom</label><input aria-label="Custom" type="color" id="edcol" style="flex:1;height:30px"></div>
+  <div class="note">Click a swatch to use it. Change the custom colour to recolour the selected swatch. + adds the custom colour as a new swatch. Palette changes are shared by all lists and save straight away. <a href="#" id="edpalreset" style="color:var(--muted)">Reset palette</a></div>
+  <div class="edbtns"><button id="edswdel" disabled title="Delete the selected colour from your palette">Remove selected swatch</button></div>
+  <div class="edr"><label>Text colour</label><input aria-label="Text colour" type="color" id="edtxt"><label class="ck"><input type="checkbox" id="edauto"> Use theme</label></div>
+  <div class="edbtns"><button id="eddel" class="danger" title="Delete this tier">Delete tier</button><button id="edclose" title="Close without saving (Esc)">✕ Cancel</button><button id="edsave" class="accent" title="Save (Enter)">Save</button></div>
+</div>
+
+<!-- export panel -->
+<div id="exppanel" class="pop">
+  <h3>Export</h3>
+  <div class="edr"><label>Labels</label><select aria-label="Labels" id="explbl"><option value="off">None (clean)</option><option value="name">Name</option><option value="num">No.</option><option value="both">No. + Name</option></select></div>
+  <div class="edr"><label>Detail</label><select aria-label="Detail" id="exppx"><option value="128">128 px / sprite</option><option value="256">256 px / sprite</option><option value="512">512 px / sprite</option><option value="1024">1024 px / sprite (huge)</option></select></div>
+  <label class="ck"><input type="checkbox" id="expempty" checked> Include empty tiers</label>
+  <label class="ck" title="Your notes listed under the tiers"><input type="checkbox" id="expnotes"> Notes under the list</label>
+  <label class="ck" title="The list's name as a heading above the tiers"><input type="checkbox" id="exptitle" checked> Title at the top</label>
+  <label class="ck" title="What's left in the pool, in a section under the tiers"><input type="checkbox" id="exppool"> Unranked items</label>
+  <label class="ck" title="A small line in the bottom corner, so people who see the picture can find the site"><input type="checkbox" id="expcredit" checked> <span id="expcreditline">Made with Tierinator</span></label>
+  <div class="edbtns"><button class="cbtn accent" id="pngbtn" title="A normal picture: best for WhatsApp, Instagram, Discord">PNG</button><button class="cbtn" id="pngcopy" title="Copy the picture, then paste it into a chat">Copy</button><button class="cbtn hid" id="pngshare" title="Send to an app (WhatsApp, Messages…)">↗ Share</button></div>
+  <div class="edbtns"><button class="cbtn" id="svgbtn">SVG</button><button class="cbtn" id="pdfbtn">PDF</button><button class="cbtn" id="csvbtn" title="Every item and its tier as a spreadsheet (Excel, Numbers, Google Sheets)">CSV</button></div>
+  <div class="note">PNG is an ordinary picture for sharing. Sprites are embedded at the chosen detail so you can zoom in without blur. Pixel sprites are scaled up with hard pixel edges. <span class="pkonly">Dream World art stays true vector in SVG.</span> Hovering a sprite in the SVG shows its name, and the PDF is searchable by name even with labels off.</div>
+</div>
+<div id="formpanel" class="pop">
+  <h3>Forms as separate Pokémon</h3>
+  <div class="note">Ticked groups get their own entry to rank. Sprite styles (shiny, back, GO, costumes) always stay with their Pokémon. Split or merge single forms by right-clicking a Pokémon.</div>
+  <div id="formcats" style="display:flex;flex-direction:column;gap:10px"></div>
+</div>
+<div id="varpop" class="pop"><h3>Variants</h3>
+  <div class="note">Versions of the same character (Dragonoid → Delta → Neo…, Four Arms in every series). <b>Separate</b>: each is its own entry to rank. <b>Combined</b>: one entry, and its pictures include every variant. To group items yourself, select them on the tier list and press Group.</div>
+  <div class="edbtns"><button id="varall1">Combine all</button><button id="varall0">Split all</button><button id="varauto" title="Group items whose names match, e.g. 'Four Arms (Omniverse)' with 'Four Arms', 'Hammer Gorem' with 'Gorem'">Find by name…</button></div>
+  <input type="search" id="varq" placeholder="Filter…" style="width:100%;margin-top:6px"><div id="varrows"></div></div>
+<!-- List menu (features/lists/lists.ts): which list is open, new ones, this one, packs -->
+<div id="listpop" class="pop">
+  <h3>Your tier lists</h3>
+  <div id="listrows" class="lrows"></div>
+  <h3 class="lhead">New</h3>
+  <div class="edbtns"><button id="lnew" title="An empty list with your default tiers">New list</button><button id="lnewpk" title="Every Pokémon, with sprites from every game">New Pokémon list</button></div>
+  <div class="edbtns"><button id="lnewchart" title="Nine cells to fill, from lawful good to chaotic evil">New alignment chart</button></div>
+  <button id="ltpl" class="cbtn" title="Ready-made lists (planets, dog breeds, flags…) to rank yourself">New list from a template…</button>
+  <button id="lgroup" class="cbtn" title="Friends rank the same list and send you their share links or list files; you get the group's ranking as a new list">Combine rankings…</button>
+  <h3 class="lhead">This list</h3>
+  <div class="edr"><label for="lname">Rename</label><input type="text" id="lname" maxlength="60"></div>
+  <div class="edbtns"><button id="ldup" title="An exact copy">Duplicate</button><button id="ldup0" title="Same items, pictures and style, everything back in the pool, to rank again a different way">Duplicate, unranked</button></div>
+  <div class="edbtns"><button id="lstream" title="Rank live on video: just the tiers, big, one item at a time [V]">Stream mode…</button><button id="ldel" class="danger" title="Delete this list from this browser (it asks first)">Delete list</button></div>
+  <h3 class="lhead">Packs</h3>
+  <div id="pkpack" class="gprow hid"><span id="packinfo"></span><button id="packdel" title="Remove the Pokémon pack from this browser (it asks first)" aria-label="Remove the Pokémon pack">✕</button></div>
+  <div id="gplist"></div>
+  <p class="note" id="nopacks">No packs yet. The Pokémon pack comes with your first Pokémon list; packs you build or open show here.</p>
+  <button id="pbopen" class="cbtn" title="Make a pack of every character, item, creature… from a wiki: pictures, tags and variants included">Build a pack from a wiki…</button>
+  <button id="lsavepack" class="cbtn hid" title="Save this list's items, tags and pictures as a pack you can share or start new lists from">Save this list as a pack</button>
+  <button id="packdefexp" class="cbtn pkonly" title="Make a pokemon-pack.json whose default sprites are the ones you picked in this list">Export pack with my sprites as defaults</button>
+  <p class="note">Got a pack file? Open it with <b>File → Load…</b></p>
+</div>
+<!-- ═════════ WINDOWS ═════════ -->
+<div id="ov"></div>
+<!-- add items -->
+<div id="addm" class="modal"><div class="mbox" id="addbox">
+  <div class="addhead"><h3>Add items</h3><div class="tabs" id="addtabs"><button data-t="up" class="on">Upload</button><button data-t="wiki" id="addtab-wiki">From a wiki</button><button data-t="txt">Type a list</button><button data-t="web">Search the web</button><button data-t="url">Image links</button></div><button id="addx">✕</button></div>
+  <section data-p="up"><div id="addzone"><b>Drop images here</b><span class="note">or paste with Ctrl/⌘+V, or</span><button id="addup" class="accent">Choose images</button><span class="note">File names become item names. You can also drop or paste straight onto the tier list.</span></div></section>
+  <section data-p="txt" class="hid"><textarea id="addtxt" rows="9" placeholder="One item per line, e.g.&#10;Spirited Away&#10;Your Name&#10;Akira"></textarea>
+    <div class="edbtns"><button id="addtxtweb" class="accent">Find a picture for each</button><button id="addtxtgo">Add as text tiles</button></div>
+    <div class="note">“Find a picture” uses the source picked under Search the web (now: <span id="srcname"></span>).</div>
+    <div class="edbtns"><button id="addcsv" title="A spreadsheet saved as CSV: a Name column, plus Tier, Position and Picture if you have them">Open a CSV file…</button></div>
+    <div class="note">A Name column, plus Tier, Position and Picture if you have them: the columns Export → CSV writes. Names already on the list are moved (to the pool if their Tier is empty), not added twice.</div></section>
+  <section data-p="web" class="hid"><div class="edr"><select id="websrc"></select><input type="search" id="webq" placeholder="Search…" style="flex:1"><button id="webgo" class="cbtn">Search</button></div>
+    <div id="webres" class="stgrid webres"></div><div class="edbtns"><button id="weball">Select all</button><button id="webadd" class="accent" disabled>Add selected</button></div></section>
+  <section data-p="wiki" class="hid">
+    <div class="edr"><input type="text" id="wkurl" placeholder="bakugan, or a link like https://bakugan.fandom.com/wiki/Category:Bakugan" style="flex:1"><button id="wkgo" class="accent">Load</button></div>
+    <div class="wkopts"><label><input type="checkbox" id="wksub" checked> Sub-categories</label><select id="wkdepth" title="How deep to follow sub-categories"><option value="1">1 level</option><option value="2" selected>2 levels</option><option value="3">3 levels</option></select>
+      <label><input type="checkbox" id="wktag" checked> Tag items by category</label><label><input type="checkbox" id="wkparen" checked> Drop “(…)” from names</label><label title="e.g. Four Arms (Classic), Four Arms (Omniverse)… become variants of Four Arms. Ticked: combined into one entry. Unticked: separate entries, combine later"><input type="checkbox" id="wkmerge"> Combine same-name pages</label></div>
+    <div class="note" id="wkstat">Type a franchise to open its Fandom wiki (<b>bakugan</b>, <b>ben10</b>, <b>beyblade</b>…), or paste the link to any wiki category or list page. Works with Fandom, Wikipedia, Bulbapedia and most other wikis.</div>
+    <div id="wkcats" class="wkcats"></div>
+    <div class="edr hid" id="wkbar"><input type="search" id="wkq" placeholder="Filter by name…" style="flex:1"><button id="wkall">Select shown</button><button id="wknone">Clear shown</button></div>
+    <div id="wkres" class="stgrid webres"></div>
+    <div class="edbtns"><button id="wkpack" title="Every page of one kind, with galleries, tags from the info box and variants, checked step by step">Build a full pack instead…</button><button id="wkadd" class="accent" disabled>Add selected</button></div></section>
+  <section data-p="url" class="hid"><textarea id="addurl" rows="7" placeholder="One image link per line, optionally with a name:&#10;Messenger Dragonite | https://…/dragonite.png"></textarea><div class="edbtns"><button id="addurlgo" class="accent">Add</button></div>
+    <div class="note">Some sites block downloads. If one fails, save the image and upload it instead.</div></section>
+</div></div>
+<!-- pack builder -->
+<div id="pbm" class="modal"><div class="mbox" id="pbbox">
+  <div class="addhead"><h3>Build a pack from a wiki</h3><div class="tabs" id="pbsteps"><button data-s="1" class="on">1 Wiki</button><button data-s="2">2 Pages</button><button data-s="3">3 Tags</button><button data-s="4">4 Pictures &amp; variants</button><button data-s="5">5 Build</button></div><button id="pbx">✕</button></div>
+  <section data-s="1">
+    <div class="note">A pack is every item from a wiki (all Bakugan, all Ben 10 aliens…) with its pictures, tags and variants, ready to start tier lists from. You check each step, so the pack has exactly what you want.</div>
+    <div class="edr"><label>Wiki</label><input aria-label="Wiki" type="text" id="pbwiki" placeholder="bakugan, ben10 or any wiki link (Fandom, Wikipedia, Bulbapedia…)"></div>
+    <div class="edr"><label>Example</label><input aria-label="Example" type="text" id="pbex" placeholder="one page that belongs in the pack, e.g. Drago or Four Arms"><button id="pbfind" class="accent">Find similar pages</button></div>
+    <div id="pbhow" class="pbhow"></div>
+    <div class="edbtns"><button id="pbload" class="accent" disabled>Read these pages</button></div></section>
+  <section data-s="2" class="hid">
+    <div class="note" id="pbcount"></div>
+    <h4 class="pbh">Leave out every page in…</h4><div id="pbcats" class="wkcats pbcats"></div>
+    <div class="edr"><input type="search" id="pbq" placeholder="Filter by name…" style="flex:1"><button id="pball">Tick shown</button><button id="pbnone">Untick shown</button></div>
+    <div id="pbitems" class="pbitems"></div>
+    <div class="edbtns"><button data-next="3" class="accent">Next: tags</button></div></section>
+  <section data-s="3" class="hid" id="pbtags">
+    <div class="note">Tags become filters in the app (and the coloured dots on tiles). Pick what's useful; rename a filter by editing its name. Give two sources the same name to join them.</div>
+    <h4 class="pbh">From the info box</h4><div id="pbfields"></div>
+    <h4 class="pbh">From categories</h4><div id="pbcatf"></div>
+    <div class="edr"><label>Coloured dots</label><select aria-label="Coloured dots" id="pbdots"></select></div><div id="pbcolors" class="pbcolors"></div>
+    <div class="edbtns"><button data-next="4" class="accent">Next: pictures &amp; variants</button></div></section>
+  <section data-s="4" class="hid">
+    <div class="edr"><label>Pictures</label><select aria-label="Pictures" id="pbmax"><option value="1">1 per item (fastest)</option><option value="10">up to 10 per item</option><option value="30">up to 30 per item</option><option value="60">up to 60 per item</option><option value="120">up to 120 per item (slow)</option></select>
+      <label>Skip smaller than</label><select id="pbminpx"><option value="32">32 px</option><option value="48">48 px</option><option value="100">100 px</option><option value="200">200 px</option></select></div>
+    <div class="edr"><label>Gallery pages</label><input aria-label="Gallery pages" type="text" id="pbgal" placeholder="none, or e.g. /Gallery" style="max-width:200px"><span class="note" id="pbgalnote"></span></div>
+    <h4 class="pbh">Variants</h4>
+    <div class="edr"><label>From field</label><select aria-label="From field" id="pbvf"></select><label style="min-width:0"><input type="checkbox" id="pbvn" checked> and by name: “X (Reboot)”, “Mega X” → X</label></div>
+    <div id="pbfams" class="pbfams"></div>
+    <div class="edbtns"><button data-next="5" class="accent">Next: build</button></div></section>
+  <section data-s="5" class="hid">
+    <div class="edr"><label>Pack name</label><input aria-label="Pack name" type="text" id="pbname" maxlength="60"><label>Items are</label><input type="text" id="pbnoun" maxlength="30" placeholder="characters" style="max-width:160px"></div>
+    <label class="note"><input type="checkbox" id="pbtidy"> Drop “(…)” from item names (“Four Arms (Classic)” → “Four Arms”)</label>
+    <div class="note" id="pbsum"></div>
+    <div class="edbtns"><button id="pbbuild" class="accent">Build pack</button></div>
+    <div id="pbres"></div></section>
+</div></div>
+<!-- item editor -->
+<div id="ied" class="modal"><div class="mbox" id="iedbox">
+  <div class="iednav"><button id="iedprev" title="Previous item (←)">‹</button><span class="note" id="iedpos"></span><button id="iednext" title="Next item (→)">›</button></div>
+  <div class="edr" style="gap:14px;align-items:flex-start"><img id="iedimg" alt=""><div style="flex:1;display:flex;flex-direction:column;gap:6px"><input type="text" id="iedname" maxlength="80"><div class="tagrow" id="iedtags"></div></div></div>
+  <p id="iedcredit"></p>
+  <div id="iedfam"></div>
+  <textarea id="iednote" rows="2" maxlength="300" placeholder="Note: why it's here (shows when you hover; can go in exports)"></textarea>
+  <div class="edbtns"><button id="iedup">Replace image</button><button id="iedtile">Text tile</button><button id="iednewvar" title="Add another version of this character as its own item (same picture to start with), e.g. a different series">New variant</button></div>
+  <input type="text" id="iedurl" placeholder="…or paste an image link and press Enter">
+  <div id="iedwiki" class="hid"><div id="iedwres"></div><button id="iedwbtn">More from its wiki page</button></div>
+  <div class="note">Tip: copy any image in your browser and press Ctrl/⌘+V while this is open.</div>
+  <div class="edbtns"><button id="ieddel" class="danger">Delete item</button><button id="ieddone" class="accent">Done</button></div>
+</div></div>
+<!-- pack needed -->
+<div id="needpack" class="hid"><div class="mbox"><h3>This Pokémon list needs its pack</h3><p>The Pokémon pack couldn't be downloaded. Check your connection and reload the page, or open a <b>pokemon-pack.json</b> file you saved.</p>
+  <div class="mbtns"><button id="needpackup" class="accent">Open a pack file…</button><button data-click="listbtn">Other lists</button></div></div></div>
+
+<!-- appearance drawer -->
+<aside id="appear" aria-label="Style">
+  <div class="dhead"><h3>Style</h3><button id="apclose">✕</button></div>
+  <div class="dsec"><h4>Themes</h4><div class="presets" id="presets"></div>
+    <div class="edbtns"><button id="thsave">Save as new theme</button><button id="thupd" class="cbtn hid"></button></div>
+    <div class="edr hid" id="thname"><input type="text" id="thnamein" maxlength="30" placeholder="Theme name"><button id="thnameok" class="accent">Save</button><button id="thnamex">✕</button></div>
+  </div>
+  <div class="dsec"><h4>Site name</h4>
+    <div class="edr"><label>Name</label><input aria-label="Name" type="text" id="ap-name" data-t="name" maxlength="40"></div>
+    <div class="edr"><label>Logo style</label><select aria-label="Logo style" data-t="logo"><option value="two">Two-tone</option><option value="gradient">Gradient</option><option value="accent">Accent colour</option><option value="text">Plain</option></select></div>
+    <div class="edr"><label>Logo size</label><input aria-label="Logo size" type="range" data-t="fsLogo" min="12" max="34" step="1"><span class="val" data-v="fsLogo"></span></div>
+    <div class="edr"><label>Logo weight</label><select aria-label="Logo weight" data-t="wLogo" data-f="fHead"></select></div>
+  </div>
+  <div class="dsec"><h4>Colours</h4>
+    <div class="cgrid">
+      <label><input type="color" data-t="bg">Background</label><label><input type="color" data-t="panel">Panels</label>
+      <label><input type="color" data-t="text">Text</label><label><input type="color" data-t="muted">Muted text</label>
+      <label><input type="color" data-t="accent">Accent</label><label><input type="color" data-t="hi">Highlight</label>
+    </div>
+    <div class="edr"><label>Row background</label><input aria-label="Row background" type="color" data-t="rowBg" data-auto="1"><label class="ck"><input type="checkbox" data-autofor="rowBg"> Same as page</label></div>
+    <div class="edr"><label>Tier colour tint</label><input aria-label="Tier colour tint" type="range" data-t="tint" min="0" max="1" step="0.01"><span class="val" data-v="tint"></span></div>
+    <div class="note">0% = every row is exactly the row background (e.g. pure black). Higher = rows take on more of their tier's colour.</div>
+    <div class="edr"><label>Tier label text</label><input aria-label="Tier label text" type="color" data-t="lblColor" data-auto="1"><label class="ck"><input type="checkbox" data-autofor="lblColor"> Auto</label></div>
+    <div class="note">Auto picks black or white per tier. Override a single tier by clicking its label.</div>
+  </div>
+  <div class="dsec"><h4>Headings &amp; tier labels</h4>
+    <div class="edr"><label>Font</label><select aria-label="Font" data-t="fHead" class="fontsel"></select></div>
+    <div class="sample" id="ap-hsample">SS tier, Pikachu #025</div>
+    <div class="edr"><label>Tier label weight</label><select aria-label="Tier label weight" data-t="wLabel" data-f="fHead"></select></div>
+    <div class="edr"><label>Title weight</label><select aria-label="Title weight" data-t="wHead" data-f="fHead"></select></div>
+    <div class="edr"><label>Label size</label><input aria-label="Label size" type="range" data-t="fsLabel" min="10" max="36" step="1"><span class="val" data-v="fsLabel"></span></div>
+    <div class="edr"><label>Letter spacing</label><input aria-label="Letter spacing" type="range" data-t="ls" min="-0.06" max="0.2" step="0.01"><span class="val" data-v="ls"></span></div>
+    <div class="edr"><label>Label case</label><select aria-label="Label case" data-t="tt"><option value="none">As typed</option><option value="uppercase">UPPERCASE</option><option value="lowercase">lowercase</option><option value="capitalize">Title Case</option></select></div>
+  </div>
+  <div class="dsec"><h4>Interface text</h4>
+    <div class="edr"><label>Font</label><select aria-label="Font" data-t="fUi" class="fontsel"></select></div>
+    <div class="sample" id="ap-usample">Search name or # (1025 shown)</div>
+    <div class="edr"><label>Weight</label><select aria-label="Weight" data-t="wUi" data-f="fUi"></select></div>
+    <div class="edr"><label>Text size</label><input aria-label="Text size" type="range" data-t="fs" min="11" max="16" step="0.5"><span class="val" data-v="fs"></span></div>
+  </div>
+  <div class="dsec"><h4>Sprite labels (No. / name)</h4>
+    <div class="edr"><label>Label size</label><input aria-label="Label size" type="range" data-t="lblFs" min="6" max="20" step="0.5"><span class="val" data-v="lblFs"></span></div>
+    <div class="edr"><label>Gap to sprite</label><input aria-label="Gap to sprite" type="range" data-t="lblGap" min="-8" max="16" step="1"><span class="val" data-v="lblGap"></span></div>
+    <label class="ck"><input type="checkbox" id="ap-tagdots"> Show tag dots on sprites</label>
+    <div class="note">Turn labels on with the Labels menu in the toolbar. Size and gap are used in exports too.</div>
+  </div>
+  <div class="dsec"><h4>Shape &amp; spacing</h4>
+    <div class="edr"><label>Tile shape</label><select aria-label="Tile shape" id="ap-shape"><option value="square">Square</option><option value="portrait">Portrait 2:3</option><option value="landscape">Landscape 16:9</option></select></div>
+    <div class="edr"><label>Pictures</label><select aria-label="Pictures" id="ap-fit"><option value="contain">Whole picture</option><option value="cover">Fill the tile</option></select></div>
+    <div class="note">Portrait suits posters and book covers, landscape thumbnails and screenshots. Fill the tile crops each picture to its centre. Saved with this list.</div>
+    <div class="edr"><label>Roundness</label><input aria-label="Roundness" type="range" data-t="radius" min="0" max="20" step="1"><span class="val" data-v="radius"></span></div>
+    <div class="edr"><label>Label column</label><input aria-label="Label column" type="range" data-t="lw" min="70" max="260" step="5"><span class="val" data-v="lw"></span></div>
+    <div class="edr"><label>Row gap</label><input aria-label="Row gap" type="range" data-t="gap" min="0" max="16" step="1"><span class="val" data-v="gap"></span></div>
+  </div>
+  <div class="dsec"><h4>Tiers</h4>
+    <div class="edr"><label>Layout</label><select aria-label="Layout" id="ap-layout"><option value="tiers">Rows</option><option value="chart">Chart (a grid of cells)</option></select></div>
+    <div class="edr" id="ap-colsrow"><label>Columns</label><input aria-label="Columns" type="range" id="ap-cols" min="2" max="6" step="1"><span class="val" id="ap-colsval"></span></div>
+    <div class="edbtns" style="justify-content:flex-start"><button id="presetbtn" title="Reset tier names and colours to the default (keeps ranked items)">Reset tiers</button><button id="mytiersbtn" title="New lists (and Reset tiers) will use this list's tier names and colours">★ Use these tiers for new lists</button><button id="mytiersx" class="hid" title="Go back to SS → U for new lists">✕ Forget mine</button></div>
+    <div class="note">Your own default tiers are kept in this browser (and in backups), not in any list file.</div>
+  </div>
+  <div class="dsec"><h4>Top bar</h4>
+    <div class="edr"><label>Size</label><select aria-label="Size" id="barsize"><option value="s">Compact</option><option value="m">Normal</option><option value="l">Large</option></select></div>
+    <div class="edr"><label>Too wide?</label><select aria-label="Too wide?" id="barwrap"><option value="scroll">Scroll sideways</option><option value="wrap">Wrap onto 2 rows</option></select></div>
+    <div class="barlist" id="barlist"></div>
+    <div class="note">Tick what to show and use ↑ ↓ to reorder. With the site name hidden, the list menu shows your list's name in the logo style instead. This layout is saved in this browser for every list.</div>
+    <div class="edbtns" style="justify-content:flex-start"><button id="barreset">Default layout</button></div>
+  </div>
+  <div class="dfoot"><button id="apreset" title="Undo edits since the selected theme">Undo edits</button><button id="apdone" class="accent">Done</button></div>
+  <div class="note" style="margin-top:12px">Your style is saved with the list (File → Save list) and is used in SVG/PDF exports.</div>
+</aside>
+
+<!-- right-click sprite picker -->
+<div id="qp" class="modal"><div id="qpbox">
+  <div class="sthead" id="qphead">
+    <img class="big" id="qpbig" alt="" data-px>
+    <div><h2 id="qpname"></h2><div class="meta" id="qpmeta"></div><div class="cur" id="qpcur"></div><div class="tagrow" id="qptags"></div><textarea id="qpnote" rows="2" maxlength="300" placeholder="Note (shows when you hover)"></textarea></div>
+    <div class="acts">
+      <button id="qpprev" title="Previous in this row [←]">‹</button><button id="qpnext" title="Next in this row [→]">›</button>
+      <button id="qpup">Upload</button><button id="qpreset">Default</button><button id="qpstudio">Open in Studio</button><button id="qpdone" class="accent">Done</button>
+    </div>
+  </div>
+  <div class="qpfilt"><button id="qpfiltbtn" class="chip" title="Choose which kinds of sprites to show">Show ▾</button><button id="qpcollbtn" class="chip" title="Collapse or expand every section">⊟ Collapse all</button><div class="stg hid" id="qpchips"></div></div>
+  <div id="qpbody"></div>
+</div></div>
+
+<!-- keyboard shortcuts -->
+<div id="keysm" class="modal"><div class="mbox" id="keysbox"><h3>Keyboard shortcuts</h3><div class="kgrid">
+  <span class="keys"><kbd>H</kbd></span><span>Hide / show top bar</span><span class="keys"><kbd>P</kbd></span><span>Hide / show pool</span><span class="keys"><kbd>B</kbd></span><span>Pool beside / below the tiers</span>
+  <span class="keys"><kbd>S</kbd></span><span>Style panel</span><span class="keys"><kbd>A</kbd></span><span>Add items</span><span class="keys"><kbd>L</kbd></span><span>Your lists</span><span class="keys"><kbd>E</kbd></span><span>Export</span>
+  <span class="keys"><kbd>/</kbd> <kbd>F</kbd></span><span>Search the pool (Enter jumps to ranked matches); with the pool hidden, find in your tiers</span><span class="keys"><kbd>T</kbd></span><span>Switch between the Tier list and Studio</span>
+  <span class="keys"><kbd>Tab</kbd> <kbd>← → ↑ ↓</kbd></span><span>Go to the tiers or pool, then move between items (<kbd>Home</kbd> <kbd>End</kbd>: first and last)</span><span class="keys"><kbd>Space</kbd></span><span>Select the item (Shift: a range)</span><span class="keys"><kbd>Alt</kbd> <kbd>← → ↑ ↓</kbd></span><span>Move the item along its tier, or up / down a tier (in a chart: to the next cell; Shift for along it)</span><span class="keys"><kbd>1</kbd>–<kbd>9</kbd></span><span>Move selected (or the focused item) to tier 1–9</span><span class="keys"><kbd>0</kbd></span><span>Send selected back to pool (also Delete)</span>
+  <span class="keys"><kbd>Ctrl/⌘ A</kbd></span><span>Select everything in the area under the mouse</span><span class="keys"><kbd>Ctrl/⌘ Z</kbd></span><span>Undo (add Shift, or press Ctrl/⌘ Y, to redo)</span><span class="keys"><kbd>Menu</kbd> <kbd>Shift F10</kbd></span><span>The focused item's picture choices or editor, as right-click</span>
+  <span class="keys"><kbd>Ctrl/⌘ S</kbd></span><span>Save</span><span class="keys"><kbd>Ctrl/⌘ O</kbd></span><span>Load</span><span class="keys"><kbd>Esc</kbd></span><span>Close / clear selection / show top bar</span>
+  <span class="keys"><kbd>← →</kbd></span><span>Previous / next Pokémon in the sprite picker and Studio</span><span class="keys"><kbd>N</kbd></span><span>Studio: next Pokémon without a pick</span>
+  <span class="keys"><kbd>Q</kbd></span><span>Quick rank the unranked</span><span class="keys"><kbd>V</kbd></span><span>Stream mode, for ranking live on video</span><span class="keys"><kbd>I</kbd></span><span>Stats</span>
+  <span class="keys"><kbd>?</kbd></span><span>This list, or <a href="#" data-close="keysm" data-open="tipsm" style="color:var(--muted)">show the welcome tips</a></span></div><div class="mbtns"><button class="accent" data-close="keysm">Got it</button></div></div></div>
+<!-- duplicates -->
+<div id="dupm" class="modal"><div class="mbox" id="dupbox"><div class="qrhead"><b>Same name: group as variants?</b><button data-close="dupm">✕</button></div>
+  <div class="note">Each group becomes one character with variants, like Pokémon forms. Keep them as separate entries to rank each one, or combine them into one entry that can show any variant's picture. Switch any time. Names ignore a trailing (…).</div>
+  <div id="dupbody"></div><div class="mbtns"><button class="accent" id="dupgo">Group, keep separate</button><button id="dupgo2">Group and combine</button></div></div></div>
+<!-- quick rank -->
+<div id="qr" class="modal"><div class="mbox" id="qrbox">
+  <div class="qrhead"><b>Quick rank</b><span class="note" id="qrprog"></span><button id="qrx" title="Stop (Esc)">✕</button></div>
+  <div class="qrimg"><img id="qrimg" alt=""></div><h2 id="qrname"></h2><div class="note" id="qrmeta"></div>
+  <div id="qrtiers"></div>
+  <div class="edbtns"><button id="qrback" title="Undo the last one (← or Backspace)">↶ Back</button><button id="qrskip" title="Leave it in the pool for now (→ or S)">Skip</button></div>
+  <div class="note">Press <kbd>1</kbd>–<kbd>9</kbd> for a tier, <kbd>→</kbd> or <kbd>S</kbd> to skip, <kbd>←</kbd> to go back, <kbd>Esc</kbd> to stop. It goes through what the pool is showing, so filter or search first to rank a subset.</div>
+</div></div>
+<!-- stream mode (features/stream): its options, then the presenter view -->
+<div id="streamm" class="modal"><div class="mbox" id="streambox">
+  <div class="qrhead"><b>Stream mode</b><button data-close="streamm" title="Close (Esc)" aria-label="Close">✕</button></div>
+  <p class="note">Just your tiers, big, and one item at a time to rank: for ranking live on video. Press Esc to leave.</p>
+  <div class="edr"><label for="streambg">Background</label><select id="streambg"><option value="theme">The list's theme</option><option value="green">Green screen (#00b140)</option><option value="magenta">Magenta screen (#ff00ff)</option></select></div>
+  <div class="edr"><label for="streamorder">Order</label><select id="streamorder"><option value="pool">As in the pool</option><option value="shuffled">Shuffled</option></select></div>
+  <div class="edr"><label for="streamwhich">Items</label><select id="streamwhich"><option value="unranked">Only the unranked ones</option><option value="all">All, from scratch (empties the tiers)</option></select></div>
+  <label class="ck"><input type="checkbox" id="streamnames"> Show names under items</label>
+  <p class="note">It goes through what the pool is showing, so search or filter first to rank a subset.</p>
+  <div class="mbtns"><button id="streamgo" class="accent">Start stream mode</button><button data-close="streamm">Cancel</button></div>
+</div></div>
+<div id="stream" class="hid" tabindex="-1" role="region" aria-label="Stream mode">
+  <div id="sboard"></div>
+  <div id="snow">
+    <div id="snowitem" aria-live="polite"><span class="snowkick">Now ranking</span><div id="snowpic" title="Drag onto a tier, or press its number"></div><h2 id="snowname"></h2><p id="snowwhere"></p></div>
+    <div id="sdone" class="hid"><h2>All ranked</h2><button id="sdoneleave" class="accent">Leave stream mode</button></div>
+    <p id="sprog"></p>
+  </div>
+  <div id="skeys"><span class="forkeys"><kbd>1</kbd>–<kbd>9</kbd> put it in a tier, or drag the picture</span><span class="fortouch">Tap a tier, or drag the picture onto one</span><button id="sback"><kbd>←</kbd> Back</button><button id="sskip">Skip <kbd>→</kbd></button><button id="sundo">Undo <kbd>U</kbd></button><button id="shide">Hide controls <kbd>H</kbd></button><button id="sleave">Leave <kbd>Esc</kbd></button></div>
+  <button id="skeysshow">Show controls</button>
+  <div id="sghost" class="hid"></div>
+</div>
+<!-- head to head -->
+<div id="h2h" class="modal"><div class="mbox" id="h2hbox">
+  <div class="qrhead"><b id="h2htitle">Which is better?</b><span class="note" id="h2hprog"></span><button id="h2hx" title="Stop without changing the order (Esc)">✕</button></div>
+  <div class="h2hrow"><button class="h2hc" id="h2ha"><img alt=""><b></b></button><span class="vs">vs</span><button class="h2hc" id="h2hb"><img alt=""><b></b></button></div>
+  <div class="edbtns"><button id="h2heq" title="=">Can't decide</button></div>
+  <div class="note">Click one, or press <kbd>←</kbd> / <kbd>→</kbd> (<kbd>=</kbd> if they're equal). When you finish, the tier is put in that order, best first. Ctrl/⌘+Z undoes it.</div>
+</div></div>
+<!-- stats -->
+<div id="statsm" class="modal"><div class="mbox" id="statsbox">
+  <div class="qrhead"><b>Stats</b><select id="statfacet" title="What to break your tier list down by"></select><button id="statsx">✕</button></div>
+  <div id="statsbody"></div>
+</div></div>
+<!-- first run -->
+<div id="tabm" class="modal"><div class="mbox"><h3>Open in another tab</h3>
+  <p>Tierinator is open in another tab or window, and that one is saving your lists now. This tab has stopped saving, so the two can't overwrite each other.</p>
+  <div class="mbtns"><button id="tabuse" class="accent">Use this tab instead</button></div>
+</div></div>
+<div id="aboutm" class="modal"><div class="mbox" id="aboutbox">
+  <h3>Tierinator</h3>
+  <p>Tier lists for anything. Free, open source, no ads, no accounts.</p>
+  <h4>Your data</h4>
+  <p>Your lists are kept only in this browser. There's no account, no tracking, no cookies and no analytics. Nothing you rank is sent anywhere unless you share a link.</p>
+  <div class="edbtns"><button data-click="backupbtn" data-close="aboutm">Back up all lists</button><button id="wipebtn" class="danger">Delete everything</button></div>
+  <p class="note">Some features fetch from other sites straight from your browser (sprites, searches, wikis, extra fonts), so those sites see your IP address as if you'd visited them. The full list is on the privacy page.</p>
+  <h4>Credits</h4>
+  <p>Pokémon data and sprites: <a href="https://pokeapi.co" target="_blank" rel="noopener">PokeAPI</a>. Animated sprites: the Smogon community, via Pokémon Showdown. Pokémon GO icons: PokeMiners. Mystery Dungeon portraits: PMDCollab. Extra artwork is shown from the Bulbagarden Archives.</p>
+  <p>Pictures from Wikipedia and Wikimedia Commons are by the people credited in <button id="aboutcredits" class="link">this list's picture credits</button>.</p>
+  <p class="note">Pokémon and all related names and images are trademarks and © of Nintendo, Creatures, GAME FREAK and The Pokémon Company. Tierinator is an unofficial fan project, not affiliated with or endorsed by them, and it doesn't host any of their images.</p>
+  <p class="note" id="aboutlinks"><a href="/privacy.html" target="_blank" rel="noopener">Privacy, terms and accessibility</a><a href="https://github.com/blaziikun/tierinator" target="_blank" rel="noopener">Source code (MIT)</a></p>
+  <div class="mbtns"><button class="accent" data-close="aboutm">Close</button></div>
+</div></div>
+<div id="tipsm" class="modal"><div class="mbox" id="tipsbox"><h3>Getting started</h3>
+  <ol class="tips">
+    <li>Tierinator starts <b>empty</b>. <b>Add items</b> to make a list, the <b>list menu</b> (top left) for a Pokémon list or a template, or open a saved list or backup with <b>File → Load…</b></li>
+    <li><b>Drag</b> pictures into tiers, or click a few and press <kbd>1</kbd>–<kbd>9</kbd>. On a phone: tap to select, then tap a tier label.</li>
+    <li><b>Quick rank</b> (above the pool, or <kbd>Q</kbd>) shows unranked items one at a time, big.</li>
+    <li><b>Right-click</b> (long-press on a phone) any item to change its picture, tag it or add a note.</li>
+    <li><b>Add items</b>: upload, type a list, search anime / films / music, or pull a whole wiki category.</li>
+    <li><b>⇅</b> on a tier sorts it head-to-head ("this or that?").</li>
+    <li><b>Variants</b>: versions of one character (every Dragonoid, every Four Arms) can be separate entries or combined into one, like Pokémon forms.</li>
+    <li>Lists live in this browser. Now and then use <b>File → Back up all lists</b>.</li>
+  </ol>
+  <div class="mbtns"><button class="accent" id="tipsok">Got it</button></div></div></div>
+<!-- ═════════ NEW VERSION NOTICE (features/offline) ═════════ -->
+<div id="updatetoast" role="status"><div id="updatebox" class="hid"><span>A new version is ready</span><button id="updatereload" class="accent">Reload</button><button id="updatelater">Not now</button></div></div>
+<!-- shared: question box, progress, toast (lib/ui.ts) -->
+<div id="cconf" class="modal"><div class="mbox"><p id="cmsg"></p><input type="text" id="cinp" class="hid" maxlength="60" style="width:100%;margin:-4px 0 12px"><div class="mbtns"><button id="cok" class="accent">OK</button><button id="calt" class="hid"></button><button id="ccancel">Cancel</button></div></div></div>
+<div id="progmod" class="modal"><div class="mbox" id="progbox"><h4 id="progtitle">Working…</h4><div id="progtxt"></div><div id="progbar"><div id="progfill"></div></div><button id="progcancel" class="hid">Cancel</button></div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+    </body>
+</html>

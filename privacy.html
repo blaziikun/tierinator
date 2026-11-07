@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="referrer" content="no-referrer" />
+        <meta name="color-scheme" content="dark" />
+        <meta name="description" content="What Tierinator stores, what other sites see, the terms of use, and accessibility." />
+        <title>Tierinator: privacy, terms and accessibility</title>
+        <link rel="canonical" href="https://tierinator.sayel.dev/privacy" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="stylesheet" href="/src/styles/privacy.css" />
+    </head>
+    <body>
+        <main>
+            <p class="back"><a href="/">← Back to Tierinator</a></p>
+            <h1>Privacy, terms and accessibility</h1>
+            <p class="updated">Last updated 7 November 2026</p>
+
+            <nav aria-label="On this page">
+                <a href="#privacy">Privacy</a>
+                <a href="#terms">Terms</a>
+                <a href="#accessibility">Accessibility</a>
+                <a href="#contact">Contact</a>
+            </nav>
+
+            <section id="privacy">
+                <h2>Privacy</h2>
+                <p>
+                    Tierinator runs in your browser. There's no account, no sign-up, no tracking, no analytics, no ads and no cookies. Nobody
+                    behind the site can see your lists.
+                </p>
+
+                <h3>What's kept, and where</h3>
+                <p>
+                    Your lists, the pictures you add, your themes and your settings are saved in your own browser's storage (local storage and
+                    IndexedDB) on this site's address, so they're there next time. Nothing is uploaded. They stay until you delete them, or
+                    until your browser clears the site's data.
+                </p>
+                <p>
+                    So that it opens without a connection, and can be installed like an app, a copy of Tierinator itself (its pages, code,
+                    fonts and icons, plus any templates and packs you open) is also kept on your device. It's the same for everyone and
+                    holds nothing about you or your lists, and keeping it sends nothing anywhere. A new version replaces it when you reload.
+                </p>
+                <p>
+                    This storage is strictly necessary for the service you asked for (keeping your lists), so there's no consent banner. Nothing
+                    is stored for any other purpose.
+                </p>
+
+                <h3>Your controls</h3>
+                <ul>
+                    <li><b>Download everything:</b> File → Back up all lists. One file with every list, picture and setting.</li>
+                    <li><b>Delete everything:</b> File → About &amp; privacy → Delete everything. Removes all of it from this browser at once.</li>
+                </ul>
+
+                <h3>What other sites see</h3>
+                <p>
+                    The site is served by Cloudflare, which handles the usual technical information any website receives (such as your IP address)
+                    to deliver the pages and protect them from abuse. Some features fetch things straight from other sites, and those sites see
+                    your IP address as if you'd visited them yourself:
+                </p>
+                <ul>
+                    <li><b>Pokémon sprites:</b> GitHub (raw.githubusercontent.com) and jsDelivr, from the PokeAPI, PokeMiners and PMDCollab collections, only while a Pokémon list is open.</li>
+                    <li><b>Extra artwork:</b> the Bulbagarden Archives, when you look at those pictures.</li>
+                    <li>
+                        <b>Searches you run in Add items:</b> Wikipedia, AniList, Kitsu, Jikan (MyAnimeList), TVmaze, iTunes, Open Library and REST
+                        Countries, and any wiki you import from. They receive what you searched for, and the pictures in the results load from
+                        their image servers.
+                    </li>
+                    <li>
+                        <b>Pictures in a list:</b> a picture added from a web address keeps loading from that address. In a list file or CSV
+                        you open, that's whatever addresses the file holds, so open files only from people you'd take a file from. In a share
+                        link, pictures from sites other than the ones above wait until you choose to show them.
+                    </li>
+                    <li>
+                        <b>Fonts:</b> Google Fonts, only for a font other than the three built-in ones: one the list on screen uses
+                        (you chose it, or it came in a shared list), or one a saved look in Style uses, to show it. An exported SVG asks
+                        for its fonts from Google Fonts too when it's opened, so it looks the same anywhere.
+                    </li>
+                    <li>
+                        <b>Templates:</b> Wikipedia (en.wikipedia.org and upload.wikimedia.org), for pictures of a template's items and who
+                        made them, when you open one. Importing from Wikipedia or another Wikimedia wiki asks that wiki who made its pictures
+                        too. Picture credits link to the picture's page on Wikimedia Commons (or Wikipedia); that site is contacted only if
+                        you follow the link.
+                    </li>
+                    <li><b>wsrv.nl:</b> an image service, used only to copy a picture from a site that won't allow it directly.</li>
+                </ul>
+                <p>
+                    Tierinator sends none of them any identifier of its own, and they're never told which page you came from. Your browser may
+                    still send those sites' own cookies, as it would for any picture on the web, depending on its settings.
+                </p>
+
+                <h3>Share links</h3>
+                <p>
+                    A share link carries the list inside the link itself, after the “#”. Browsers never send that part to this site, so it isn't
+                    stored anywhere but in the link. Anyone you give the link to can see the list, so don't put anything private in a list you
+                    share.
+                </p>
+            </section>
+
+            <section id="terms">
+                <h2>Terms</h2>
+                <ul>
+                    <li>Tierinator is free and provided as it is, without any warranty. Keep backups of lists that matter to you.</li>
+                    <li>
+                        You're responsible for what you add and share. Only use pictures you're allowed to use, and don't share links to lists
+                        that break the law or someone else's rights.
+                    </li>
+                    <li>The code is open source under the MIT licence. The bundled fonts are under the SIL Open Font License.</li>
+                    <li>
+                        Pokémon and all related names and images are trademarks and © of Nintendo, Creatures, GAME FREAK and The Pokémon Company.
+                        Tierinator is an unofficial fan project, not affiliated with or endorsed by them. It doesn't host any of their images:
+                        sprites load from the public collections above when shown. Rights holders who want something changed can say so through
+                        the contact below, and it will be dealt with promptly.
+                    </li>
+                    <li>These terms may change as the site does; the date at the top says when they last did.</li>
+                </ul>
+            </section>
+
+            <section id="accessibility">
+                <h2>Accessibility</h2>
+                <p>Tierinator aims to meet WCAG 2.2 at level AA. So far:</p>
+                <ul>
+                    <li>
+                        Dragging always has another way: Tab to the tiers or the pool, move between items with the arrow keys, select with Space
+                        and press a tier's number, or move an item with Alt and the arrows. Quick rank (press Q) ranks a whole list from the
+                        keyboard alone.
+                    </li>
+                    <li>Buttons, menus and windows work with a keyboard, and focus is always visible. Shortcuts are listed under the keyboard button (or press ?).</li>
+                    <li>Controls have names for screen readers, and messages are announced.</li>
+                    <li>Text colours are checked against their background and swapped if a theme makes them hard to read.</li>
+                    <li>Animation is switched off when your system asks for reduced motion. The site has one dark look; every colour, font and size in it can be changed under Style (lighter backgrounds included).</li>
+                    <li>Automatic accessibility checks run on every change before it goes live.</li>
+                </ul>
+                <p>
+                    Known gap: pictures are identified by their names rather than described. If something gets in your way, please say so
+                    (below) and it will be fixed.
+                </p>
+            </section>
+
+            <section id="contact">
+                <h2>Contact</h2>
+                <p>
+                    Questions, problems and requests: open an issue on
+                    <a href="https://github.com/blaziikun/tierinator/issues" rel="noopener">GitHub</a>. Security problems: report them
+                    privately through the repository's <a href="https://github.com/blaziikun/tierinator/security/advisories/new" rel="noopener">security page</a>.
+                </p>
+            </section>
+        </main>
+    </body>
+</html>

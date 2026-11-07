@@ -1,0 +1,30 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "farm-animals",
+    "title": "Farm animals",
+    "category": "Animals",
+    "description": "The animals of the farmyard and the field.",
+    "items": [
+        { "name": "Cow", "wiki": "Cattle" },
+        { "name": "Highland cattle", "wiki": "Highland cattle" },
+        { "name": "Sheep", "wiki": "Sheep" },
+        { "name": "Goat", "wiki": "Goat" },
+        { "name": "Pig", "wiki": "Pig" },
+        { "name": "Chicken", "wiki": "Chicken" },
+        { "name": "Duck", "wiki": "Domestic duck" },
+        { "name": "Goose", "wiki": "Domestic goose" },
+        { "name": "Turkey", "wiki": "Domestic turkey" },
+        { "name": "Horse", "wiki": "Horse" },
+        { "name": "Donkey", "wiki": "Donkey" },
+        { "name": "Mule", "wiki": "Mule" },
+        { "name": "Llama", "wiki": "Llama" },
+        { "name": "Alpaca", "wiki": "Alpaca" },
+        { "name": "Water buffalo", "wiki": "Water buffalo" },
+        { "name": "Rabbit", "wiki": "Domestic rabbit" },
+        { "name": "Guinea fowl", "wiki": "Helmeted guineafowl" },
+        { "name": "Yak", "wiki": "Domestic yak" },
+        { "name": "Camel", "wiki": "Camel" },
+        { "name": "Reindeer", "wiki": "Reindeer" }
+    ]
+}

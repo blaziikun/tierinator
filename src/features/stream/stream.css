@@ -1,0 +1,405 @@
+/*
+ * src/features/stream/stream.css
+ *
+ * Stream mode (stream.ts): its options window, and the presenter view that covers
+ * the whole window (or screen): the tiers big on one side, the item being ranked
+ * on the other, a row of controls underneath that can be hidden.
+ */
+
+#streambox {
+    width: min(440px, 94vw);
+    max-width: none;
+    text-align: left;
+}
+
+#streambox .edr > label {
+    min-width: 92px;
+}
+
+/* the rest of the app steps aside (and out of the Tab order) while streaming */
+body.streaming > :not(#stream) {
+    display: none;
+}
+
+#stream {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 28vw, 440px);
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 14px 22px;
+    padding: 18px 20px 12px;
+    background: var(--bg);
+    color: var(--text);
+    --stream-sz: 96px;
+    outline: none;
+}
+
+/* chroma-key backgrounds: the colours video tools key out by default */
+#stream[data-bg="green"] {
+    background: #00b140;
+}
+
+#stream[data-bg="magenta"] {
+    background: #ff00ff;
+}
+
+/* ── the tiers ── */
+
+#sboard {
+    display: flex;
+    flex-direction: column;
+    gap: max(var(--rowgap), 4px);
+    overflow: auto;
+    min-height: 0;
+}
+
+.srow {
+    display: flex;
+    flex-shrink: 0;
+    /* room for a line of names too, so rows with items and empty ones are the same height */
+    min-height: calc(var(--stream-sz) * var(--tile-hf, 1) + 14px + var(--name-line, 0px));
+    border: 2px solid transparent;
+    border-radius: var(--r);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.srow.over {
+    border-color: var(--cyan);
+}
+
+.slbl {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: calc(var(--lw) * 1.2);
+    min-width: calc(var(--lw) * 1.2);
+    padding: 6px 12px;
+    border: none;
+    border-radius: 0;
+    white-space: normal;
+}
+
+.slbl:hover {
+    filter: brightness(1.06);
+}
+
+.slbl i {
+    position: absolute;
+    top: 3px;
+    left: 6px;
+    font-family: var(--font-ui);
+    font-size: 0.769rem;
+    font-style: normal;
+    opacity: 0.7;
+}
+
+.slbl-main {
+    font-family: var(--font-head);
+    font-weight: var(--w-label);
+    font-size: calc(var(--fs-label) * 1.3);
+    letter-spacing: var(--ls-label);
+    text-transform: var(--tt-label);
+    line-height: 1.1;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.slbl-sub {
+    font-size: 0.846rem;
+    opacity: 0.8;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.scell {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 3px;
+    padding: 6px;
+    min-width: 0;
+}
+
+.stile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* the list's tile shape, as on the board (tile-shape.ts) */
+    width: calc(var(--stream-sz) * var(--tile-wf, 1));
+}
+
+.stile.new {
+    animation: stream-arrive 0.4s ease-out;
+}
+
+@keyframes stream-arrive {
+    from {
+        transform: scale(1.3);
+    }
+    to {
+        transform: none;
+    }
+}
+
+#stream .pimg {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--tile-ratio, 1);
+    overflow: hidden;
+    pointer-events: none;
+}
+
+#stream .pimg img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: var(--tile-fit, contain);
+}
+
+#stream .pimg img.whole {
+    object-fit: contain;
+}
+
+#stream .pimg img.crop {
+    position: absolute;
+    object-fit: fill;
+    max-width: none;
+}
+
+.sname {
+    display: none;
+    max-width: 100%;
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--text);
+    font-size: clamp(10px, calc(var(--stream-sz) * 0.15), 15px);
+    line-height: 1.25;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#stream.names {
+    --name-line: calc(clamp(10px, calc(var(--stream-sz) * 0.15), 15px) * 1.25 + 2px);
+}
+
+#stream.names .sname {
+    display: block;
+}
+
+/* a chart: the same cells as on the board, a grid of labelled bands */
+#sboard.chart {
+    display: grid;
+    grid-template-columns: repeat(var(--chart-cols, 3), minmax(0, 1fr));
+    grid-auto-rows: max-content;
+    align-content: start;
+    gap: 6px;
+}
+
+#sboard.chart .srow {
+    flex-direction: column;
+}
+
+#sboard.chart .slbl {
+    width: auto;
+    min-width: 0;
+    min-height: 40px;
+}
+
+#sboard.chart .scell {
+    min-height: calc(var(--stream-sz) * var(--tile-hf, 1) * 1.2 + 14px);
+}
+
+/* ── the item being ranked ── */
+
+#snow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 0;
+    text-align: center;
+}
+
+#snowitem,
+#sdone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.snowkick {
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+/* as tall as a square one would be, whatever the tile shape */
+#snowpic {
+    width: min(100%, calc(48vh * var(--tile-ratio, 1)));
+    aspect-ratio: var(--tile-ratio, 1);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#snowpic.lifted {
+    opacity: 0.3;
+}
+
+#snowname,
+#sdone h2 {
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    font-size: clamp(1.5rem, 2.6vw, 2.8rem);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+#snowwhere,
+#sprog {
+    color: var(--muted);
+    font-size: 1rem;
+    min-height: 1.2em;
+}
+
+#sdone {
+    padding: 6px 0;
+}
+
+#sdone button {
+    padding: 8px 18px;
+    font-size: 1rem;
+}
+
+/* over a keyed-out background the words sit on the video: white with a shadow reads on anything */
+#stream[data-bg="green"] #snow,
+#stream[data-bg="magenta"] #snow {
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+}
+
+#stream[data-bg="green"] :is(.snowkick, #snowwhere, #sprog),
+#stream[data-bg="magenta"] :is(.snowkick, #snowwhere, #sprog) {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#sghost {
+    position: fixed;
+    z-index: 10;
+    width: 110px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+/* ── controls (H hides them, and the tier numbers, so they stay off camera) ── */
+
+#skeys {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    justify-self: start;
+    max-width: 100%;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-panel);
+    background: var(--s1);
+    color: var(--muted);
+    font-size: 0.846rem;
+}
+
+#skeys > span {
+    margin-right: 6px;
+}
+
+#skeys button {
+    padding: 2px 8px;
+    font-size: 0.846rem;
+}
+
+.fortouch {
+    display: none;
+}
+
+#skeysshow {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    padding: 2px 8px;
+    font-size: 0.846rem;
+    opacity: 0.3;
+}
+
+#skeysshow:hover,
+#skeysshow:focus-visible {
+    opacity: 1;
+}
+
+#stream.nohints #skeys,
+#stream.nohints .slbl i,
+#stream:not(.nohints) #skeysshow {
+    display: none;
+}
+
+/* touch screens: no keys to press, so the hint says what to tap */
+@media (hover: none) and (pointer: coarse) {
+    .forkeys,
+    #skeys kbd {
+        display: none;
+    }
+    .fortouch {
+        display: inline;
+    }
+}
+
+/* phones and tall windows: the item on top, the tiers under it */
+@media (max-width: 720px), (max-aspect-ratio: 4 / 5) {
+    #stream {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: 10px;
+        padding: 10px 10px 8px;
+    }
+    #snow {
+        order: -1;
+        gap: 4px;
+    }
+    #snowitem {
+        gap: 4px;
+    }
+    #snowpic {
+        width: min(46vw, calc(24vh * var(--tile-ratio, 1)));
+    }
+    #snowname,
+    #sdone h2 {
+        font-size: 1.35rem;
+    }
+    .slbl {
+        width: calc(var(--lw) * 0.8);
+        min-width: calc(var(--lw) * 0.8);
+        padding: 4px 6px;
+    }
+    .slbl-main {
+        font-size: var(--fs-label);
+    }
+    #skeys {
+        gap: 4px;
+    }
+    #skeys > span {
+        flex-basis: 100%;
+    }
+}

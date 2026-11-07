@@ -1,0 +1,23 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "planets",
+    "title": "Planets and dwarf planets",
+    "category": "Space",
+    "description": "The eight planets of the Solar System and its five recognised dwarf planets.",
+    "items": [
+        { "name": "Mercury", "wiki": "Mercury (planet)" },
+        { "name": "Venus", "wiki": "Venus" },
+        { "name": "Earth", "wiki": "Earth" },
+        { "name": "Mars", "wiki": "Mars" },
+        { "name": "Jupiter", "wiki": "Jupiter" },
+        { "name": "Saturn", "wiki": "Saturn" },
+        { "name": "Uranus", "wiki": "Uranus" },
+        { "name": "Neptune", "wiki": "Neptune" },
+        { "name": "Pluto", "wiki": "Pluto" },
+        { "name": "Ceres", "wiki": "Ceres (dwarf planet)" },
+        { "name": "Eris", "wiki": "Eris (dwarf planet)" },
+        { "name": "Haumea", "wiki": "Haumea" },
+        { "name": "Makemake", "wiki": "Makemake" }
+    ]
+}

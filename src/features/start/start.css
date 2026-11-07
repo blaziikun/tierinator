@@ -1,0 +1,138 @@
+/*
+ * src/features/start/start.css
+ *
+ * The start screen: one big line saying what the site does, then four ways in, over the empty
+ * board on a first visit. The board stays faintly visible behind it, so the first thing you see is a
+ * tier list waiting.
+ */
+
+#main {
+    position: relative;
+}
+
+#start {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    overflow-y: auto;
+}
+
+#startbox {
+    width: min(620px, 100%);
+    margin: auto 0; /* centred when it fits, scrolls from the top when it doesn't */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* the one loud thing in the whole interface: the heading face at display size, set tight like a
+   poster's headline. Everything else on the site stays at the size of a control. */
+#startbox h1 {
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: clamp(2.75rem, 9vw, 4.6rem);
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+    text-wrap: balance;
+}
+
+#startbox h1 + p {
+    color: var(--muted);
+    font-size: 1.077rem;
+    line-height: 1.5;
+    margin-top: 4px;
+}
+
+/* the ways in: rows on one sheet, ruled apart like a tier list's rows (they're choices, not a ranking,
+   so no colours) */
+#startways {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin: 24px 0 8px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--r-panel);
+    overflow: hidden;
+}
+
+#startways button {
+    display: grid;
+    grid-template-columns: 12.5rem 1fr;
+    align-items: baseline;
+    gap: 4px 16px;
+    padding: 16px 18px;
+    border: 0;
+    border-radius: 0;
+    background: var(--s1);
+    text-align: left;
+    white-space: normal;
+}
+
+#startways button:hover {
+    background: var(--s2);
+}
+
+#startways button:focus-visible {
+    outline-offset: -3px; /* inside the sheet, which clips anything outside a row */
+}
+
+#startways button b {
+    font-family: var(--font-head);
+    font-weight: 500;
+    font-size: 1.385rem;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--text);
+}
+
+#startways button span {
+    font-size: 0.923rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+#startways button:hover span {
+    color: color-mix(in srgb, var(--text) 80%, var(--muted));
+}
+
+@media (max-width: 560px) {
+    /* on a phone the text sits over the board itself, so the board shows through less */
+    #start {
+        background-color: color-mix(in srgb, var(--bg) 97%, transparent);
+    }
+
+    #startways button {
+        grid-template-columns: 1fr;
+        padding: 14px 16px;
+    }
+}
+
+#startlinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+}
+
+/* a button that looks like a link (used in short notes) */
+button.link {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--text) 35%, transparent);
+    text-underline-offset: 3px;
+    font-size: inherit;
+}
+
+button.link:hover {
+    background: none;
+    color: var(--cyan);
+    text-decoration-color: currentColor;
+}

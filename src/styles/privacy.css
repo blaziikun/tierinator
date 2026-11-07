@@ -1,0 +1,120 @@
+/*
+ * src/styles/privacy.css
+ *
+ * The privacy, terms and accessibility page: one readable column in the default theme's
+ * type and greys (dark, like the app).
+ */
+
+@font-face {
+    font-family: "Playfair Display";
+    font-weight: 400 900;
+    font-display: swap;
+    src: url("./fonts/playfair-display-latin-wght-normal.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url("./fonts/instrument-sans-latin-wght-normal.woff2") format("woff2");
+}
+
+:root {
+    --bg: #0b0b0c;
+    --text: #ededee;
+    --muted: #8c8c93;
+    --rule: #26262a;
+    color-scheme: dark;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font:
+        16px / 1.65 "Instrument Sans",
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+main {
+    max-width: 68ch;
+    margin: 0 auto;
+    padding: 48px 16px 96px;
+}
+
+h1,
+h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+h1 {
+    font-size: clamp(2.4rem, 7vw, 3.4rem);
+    margin: 12px 0 8px;
+    text-wrap: balance;
+}
+
+h2 {
+    font-size: 1.7rem;
+    margin: 56px 0 8px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+}
+
+h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 28px 0 4px;
+}
+
+p,
+li {
+    margin: 0 0 12px;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+a {
+    color: var(--text);
+    text-decoration-color: color-mix(in srgb, var(--text) 35%, transparent);
+    text-underline-offset: 3px;
+}
+
+a:hover {
+    text-decoration-color: currentColor;
+}
+
+a:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+}
+
+.updated,
+.back {
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+.back {
+    margin-bottom: 28px;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin-top: 24px;
+}

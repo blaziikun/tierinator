@@ -1,0 +1,24 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "wonders-of-the-world",
+    "title": "Wonders of the world",
+    "category": "History",
+    "description": "The Seven Wonders of the Ancient World and the New Seven Wonders.",
+    "items": [
+        { "name": "Great Pyramid of Giza", "wiki": "Great Pyramid of Giza" },
+        { "name": "Hanging Gardens of Babylon", "wiki": "Hanging Gardens of Babylon" },
+        { "name": "Statue of Zeus at Olympia", "wiki": "Statue of Zeus at Olympia" },
+        { "name": "Temple of Artemis", "wiki": "Temple of Artemis" },
+        { "name": "Mausoleum at Halicarnassus", "wiki": "Mausoleum at Halicarnassus" },
+        { "name": "Colossus of Rhodes", "wiki": "Colossus of Rhodes" },
+        { "name": "Lighthouse of Alexandria", "wiki": "Lighthouse of Alexandria" },
+        { "name": "Great Wall of China", "wiki": "Great Wall of China" },
+        { "name": "Petra", "wiki": "Petra" },
+        { "name": "Christ the Redeemer", "wiki": "Christ the Redeemer (statue)" },
+        { "name": "Machu Picchu", "wiki": "Machu Picchu" },
+        { "name": "Chichen Itza", "wiki": "Chichen Itza" },
+        { "name": "Colosseum", "wiki": "Colosseum" },
+        { "name": "Taj Mahal", "wiki": "Taj Mahal" }
+    ]
+}

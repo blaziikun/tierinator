@@ -1,0 +1,229 @@
+/*
+ * src/features/pack-builder/pack-builder.css
+ *
+ * The pack builder: steps, category and field tables, colours, families.
+ */
+
+#pbbox {
+    width: min(980px, 96vw);
+    max-width: none;
+    max-height: 90vh;
+    text-align: left;
+    overflow-y: auto;
+}
+
+#pbbox .addhead #pbx {
+    margin-left: auto;
+}
+
+#pbbox .edr,
+#pbbox .edbtns {
+    flex-wrap: wrap;
+}
+
+#pbsteps {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+#pbsteps button {
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    #pbbox {
+        padding: 14px 12px;
+    }
+    #pbbox .addhead #pbx {
+        position: absolute;
+        right: 14px;
+        top: 12px;
+    }
+    #pbbox {
+        position: relative;
+    }
+}
+
+#pbbox .edr input[type="text"] {
+    min-width: 160px;
+}
+
+#pbsteps button:disabled {
+    opacity: 0.4;
+}
+
+.pbh {
+    font-size: 0.846rem;
+    color: var(--muted);
+    font-weight: 600;
+    margin: 4px 0 -4px;
+}
+
+.pbopt {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-ctl);
+    margin: 4px 0;
+    cursor: pointer;
+}
+
+.pbhow .chip {
+    margin: 2px;
+}
+
+.pbcats .chip.off {
+    text-decoration: line-through;
+    opacity: 0.55;
+    border-color: var(--red);
+    color: var(--red);
+}
+
+.pbitems {
+    columns: 3 220px;
+    column-gap: 14px;
+    max-height: 44vh;
+    overflow-y: auto;
+    font-size: 0.846rem;
+    border: 1px solid var(--border);
+    border-radius: var(--r-ctl);
+    padding: 8px;
+}
+
+.pbitems label {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    break-inside: avoid;
+    padding: 1px 0;
+    cursor: pointer;
+}
+
+.pbitems label.off span {
+    opacity: 0.45;
+    text-decoration: line-through;
+}
+
+.pbitems a {
+    opacity: 0.5;
+    text-decoration: none;
+    margin-left: auto;
+}
+
+.pbitems a:hover {
+    opacity: 1;
+}
+
+.pbtab {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.846rem;
+}
+
+.pbtab td,
+.pbtab th {
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top;
+}
+
+.pbtab th {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.pbtab tr.off td:not(:first-child) {
+    opacity: 0.5;
+}
+
+.pbtab input[type="text"] {
+    width: 130px;
+}
+
+.pbcf {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.846rem;
+}
+
+.pbcf.off {
+    opacity: 0.55;
+}
+
+.pbcf .chip {
+    display: inline-block;
+    margin: 2px;
+    cursor: default;
+}
+
+.pbcf .chip small,
+.pbcats .chip small {
+    opacity: 0.6;
+    margin-left: 4px;
+}
+
+.pbcf label {
+    margin-right: 8px;
+}
+
+.pbcf input[type="text"] {
+    width: 150px;
+}
+
+.pbcolors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 0.846rem;
+    align-items: center;
+}
+
+.pbcol {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.pbcol input {
+    width: 26px;
+    height: 22px;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.pbfams {
+    max-height: 42vh;
+    overflow-y: auto;
+    font-size: 0.846rem;
+}
+
+.pbfam {
+    display: block;
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.pbfam.off {
+    opacity: 0.5;
+}
+
+.pbok {
+    padding: 8px 10px;
+    border-radius: var(--r-ctl);
+    background: color-mix(in srgb, var(--green, #30a46c) 14%, transparent);
+}
+
+.pbgrid {
+    --vc: 84px;
+    max-height: 46vh;
+    overflow-y: auto;
+}
+
+.pbgrid a.vc {
+    text-decoration: none;
+}

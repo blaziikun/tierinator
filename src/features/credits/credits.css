@@ -1,0 +1,81 @@
+/*
+ * src/features/credits/credits.css
+ *
+ * Picture credits: the line in the item editor, and the Picture credits window.
+ */
+
+#iedcredit {
+    font-size: 0.846rem;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+}
+
+#iedcredit:empty {
+    display: none;
+}
+
+#iedcredit a,
+#pclist a {
+    color: var(--text);
+    text-underline-offset: 3px;
+}
+
+#pcbox {
+    width: min(620px, calc(100vw - 24px));
+    max-width: none;
+    max-height: min(780px, calc(100dvh - 24px));
+    text-align: left;
+    gap: 12px;
+}
+
+#pcbox #pcx {
+    margin-left: auto;
+}
+
+#pcbox > .note {
+    font-size: 0.846rem;
+    line-height: 1.5;
+}
+
+#pclist {
+    min-height: 0;
+    overflow-y: auto;
+    /* room for the focus ring of the links at the edges */
+    padding: 3px;
+    margin: -3px;
+}
+
+#pclist ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+#pclist li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 9px 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.846rem;
+    overflow-wrap: anywhere;
+}
+
+#pclist li:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+#pclist li a {
+    font-size: 0.846rem;
+    color: var(--muted);
+    align-self: flex-start;
+}
+
+#pclist li a:hover {
+    color: var(--text);
+}
+
+#pclist .empty {
+    padding: 24px 12px;
+}

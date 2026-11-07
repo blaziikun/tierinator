@@ -1,0 +1,25 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "harry-potter",
+    "title": "Harry Potter books and films",
+    "category": "Books",
+    "description": "The seven books and eight films, to rank side by side.",
+    "items": [
+        { "name": "Philosopher’s Stone (book)", "wiki": "Harry Potter and the Philosopher's Stone" },
+        { "name": "Chamber of Secrets (book)", "wiki": "Harry Potter and the Chamber of Secrets" },
+        { "name": "Prisoner of Azkaban (book)", "wiki": "Harry Potter and the Prisoner of Azkaban" },
+        { "name": "Goblet of Fire (book)", "wiki": "Harry Potter and the Goblet of Fire" },
+        { "name": "Order of the Phoenix (book)", "wiki": "Harry Potter and the Order of the Phoenix" },
+        { "name": "Half-Blood Prince (book)", "wiki": "Harry Potter and the Half-Blood Prince" },
+        { "name": "Deathly Hallows (book)", "wiki": "Harry Potter and the Deathly Hallows" },
+        { "name": "Philosopher’s Stone (film)", "wiki": "Harry Potter and the Philosopher's Stone (film)" },
+        { "name": "Chamber of Secrets (film)", "wiki": "Harry Potter and the Chamber of Secrets (film)" },
+        { "name": "Prisoner of Azkaban (film)", "wiki": "Harry Potter and the Prisoner of Azkaban (film)" },
+        { "name": "Goblet of Fire (film)", "wiki": "Harry Potter and the Goblet of Fire (film)" },
+        { "name": "Order of the Phoenix (film)", "wiki": "Harry Potter and the Order of the Phoenix (film)" },
+        { "name": "Half-Blood Prince (film)", "wiki": "Harry Potter and the Half-Blood Prince (film)" },
+        { "name": "Deathly Hallows – Part 1 (film)", "wiki": "Harry Potter and the Deathly Hallows – Part 1" },
+        { "name": "Deathly Hallows – Part 2 (film)", "wiki": "Harry Potter and the Deathly Hallows – Part 2" }
+    ]
+}

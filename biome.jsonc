@@ -1,0 +1,51 @@
+// Biome: one tool that formats and lints (TypeScript, CSS, JSON). Run: pnpm lint / pnpm format
+{
+    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+    "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+    "files": {
+        // the packs are data (one long line each), not code
+        "includes": ["src/**", "tests/**", "scripts/**", "*.ts", "*.json", "*.jsonc", "!public/packs", "!package-lock.json"]
+    },
+    "formatter": {
+        "indentStyle": "space",
+        "indentWidth": 4,
+        // long enough that one idea fits on one line; templates of markup stay readable
+        "lineWidth": 140
+    },
+    "javascript": {
+        "formatter": { "quoteStyle": "single", "trailingCommas": "all" }
+    },
+    "assist": { "actions": { "source": { "organizeImports": "on" } } },
+    "linter": {
+        "rules": {
+            "preset": "recommended",
+            "style": {
+                // `x!` after a lookup that can't fail (byId, a key just checked) reads better than a cast
+                "noNonNullAssertion": "off",
+                "useTemplate": "off"
+            },
+            "suspicious": {
+                "noExplicitAny": "error",
+                // `catch {}` is how "storage might be unavailable, carry on" is written here
+                "noEmptyBlockStatements": "off"
+            },
+            "complexity": {
+                // only in the hide helpers (.hid…) and drag cursors, where the override must always win
+                "noImportantStyles": "off"
+            },
+            "security": {
+                "noDangerouslySetInnerHtml": "error"
+            }
+        }
+    },
+    "css": {
+        "linter": { "enabled": true }
+    },
+    "overrides": [
+        {
+            // the stylesheet relies on source order (later rules win); that's intended
+            "includes": ["**/*.css"],
+            "linter": { "rules": { "style": { "noDescendingSpecificity": "off" } } }
+        }
+    ]
+}

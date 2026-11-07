@@ -1,0 +1,31 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "star-wars",
+    "title": "Star Wars films and series",
+    "category": "Films and TV",
+    "description": "The Skywalker saga, the spin-off films and the live-action and animated series.",
+    "items": [
+        { "name": "A New Hope", "wiki": "Star Wars (film)" },
+        { "name": "The Empire Strikes Back", "wiki": "The Empire Strikes Back" },
+        { "name": "Return of the Jedi", "wiki": "Return of the Jedi" },
+        { "name": "The Phantom Menace", "wiki": "Star Wars: Episode I – The Phantom Menace" },
+        { "name": "Attack of the Clones", "wiki": "Star Wars: Episode II – Attack of the Clones" },
+        { "name": "Revenge of the Sith", "wiki": "Star Wars: Episode III – Revenge of the Sith" },
+        { "name": "The Force Awakens", "wiki": "Star Wars: The Force Awakens" },
+        { "name": "The Last Jedi", "wiki": "Star Wars: The Last Jedi" },
+        { "name": "The Rise of Skywalker", "wiki": "Star Wars: The Rise of Skywalker" },
+        { "name": "Rogue One", "wiki": "Rogue One" },
+        { "name": "Solo", "wiki": "Solo: A Star Wars Story" },
+        { "name": "The Clone Wars (series)", "wiki": "Star Wars: The Clone Wars (2008 TV series)" },
+        { "name": "Rebels", "wiki": "Star Wars Rebels" },
+        { "name": "The Mandalorian", "wiki": "The Mandalorian" },
+        { "name": "The Bad Batch", "wiki": "Star Wars: The Bad Batch" },
+        { "name": "The Book of Boba Fett", "wiki": "The Book of Boba Fett" },
+        { "name": "Obi-Wan Kenobi", "wiki": "Obi-Wan Kenobi (TV series)" },
+        { "name": "Andor", "wiki": "Andor (TV series)" },
+        { "name": "Ahsoka", "wiki": "Ahsoka (TV series)" },
+        { "name": "The Acolyte", "wiki": "The Acolyte (TV series)" },
+        { "name": "Skeleton Crew", "wiki": "Star Wars: Skeleton Crew" }
+    ]
+}

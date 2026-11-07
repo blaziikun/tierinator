@@ -1,0 +1,19 @@
+// wrangler.jsonc — how Cloudflare serves the site (Workers static assets: no server code).
+// Deploy: `pnpm deploy`, or automatically on every push to main (docs/hosting.md).
+{
+    "$schema": "./node_modules/wrangler/config-schema.json",
+    "name": "tierinator",
+    "compatibility_date": "2026-10-01",
+    "assets": {
+        // the built site (`pnpm build`), headers from public/_headers
+        "directory": "./dist",
+        // a mistyped address shows the app (it has only one page)
+        "not_found_handling": "single-page-application"
+    },
+    "routes": [{ "pattern": "tierinator.sayel.dev", "custom_domain": true }],
+    // the site is only at tierinator.sayel.dev, not also at tierinator.<account>.workers.dev
+    "workers_dev": false,
+    "preview_urls": false,
+    // no usage statistics from wrangler
+    "send_metrics": false
+}

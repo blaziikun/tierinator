@@ -1,0 +1,23 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "beatles-albums",
+    "title": "Beatles albums",
+    "category": "Music",
+    "description": "The thirteen studio albums, from Please Please Me to Let It Be.",
+    "items": [
+        { "name": "Please Please Me", "wiki": "Please Please Me" },
+        { "name": "With the Beatles", "wiki": "With the Beatles" },
+        { "name": "A Hard Day’s Night", "wiki": "A Hard Day's Night (album)" },
+        { "name": "Beatles for Sale", "wiki": "Beatles for Sale" },
+        { "name": "Help!", "wiki": "Help! (album)" },
+        { "name": "Rubber Soul", "wiki": "Rubber Soul" },
+        { "name": "Revolver", "wiki": "Revolver (Beatles album)" },
+        { "name": "Sgt. Pepper’s Lonely Hearts Club Band", "wiki": "Sgt. Pepper's Lonely Hearts Club Band" },
+        { "name": "Magical Mystery Tour", "wiki": "Magical Mystery Tour" },
+        { "name": "The White Album", "wiki": "The Beatles (album)" },
+        { "name": "Yellow Submarine", "wiki": "Yellow Submarine (album)" },
+        { "name": "Abbey Road", "wiki": "Abbey Road" },
+        { "name": "Let It Be", "wiki": "Let It Be (album)" }
+    ]
+}

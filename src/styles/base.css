@@ -1,0 +1,537 @@
+/*
+ * src/styles/base.css
+ *
+ * The ground floor: colour and font variables (set live by the Appearance panel),
+ * the measures every part shares (radius, height, shadow, focus), the page, and every
+ * shared control: buttons, chips, tabs, fields, menus' checkboxes and sliders.
+ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* The default theme's fonts are served from this site (licence: fonts/OFL.txt);
+   any other font you pick comes from Google Fonts. */
+@font-face {
+    font-family: "Playfair Display";
+    font-style: normal;
+    font-weight: 400 900;
+    font-display: swap;
+    src: url("./fonts/playfair-display-latin-wght-normal.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url("./fonts/instrument-sans-latin-wght-normal.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Geist Mono";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("./fonts/geist-mono-latin-wght-normal.woff2") format("woff2");
+}
+
+/* Every colour, font, weight and size below comes from the Appearance panel (applyTheme);
+   these are the built-in theme's values, for the moment before it runs. */
+
+:root {
+    --psz: 56px;
+    --bg: #0b0b0c;
+    --s1: #141416;
+    --s2: #202022;
+    --s3: #303032;
+    --accent: #ededee;
+    --on-accent: #111111;
+    --cyan: #ffffff;
+    --on-cyan: #111111;
+    --text: #ededee;
+    --muted: #8c8c93;
+    --shadow: rgba(0, 0, 0, 0.5);
+    --overlay: rgba(0, 0, 0, 0.72);
+    --font-head: "Playfair Display", Georgia, serif;
+    --font-ui: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --w-logo: 700;
+    --w-label: 700;
+    --w-head: 700;
+    --w-ui: 400;
+    --w-strong: 600;
+    --fs: 13px;
+    --fs-logo: 17px;
+    --fs-label: 17px;
+    --ls-label: 0em;
+    --tt-label: none;
+    --sz: 64px;
+    --lw: 110px;
+    --r: 3px;
+    --rowgap: 3px;
+    --vc: 96px;
+
+    /* lines, from faint to firm: rules between parts, edges of things you can press, and the edge of a field
+       you type in (3:1 against the panels, so it can be found without the placeholder) */
+    --border: color-mix(in srgb, var(--text) 8%, transparent);
+    --border2: color-mix(in srgb, var(--text) 14%, transparent);
+    --edge: color-mix(in srgb, var(--text) 38%, transparent);
+    --hover: color-mix(in srgb, var(--text) 6%, transparent);
+    /* the chosen one of a set (a tab, a switch that's on): light enough to stand 3:1 apart from the track */
+    --chosen: color-mix(in srgb, var(--text) 34%, var(--s1));
+
+    /* the site's own monospace, for what has to line up or be typed exactly: shortcuts, colour codes */
+    --font-mono: "Geist Mono", ui-monospace, Menlo, monospace;
+
+    /* roundness grows with size, all from the theme's Roundness (--r, 3 px by default): small chips 4,
+       buttons and fields 7, floating panels 12, windows 14. Tiles and tier rows use --r itself. */
+    --r-chip: calc(var(--r) + 1px);
+    --r-ctl: min(calc(var(--r) * 2 + 1px), 14px);
+    --r-panel: min(calc(var(--r) * 3 + 3px), 20px);
+    --r-win: min(calc(var(--r) * 3 + 5px), 22px);
+
+    /* one height for every control in a row, so buttons, fields and menus line up */
+    --h-ctl: 28px;
+
+    /* things that float over the page: a close shadow for the edge, a long soft one for the height */
+    --lift: 0 1px 2px color-mix(in srgb, var(--shadow) 60%, transparent), 0 14px 36px -6px var(--shadow);
+    --lift-win: 0 2px 6px color-mix(in srgb, var(--shadow) 60%, transparent), 0 30px 80px -10px var(--shadow);
+
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+html {
+    font-size: var(--fs);
+}
+
+/* keyboard focus is always visible, in the highlight colour, a little away from the edge; mouse clicks don't draw it */
+:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+}
+
+/* people who ask their system for less motion get none */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+}
+
+body {
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-weight: var(--w-ui);
+    font-size: 1rem;
+    line-height: 1.45;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* the few symbols used as marks (✕ ▾ ★ ⌨) stay plain text, never a phone's colour emoji */
+    font-variant-emoji: text;
+}
+
+/* thin scrollbars in the panel greys everywhere, so a scrolling list doesn't grow a bright system bar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--s3) transparent;
+}
+
+b,
+strong {
+    font-weight: var(--w-strong);
+}
+
+.hid,
+.barhid {
+    display: none !important;
+}
+
+::selection {
+    background: color-mix(in srgb, var(--cyan) 35%, transparent);
+}
+
+/* ── buttons ── */
+
+button {
+    background: var(--s2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--r-ctl);
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 0.923rem;
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: 1.5;
+    transition:
+        background 0.12s,
+        border-color 0.12s,
+        color 0.12s;
+    white-space: nowrap;
+}
+
+button:hover {
+    background: var(--s3);
+    border-color: var(--border2);
+}
+
+/* a control that can't be used yet stays readable as a word, with nothing that answers the pointer */
+button:disabled,
+button:disabled:hover {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--muted);
+    opacity: 0.6;
+    cursor: default;
+}
+
+/* the one filled button in a group: what you most likely came to do */
+button.accent {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    font-weight: var(--w-strong);
+}
+
+button.accent:hover {
+    background: color-mix(in srgb, var(--accent) 86%, var(--bg));
+    border-color: color-mix(in srgb, var(--accent) 86%, var(--bg));
+}
+
+button.accent:disabled,
+button.accent:disabled:hover {
+    background: transparent;
+    border-color: var(--border2);
+    color: var(--muted);
+}
+
+/* a second way on, quieter than the filled one: a firmer edge than a plain button */
+button.cbtn {
+    background: color-mix(in srgb, var(--cyan) 7%, var(--s2));
+    border-color: color-mix(in srgb, var(--cyan) 26%, transparent);
+    color: var(--text);
+}
+
+button.cbtn:hover {
+    background: color-mix(in srgb, var(--cyan) 13%, var(--s2));
+    border-color: color-mix(in srgb, var(--cyan) 40%, transparent);
+}
+
+/* a highlighted button that is also the main one (Export → PNG) is filled like any main one */
+button.cbtn.accent {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+}
+
+button.cbtn.accent:hover {
+    background: color-mix(in srgb, var(--accent) 86%, var(--bg));
+}
+
+/* something that can't be taken back (lists, items, everything): red words, filled red only under the pointer */
+button.danger {
+    background: color-mix(in srgb, #e5484d 10%, transparent);
+    border-color: color-mix(in srgb, #e5484d 42%, transparent);
+    color: #ff8f8f;
+}
+
+button.danger:hover {
+    background: #c9363b;
+    border-color: #c9363b;
+    color: #ffffff;
+}
+
+/* small round-cornered toggles in a row: filters, tags, categories */
+.chip {
+    border-radius: var(--r-chip);
+    padding: 2px 9px;
+    font-size: 0.846rem;
+}
+
+.chip.on {
+    background: color-mix(in srgb, var(--cyan) 14%, var(--s2));
+    border-color: color-mix(in srgb, var(--cyan) 55%, transparent);
+    color: var(--cyan);
+}
+
+/* a set of views or modes, one chosen: a sunken track with the chosen one raised */
+.tabs {
+    display: flex;
+    max-width: 100%;
+    overflow-x: auto; /* on a phone the tabs scroll rather than being cut off */
+    scrollbar-width: none;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-ctl);
+    padding: 2px;
+    gap: 2px;
+}
+
+.tabs button {
+    flex-shrink: 0;
+    border: 1px solid transparent;
+    background: none;
+    border-radius: calc(var(--r-ctl) - 2px);
+    padding: 2px 10px;
+    color: var(--muted);
+}
+
+.tabs button:hover {
+    background: none;
+    color: var(--text);
+}
+
+.tabs button.on {
+    background: var(--chosen);
+    border-color: transparent;
+    color: var(--text);
+}
+
+/* ── fields ── */
+
+input[type="text"],
+input[type="search"],
+textarea {
+    background: var(--bg);
+    border: 1px solid var(--edge);
+    border-radius: var(--r-ctl);
+    color: var(--text);
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: 0.923rem;
+    line-height: 1.5;
+    padding: 4px 10px;
+    outline: none;
+    transition:
+        border-color 0.12s,
+        box-shadow 0.12s;
+}
+
+input[type="text"]:hover,
+input[type="search"]:hover,
+textarea:hover {
+    border-color: color-mix(in srgb, var(--text) 50%, transparent);
+}
+
+/* a field you're typing in: its edge turns the highlight colour, with a soft halo outside it */
+input[type="text"]:focus,
+input[type="search"]:focus,
+textarea:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 16%, transparent);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--muted);
+    opacity: 1;
+}
+
+/* a choice of several: shaped like a button, with its own small chevron drawn in the text colour, like the ▾ on menu buttons */
+select {
+    appearance: none;
+    background-color: var(--s2);
+    background-image: linear-gradient(45deg, transparent 50%, var(--text) 50%), linear-gradient(135deg, var(--text) 50%, transparent 50%);
+    background-position:
+        calc(100% - 14px) 52%,
+        calc(100% - 10px) 52%;
+    background-size: 4px 4px;
+    background-repeat: no-repeat;
+    border: 1px solid var(--border2);
+    border-radius: var(--r-ctl);
+    color: var(--text);
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: 0.923rem;
+    line-height: 1.5;
+    padding: 4px 26px 4px 10px;
+    cursor: pointer;
+    max-width: 100%;
+    transition:
+        background-color 0.12s,
+        border-color 0.12s;
+}
+
+select:hover {
+    background-color: var(--s3);
+}
+
+select option,
+select optgroup {
+    background: var(--s1);
+    color: var(--text);
+}
+
+input[type="range"] {
+    width: 84px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+input[type="color"] {
+    width: 32px;
+    height: 26px;
+    border: 1px solid var(--border2);
+    border-radius: var(--r-chip);
+    background: none;
+    cursor: pointer;
+    padding: 2px;
+}
+
+label.ck {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.923rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* a key to press: a small key cap in the site's monospace, the same in menus, notes and windows */
+kbd {
+    display: inline-block;
+    min-width: 1.7em;
+    padding: 0 5px;
+    border: 1px solid var(--border2);
+    border-bottom-width: 2px;
+    border-radius: var(--r-chip);
+    background: color-mix(in srgb, var(--bg) 50%, transparent);
+    color: var(--muted);
+    font: 500 0.75rem / 1.55 var(--font-mono);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: 1px;
+}
+
+img.px {
+    image-rendering: pixelated;
+}
+
+/* ── rows of settings in panels and windows ── */
+
+.edr {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.edr > label {
+    font-size: 0.923rem;
+    color: var(--muted);
+    min-width: 64px;
+}
+
+.edr input[type="text"],
+.edr select {
+    flex: 1;
+    min-width: 0;
+}
+
+.edbtns {
+    display: flex;
+    gap: 8px;
+}
+
+.edbtns button {
+    flex: 1;
+}
+
+.note {
+    font-size: 0.846rem;
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+.empty {
+    padding: 40px;
+    color: var(--muted);
+    text-align: center;
+}
+
+body:not(.kind-pokemon) .pkonly {
+    display: none !important;
+}
+
+body.kind-pokemon .cstonly {
+    display: none !important;
+}
+
+/* Text in the accent colour (e.g. "Blocked"). */
+
+.accent {
+    color: var(--accent);
+}
+
+/* Empty notes that need more room (Variants ▾). */
+
+.empty.roomy {
+    padding: 16px;
+}
+
+/* Space above a note under a card. */
+
+.note.spaced {
+    margin-top: 6px;
+}
+
+/* ── phones: what a finger presses is at least 44 px tall (the bars, menus, windows and the Style panel;
+   the small tools beside a tier stay small, since they'd push every row apart, and cards are taller anyway: a
+   minimum on a card in a grid would let its row shrink to that minimum) ── */
+
+@media (pointer: coarse) and (max-width: 720px) {
+    :root {
+        --h-ctl: 44px;
+    }
+
+    #toolbar button,
+    #toolbar select,
+    #pfilt button,
+    #pfilt select,
+    #pfilt input[type="search"],
+    #selbar button,
+    .pop button,
+    .pop select,
+    .pop input[type="text"],
+    .pop input[type="search"],
+    .mbox button:not(.tplcard, .scard, .h2hc),
+    .mbox select,
+    .mbox input[type="text"],
+    .mbox input[type="search"],
+    #appear button,
+    #appear select,
+    #appear input[type="text"] {
+        min-height: var(--h-ctl);
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+        width: 20px;
+        height: 20px;
+    }
+}

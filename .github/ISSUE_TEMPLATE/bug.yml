@@ -1,0 +1,28 @@
+name: Something's broken
+description: A bug, a crash, or something that looks wrong
+labels: [bug]
+body:
+    - type: textarea
+      id: what
+      attributes:
+          label: What happened
+          description: And what you expected instead.
+      validations:
+          required: true
+    - type: textarea
+      id: steps
+      attributes:
+          label: How to make it happen
+          placeholder: |
+              1. Open a Pokémon list
+              2. …
+      validations:
+          required: true
+    - type: input
+      id: browser
+      attributes:
+          label: Browser and device
+          placeholder: Firefox 144 on Windows, Safari on iPhone…
+    - type: markdown
+      attributes:
+          value: Please don't attach list files or backups with anything personal in them. A screenshot is usually enough.

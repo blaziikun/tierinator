@@ -1,0 +1,112 @@
+/*
+ * src/features/find/find.css
+ *
+ * The floating Find bar (F) for searching the tiers with the pool hidden.
+ */
+
+#findbox {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 900;
+    display: none;
+}
+
+body.pooloff #findbox:not(.hid) {
+    display: block;
+}
+
+#findfab {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--s1);
+    color: var(--text);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 7px 12px 7px 14px;
+    font-size: 0.923rem;
+    box-shadow: var(--lift);
+    opacity: 0.6;
+    transition: opacity 0.18s;
+    cursor: pointer;
+}
+
+#findfab:hover {
+    opacity: 1;
+}
+
+#findbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 5px 6px 5px 12px;
+    box-shadow: var(--lift);
+    max-width: calc(100vw - 32px);
+}
+
+#findbar.hid {
+    display: none;
+}
+
+#findin {
+    width: 200px;
+    min-width: 0;
+    flex: 1 1 auto;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--text);
+    font: inherit;
+    font-size: 0.923rem;
+}
+
+#findin::-webkit-search-cancel-button {
+    display: none;
+}
+
+#findcnt {
+    font-size: 0.846rem;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+#findcnt:empty {
+    display: none;
+}
+
+#findbar button {
+    border-radius: var(--r-ctl);
+    padding: 3px 10px;
+    font-size: 0.846rem;
+    white-space: nowrap;
+}
+
+#findbar #findpool {
+    background: var(--accent);
+    color: var(--on-accent);
+    border-color: transparent;
+}
+
+@media (max-width: 600px) {
+    #findbox {
+        right: 10px;
+        bottom: 10px;
+        left: auto;
+    }
+    #findbar {
+        max-width: calc(100vw - 20px);
+    }
+    #findin {
+        width: 120px;
+    }
+    #findfab span {
+        display: none;
+    }
+    #findfab kbd {
+        display: none;
+    }
+}
