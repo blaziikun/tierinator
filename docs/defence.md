@@ -600,6 +600,13 @@ theme is swapped for black or white (`contrastRatio`).
   theme (`--r-chip`, `--r-ctl`, `--r-panel`, `--r-win` from Roundness; `--edge`, `--chosen` from the text colour), so a
   theme with other colours or roundness keeps the same proportions. The edge of a field and a chosen tab stand 3:1
   against the panels in the built-in look; text stands at least 4.5:1 (muted text on the lightest panel: 4.8:1).
+- **A closed panel changes nothing.** Firefox and Zen, reopening tabs after a restart, put back every form field's old
+  value and fire `input`/`change` on it. The Style panel's controls only take the list's values when it opens
+  (`syncAppearancePanel`), so before this guard the restore wrote their untouched defaults into the list: every colour
+  black, every slider at half way, the layout Chart, then autosave kept it. Now `setupPanel` stops both events on
+  `#appear` while it isn't `.open`, and every field in `index.html` has `autocomplete="off"`, so the browser doesn't keep
+  their values in the first place. `tests/e2e/appearance.spec.ts` fires both events on every closed control and checks
+  the theme and layout are untouched (it fails without the guard).
 
 **Why this and not that:** dark only, not two built-in looks: one look to design, check for contrast and test at two
 widths, the same on screen, in exports and on a stream; tier colours and pictures read best on a quiet dark ground.
@@ -611,6 +618,8 @@ and every value is checked first.
 opener's browser asks Google for it (said on the privacy page). A theme makes text unreadable: the guard swaps it. An old
 list saved with the light look: it opens as it was saved. An old list set in Geist Mono: it stays so, and its theme card
 says "(edited)"; ↺ on the card brings the built-in look, Instrument Sans included.
+The browser restores a tab after a restart and replays old field values: the closed panel ignores them, and the fields
+don't ask to be remembered anyway.
 
 **Where it fails:** the page no longer follows the system's light setting; someone who reads better on light (bright
 rooms, some eyesight) has to make a light theme by hand. A theme can still be ugly; only readability is guarded. A
@@ -622,6 +631,9 @@ shared theme's font contacts Google without asking first.
   automatic switch. I chose one look done well, with Style as the way to any other, over two looks half-tested.
 - **"Doesn't `'unsafe-inline'` for styles undo the CSP?"** No: it's for styles only. Scripts stay locked to this site,
   and every colour is a checked hex value, so nothing can smuggle in a `url(…)`.
+- **"Why not keep the controls in step with the list all the time, instead of blocking them?"** That would also work,
+  but every list switch and undo would have to update nearly forty controls nobody can see. The panel syncs when it opens,
+  and nothing can reach it before then; one rule, checked by one test.
 - **"Why self-host three fonts?"** So an ordinary visit never contacts Google (a German court fined a site over
   Google-hosted fonts), and the first paint doesn't wait on another site.
 - **"Why a proportional sans for the interface, and mono only for keys and numbers?"** A monospace makes every label
@@ -1251,6 +1263,9 @@ against (same lock file, so in practice the same).
 7. **Dark only:** no automatic light look for people who read better on light ({9}).
 8. **`NEVER_LOADED` is hand-kept** ({17}); template pictures download one at a time ({6}).
 9. **The identity guard** can't see misspellings, initials, nicknames, encoded text or anything outside git ({19}).
+10. **Fields drawn by script** (the top-bar list, the pack builder, Combine rankings) don't carry `autocomplete="off"`;
+    browsers restore the fields the page's HTML makes, these appear later, and none of them saves anything on its own, but a new one that
+    did would need the same care as the Style panel ({9}).
 
 **Not done on purpose:** an `Api-User-Agent` header on Wikimedia requests; it would add a CORS preflight to every
 request, and `Origin` already says where they come from ({20}).

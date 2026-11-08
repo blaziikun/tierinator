@@ -317,6 +317,17 @@ const syncMyTiersButtons = (): void => {
 // ── wiring (runs once at start-up, from main.ts) ──
 export function setupPanel(): void {
     loadThemeLibrary();
+    // Firefox-based browsers, reopening tabs after a restart, replay old form values as input events: on this
+    // closed panel's untouched controls (black colours, sliders at half way) that rewrote the whole look and the
+    // layout. Only someone using the open panel can change anything in it.
+    for (const type of ['input', 'change'])
+        byId('appear').addEventListener(
+            type,
+            (e) => {
+                if (!byId('appear').classList.contains('open')) e.stopImmediatePropagation();
+            },
+            true,
+        );
     byId('stylebtn').onclick = () => (byId('appear').classList.contains('open') ? closeAppearance() : openAppearance());
     byId('presetbtn').onclick = async () => {
         const preset = myDefaultTiers() ? 'your default tiers' : 'the default tiers (SS → U)';

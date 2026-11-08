@@ -6,6 +6,8 @@ import { expect, openSite, test } from './fixtures';
 async function setColour(page: Page, field: string, colour: string): Promise<void> {
     await page.evaluate(
         ([field, colour]) => {
+            // as someone does it: with the Style panel open (a closed panel ignores its controls)
+            if (!document.getElementById('appear')!.classList.contains('open')) document.getElementById('stylebtn')!.click();
             const input = document.querySelector<HTMLInputElement>(`[data-t="${field}"]`)!;
             input.value = colour!;
             input.dispatchEvent(new Event('input', { bubbles: true }));
