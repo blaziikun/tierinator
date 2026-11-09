@@ -79,4 +79,5 @@ Company. Tierinator is an unofficial fan project, not affiliated with or endorse
 
 ## Licence
 
-[MIT](LICENSE). The bundled fonts (Playfair Display, Instrument Sans, Geist Mono) are under the SIL Open Font License.
+[MIT](LICENSE). The bundled fonts (Playfair Display, Instrument Sans, Geist Mono) are under the SIL Open Font License;
+see [NOTICE](NOTICE) for that and for Pokémon names and images.
