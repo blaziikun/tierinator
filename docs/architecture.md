@@ -27,7 +27,8 @@ tierinator/
 │   ├── testing.ts          test builds only: window.__app for the browser tests
 │   ├── lib/                tools that know nothing about tier lists
 │   ├── core/               the list itself, no screens
-│   ├── pokemon/            Pokémon data tables, sprite addresses, the offline pokemon.zip
+│   ├── pokemon/            Pokémon data tables, species facts (stage, group…), facets for Focus and the grid,
+│   │                       sprite addresses, the offline pokemon.zip
 │   ├── features/           one folder per feature: its .ts and .css side by side
 │   └── styles/             base.css (variables, shared measures and controls), windows.css, fonts/, privacy.css,
 │                           template-pages.css, app.css (every stylesheet, in order)
@@ -57,6 +58,7 @@ src/core/                   ← the list and its rules
 ├── csv-format.ts           a list as CSV rows and back (Export → CSV, Add items → Open a CSV)
 ├── template-format.ts      reading template files (public/templates), every field checked
 ├── group-ranking.ts        combining several people's lists: matching items, scores, the group's tiers
+├── grid-format.ts          saved grids (Pokémon lists): the ready-made ones, and reading them back, every field checked
 ├── picture-sites.ts        the picture addresses trusted without asking (share links, templates)
 ├── persist.ts              autosave, one tab at a time
 ├── history.ts              undo / redo: tiers, families, deleted items, the look and the layout
@@ -76,7 +78,10 @@ src/features/               ← one box per thing you can do
 ├── offline/                the installable app: sw.js (the service worker, built into dist/sw.js by vite.config.ts),
 │                           offline.ts (registers it, offers "Reload" when a new version is waiting)
 ├── credits/                who made each Wikimedia picture and its licence: the lookup, the item editor's line, the window
-├── appearance/ layout/     themes and the Style panel, the two views and the top bar
+├── appearance/ layout/     themes and the Style panel, the views (tier list, grid, studio) and the top bar
+├── focus/                  Focus ▾ (Pokémon lists): show only some Pokémon, in the pool and the tiers at once
+├── grid/                   the Grid view: favourites per cell from the ranking (cells.ts, pure), pins, saved grids,
+│                           its picture (grid-export.ts); loads on first use
 ├── export/ stats/          PNG / SVG / PDF, the stats window
 ├── stream/                 stream mode: a presenter view for ranking live on video (below)
 └── …                       quick-rank, head-to-head, find, tags, variants, forms, keyboard, onboarding
@@ -116,10 +121,14 @@ with unit tests.
    | `onFormsChange` | features/forms | forms are split out or merged |
    | `onLocalSpritesChange` | pokemon/local-source | a pokemon.zip or folder was loaded |
 
+   One slot works the other way round: `gridView.render` in `features/layout` is empty until the grid's code loads (on
+   first use) and fills it, so switching views can draw the grid without the layout importing it.
+
 5. **Markup only through `` html`…` `` and `setHtml`.** A unit test fails on `innerHTML`, `eval` and friends anywhere
    else, and on inline `onclick=`.
 6. **Anything from outside is `unknown` until checked:** files, links, storage, websites, packs. One checking module per
-   format (`core/snapshot.ts`, `core/pack-format.ts`, `core/template-format.ts`, `core/csv-format.ts`, `lib/checks.ts`).
+   format (`core/snapshot.ts`, `core/pack-format.ts`, `core/template-format.ts`, `core/csv-format.ts`,
+   `core/grid-format.ts`, `lib/checks.ts`).
 7. **Every outside picture is checked before it's kept:** uploads, links, wiki and template pictures go through
    `checkedImage` (real type, size and pixel caps); sprite-collection pictures, from fixed addresses, get the type check
    and the 25 MB cap in `fetchSpriteBlob`.

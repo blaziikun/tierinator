@@ -11,6 +11,7 @@
 import { isRecord } from '../lib/checks';
 import { isHexColor } from '../lib/color';
 import { CHART_COLUMNS, DEFAULT_SPRITE_FILTERS } from './defaults';
+import { readGrids } from './grid-format';
 import { isTileFit, isTileShape } from './tile-box';
 import type {
     BoardLayout,
@@ -24,6 +25,7 @@ import type {
     Pick,
     PictureCredit,
     PoolSortBy,
+    SavedGrid,
     SpriteFilters,
     Theme,
     Tier,
@@ -72,6 +74,9 @@ export interface StoredList {
     /** The pool's order on screen (older files show it in the order items were added). */
     psort: PoolSortBy;
     pseed: number;
+    /** Pokémon lists' grids and the open one (added later: older files have none). */
+    grids?: SavedGrid[];
+    gsel?: string;
 }
 export interface StoredTier {
     id: string;
@@ -83,10 +88,7 @@ export interface StoredTier {
 }
 
 /** The parts of a list that are saved (selection, filters and the open view are not). */
-type SavedState = Omit<
-    ListState,
-    'selection' | 'selectionSource' | 'searchQuery' | 'generationFilter' | 'typeFilter' | 'tagFilter' | 'view' | 'topBarHidden'
->;
+type SavedState = Omit<ListState, 'selection' | 'selectionSource' | 'searchQuery' | 'focus' | 'tagFilter' | 'view' | 'topBarHidden'>;
 
 export function toStored(state: SavedState, listName: string): StoredList {
     return {
@@ -125,6 +127,7 @@ export function toStored(state: SavedState, listName: string): StoredList {
         fit: state.tileFit,
         psort: state.poolOrder.by,
         pseed: state.poolOrder.seed,
+        ...(state.grids.length ? { grids: state.grids, gsel: state.gridId ?? undefined } : {}),
     };
 }
 
@@ -228,6 +231,8 @@ export interface ReadList {
     picks: Record<string, Pick>;
     /** Very old files stored chosen sprite addresses instead of picks. */
     chosenSprites: Record<string, string>;
+    grids?: SavedGrid[];
+    gridId?: string;
 }
 
 /**
@@ -323,6 +328,10 @@ export function readStored(raw: unknown, itemExists: (id: ItemId) => boolean, ma
     if (isRecord(s.picks))
         for (const [key, pick] of Object.entries(s.picks))
             if (ownsId(key) && isRecord(pick) && isPicturePath(pick.path)) out.picks[key] = readPick(pick);
+    if (Array.isArray(s.grids)) {
+        out.grids = readGrids(s.grids, itemExists, makeId);
+        if (typeof s.gsel === 'string' && out.grids.some((grid) => grid.id === s.gsel)) out.gridId = s.gsel;
+    }
     if (isRecord(s.chosenSprites))
         for (const [key, url] of Object.entries(s.chosenSprites)) if (ownsId(key) && isPicturePath(url)) out.chosenSprites[key] = url;
     return out;

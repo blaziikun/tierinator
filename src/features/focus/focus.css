@@ -1,0 +1,124 @@
+/*
+ * src/features/focus/focus.css
+ *
+ * Focus ▾: the picker (#focuspop, chips per facet with counts) and the line
+ * above the tiers while it hides some of them (#focusbar, kept at the top as
+ * the tiers scroll).
+ */
+
+#focusbtn.on {
+    background: color-mix(in srgb, var(--cyan) 12%, var(--s2));
+    border-color: color-mix(in srgb, var(--cyan) 45%, transparent);
+    color: var(--cyan);
+}
+
+#focusbar {
+    position: sticky;
+    top: -10px; /* #tsec's own padding: flush with its top edge */
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    margin: -10px -12px 0;
+    padding: 7px 12px;
+    background: color-mix(in srgb, var(--s1) 92%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border2);
+    font-size: 0.923rem;
+}
+
+#focusbar.hid {
+    display: none;
+}
+
+#tsec.chart #focusbar {
+    grid-column: 1 / -1;
+    margin-bottom: max(var(--rowgap), 6px);
+}
+
+#focustext {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+#focusbar button {
+    padding: 2px 10px;
+}
+
+#focuspop {
+    width: 460px;
+    gap: 12px;
+}
+
+#focuspop .fhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#focuspop h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#focuspop .fgroup h3 {
+    font-size: 0.846rem;
+    color: var(--muted);
+    font-weight: var(--w-strong);
+    margin-bottom: 6px;
+}
+
+#focuspop .fshort {
+    display: inline-flex;
+    gap: 4px;
+    margin-left: auto;
+}
+
+#focuspop .fchips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+#focuspop .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* none of the list's Pokémon have it: quieter, still readable */
+#focuspop .chip.none:not(.on) {
+    color: var(--muted);
+    border-style: dashed;
+}
+
+#focuspop .fn {
+    font-size: 0.769rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.fdot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+#focuspop .fonly {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: baseline;
+    padding: 6px 10px;
+    border: 1px solid var(--border2);
+    border-radius: var(--r-ctl);
+}

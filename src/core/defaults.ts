@@ -190,8 +190,9 @@ export function createListState(): ListState {
         selection: new Set(),
         selectionSource: null,
         searchQuery: '',
-        generationFilter: 'all',
-        typeFilter: 'all',
+        focus: {},
+        grids: [],
+        gridId: null,
         view: 'tier',
     };
 }

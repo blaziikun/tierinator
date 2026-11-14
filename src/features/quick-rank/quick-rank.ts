@@ -14,7 +14,8 @@ import { closePopovers, toast } from '../../lib/ui';
 import { labelTextColor } from '../appearance/theme';
 import { switchView } from '../layout/layout';
 import { spriteSrc } from '../sprites/sprites';
-import { clearSelection, placeAllTiles, rankedIds, removeFromTiers } from '../tier-board/board';
+import { clearSelection, inFocus, placeAllTiles, rankedIds, removeFromTiers } from '../tier-board/board';
+import { insertionIndex } from '../tier-board/placement';
 
 const quickRank = {
     /** The items to go through (the pool as shown when it started). */
@@ -87,7 +88,7 @@ export function placeQuickRankItem(tierId: string): void {
     if (id == null || !tier) return;
     pushHistory();
     removeFromTiers([id]);
-    tier.items.push(id);
+    tier.items.splice(insertionIndex(tier.items, inFocus, {}), 0, id); // after the last one shown
     quickRank.placed.push(id);
     quickRank.position++;
     placeAllTiles();

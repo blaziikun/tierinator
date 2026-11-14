@@ -15,6 +15,9 @@ Tier lists for anything: your own pictures, characters from any wiki, or a ready
   every sprite style from every game (animated ones too), GO icons and Mystery Dungeon portraits.
 - **Ranking that keeps up:** drag, box-select, or the keyboard alone (arrows, Space, number keys); Quick rank (one at a
   time) and head-to-head.
+- **Pokémon, sliced any way:** Focus shows one set at a time (Electric types, starters, Megas, fully evolved…) in the
+  pool and the tiers, so you can check their order among themselves; the Grid turns your ranking into a favourite per
+  generation, type, starter or legendary group, and lets you pin your own pick where "best" and "favourite" differ.
 - **Stream mode:** rank live on video. Only the tiers, big, and the item being ranked; number keys or a drag to place
   it, undo, a green or magenta screen for chroma key, and controls you can hide so they stay off camera.
 - **Charts as well as tiers:** lay a list out as a grid of labelled cells instead of rows, such as the 3 × 3 alignment

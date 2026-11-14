@@ -12,6 +12,7 @@ Everything Tierinator can do, grouped by what you're trying to get done.
 - [Tiers and charts](#tiers-and-charts)
 - [Finding and stats](#finding-and-stats)
 - [Pokémon pack](#pokémon-pack)
+- [Focus and the grid](#focus-and-the-grid)
 - [Studio](#studio)
 - [Other packs and the pack builder](#other-packs-and-the-pack-builder)
 - [Looks and layout](#looks-and-layout)
@@ -110,11 +111,11 @@ load, share, export, back up, and what's kept where (About & privacy).
 | Back to the pool | Sends the selection back unranked. | Selection bar → **To pool**, <kbd>0</kbd>, <kbd>Delete</kbd> |
 | Reset list | Sends everything ranked back to the pool, keeping tiers, pictures and tags. | **Reset list** above the pool |
 | Quick rank | Shows the pool's items one at a time, big, with a button per tier. | **Quick rank**, or <kbd>Q</kbd> |
-| Quick rank a subset | Quick rank goes through what the pool shows, so search or filter first. | Pool search and filters |
+| Quick rank a subset | Quick rank goes through what the pool shows, so search, focus or filter first. | Pool search, **Focus ▾**, tag filter |
 | Skip and back | Leaves an item for later, or takes the last one out again. | Quick rank → **Skip**, **Back** |
-| Head to head | Sorts a tier of three or more by asking "this or that?", about n log n questions. | ⇅ on a tier |
+| Head to head | Sorts a tier of three or more by asking "this or that?", about n log n questions. With Focus on, it sorts only what's shown (two or more), in the places they already had. | ⇅ on a tier |
 | Can't decide | Treats two items as equal and keeps their order. | Head to head → **Can't decide**, <kbd>=</kbd> |
-| Undo and redo | Up to 80 steps of tiers, variants, deleted items, the look and the layout. | ↶ ↷, <kbd>Ctrl/⌘ Z</kbd>, <kbd>Ctrl/⌘ Shift Z</kbd> |
+| Undo and redo | Up to 80 steps of tiers, variants, deleted items, the look, the layout and grids (pins, axes, new and deleted grids). | ↶ ↷, <kbd>Ctrl/⌘ Z</kbd>, <kbd>Ctrl/⌘ Shift Z</kbd> |
 | Progress count | Shows how many are ranked out of the total. | Under the pool |
 
 ## Ranking together and live
@@ -170,7 +171,6 @@ load, share, export, back up, and what's kept where (About & privacy).
 | Feature | What it does | Where |
 | --- | --- | --- |
 | Every Pokémon | All 1,025 species and their forms, kept in the browser and updated when the site's copy changes. | New Pokémon list |
-| Generation and type filters | Narrows the pool to one generation or type. | Above the pool |
 | Forms | Choose which kinds of form (regional, Mega, Gigantamax, ones that play differently, cosmetic) are ranked on their own. | **Forms ▾** above the pool |
 | One form at a time | Split a single form out, or merge it back into its species. | Forms bar in the quick picker or studio |
 | Quick picker | Every sprite of a Pokémon grouped by game, to pick one without leaving the board. | Right-click (long-press) a Pokémon |
@@ -185,6 +185,31 @@ load, share, export, back up, and what's kept where (About & privacy).
 | Sprite packs | Saves every picked sprite and your gallery in one zip, to move or keep offline. | Studio → More ▾ → **Export sprite pack**, **Import pack** |
 | Pack with your defaults | Saves a Pokémon pack whose default sprites are the ones you picked. | List menu → **Export pack with my sprites as defaults** |
 | Self-repair | A sprite that fails tries a mirror, and broken pictures fetch themselves again. | Automatic |
+
+## Focus and the grid
+
+Pokémon lists only. **Focus** shows a set of Pokémon (the Electric types, the starters, the legendaries) in the pool and
+the tiers at once, so you can check their order among themselves. The **grid** turns your ranking into favourites:
+the best-ranked Pokémon of each generation, type or other group, and you can pin your own pick where "the best" and
+"my favourite" differ.
+
+| Feature | What it does | Where |
+| --- | --- | --- |
+| Focus | Shows only the Pokémon you choose by type, generation, evolution stage, group (starter line, pseudo-legendary, legendary, box legend, mythical, Ultra Beast, Paradox) and form (standard, Mega, Gigantamax, regional, battle, cosmetic). Several in one group means any of them; several groups means all. Each choice shows how many of the list's Pokémon have it. Not saved: every list opens showing everything. | **Focus ▾** above the pool |
+| Stage shortcuts | **Unevolved** (babies, first stages and Pokémon that don't evolve) and **Fully evolved** (final stages and Pokémon that don't evolve). | Focus ▾ → Stage |
+| Focus in the tiers | The tiers hide what isn't chosen and close up, so the rest sit side by side in their real order. A line at the top says what's shown and how many of the ranked ones; **Change** and **Show all** are on it. | Above the tiers while Focus is on |
+| Moving while focused | A dropped item lands straight after the shown one to its left (right before the first one, or after the last on empty space); a number key, a tier label, Quick rank and Stream mode put it after the last one shown; the hidden ones keep their places. Alt+arrows step past the next shown one. Select all and Shift-click ranges take only what's shown. | Tier list |
+| Quick rank and Stream with Focus | Both go through what the pool shows. Stream's "All, from scratch" starts again only what Focus shows; the rest stays ranked. | **Quick rank**, Stream mode |
+| Grid | Your favourite in each cell: the best-ranked Pokémon that fits, or your pin. Cells that fit nothing show —; ones with nothing ranked yet say how many there are to rank. | **Grid** tab, or <kbd>G</kbd> |
+| Axes | What runs down and across: type, generation, stage, group or form, or one column (a favourite per row). Type both ways gives every type pairing, single types on the diagonal. | Grid → **Down**, **Across** |
+| Which values | Show only some rows or columns, in the order you pick them (Grass, Fire, Water). | Grid → the button beside each axis |
+| Layers | A third facet seen one value at a time, such as Gen × Type for final stages only, with how many fit each. | Grid → **Layers** |
+| Grid focus | Each grid's own Focus, such as starters' first stages. | Grid → **Focus ▾** |
+| Pins | Make any Pokémon in a cell its pick, whatever the ranking says; the ranking's pick still shows under it. Unpin to follow the ranking again. | Click a cell → **Pin** |
+| A cell's Pokémon | Everything in the cell in your ranking order with its tier, then the unranked ones. | Click a cell |
+| Back to the tiers | Goes to the tier list showing only that cell's Pokémon, to reorder them; or quick ranks its unranked ones. | Cell → **Show in the tiers**, **Quick rank** |
+| Saved grids | Several grids per list, each with its own axes, values, layer, focus and pins, saved with the list (and in its files, backups and share links). Ready-made: Gen × Type, By type, By generation, Starters, Legendaries, Type × Type, Gen × Type by stage; or a copy of the open one. A grid's name follows its axes until you rename it. | Grid → tabs, **New grid ▾**, ⋯ → **Rename**, **Delete** |
+| Grid picture | The grid as a PNG: the list's and grid's names, the headings, each pick and its name, and the "Made with" line if exports carry it. | Grid → ⋯ → **Download picture**, **Copy picture** |
 
 ## Studio
 
@@ -287,7 +312,7 @@ The full list is under ⌨ in the top bar, or <kbd>?</kbd>.
 | --- | --- | --- |
 | Shortcuts window | Lists the shortcuts. | ⌨ in the top bar, or <kbd>?</kbd> |
 | Open things | Style, add items, your lists, export, stats. | <kbd>S</kbd> <kbd>A</kbd> <kbd>L</kbd> <kbd>E</kbd> <kbd>I</kbd> |
-| Views | Hide the top bar or pool, move the pool, switch to the studio. | <kbd>H</kbd> <kbd>P</kbd> <kbd>B</kbd> <kbd>T</kbd> |
+| Views | Hide the top bar or pool, move the pool, switch to the studio; on Pokémon lists, the grid and back. | <kbd>H</kbd> <kbd>P</kbd> <kbd>B</kbd> <kbd>T</kbd> <kbd>G</kbd> |
 | Search | Pool search, or Find when the pool is hidden. | <kbd>/</kbd> <kbd>F</kbd> |
 | Move between items | Tab into the tiers or pool, then move by what's on screen. | <kbd>Tab</kbd>, arrows, <kbd>Home</kbd> <kbd>End</kbd> |
 | Select | Selects the focused item; Shift for a range, Ctrl/⌘ to add. | <kbd>Space</kbd> or <kbd>Enter</kbd> |
@@ -379,3 +404,4 @@ The full list is under ⌨ in the top bar, or <kbd>?</kbd>.
 | Templates | 1 to 300 items, up to 20 tiers |
 | Combine rankings | 2 to 30 lists |
 | Tag dots | Four per tile |
+| Grids | 30 per list, 5,000 pins each |

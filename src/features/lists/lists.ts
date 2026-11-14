@@ -92,6 +92,8 @@ export function applySnapshot(raw: unknown): void {
     if (read.studioCardSize) state.studioCardSize = read.studioCardSize;
     if (read.spriteFilters) state.spriteFilters = { ...state.spriteFilters, ...read.spriteFilters };
     Object.assign(state.picks, read.picks);
+    if (read.grids) state.grids = read.grids;
+    state.gridId = read.gridId ?? state.grids[0]?.id ?? null;
     // very old files: chosen sprite addresses instead of picks
     for (const [key, url] of Object.entries(read.chosenSprites))
         if (!state.picks[key]) state.picks[key] = { path: url.startsWith(POKEAPI_SPRITES) ? url.slice(POKEAPI_SPRITES.length) : url };

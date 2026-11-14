@@ -72,6 +72,28 @@ export const POKEMON_TYPES = [
     'Fairy',
 ];
 
+/** Each type's usual colour (the stats' bars, the grid's headings). */
+export const TYPE_COLORS: Record<string, string> = {
+    Normal: '#9fa19f',
+    Fire: '#e62829',
+    Water: '#2980ef',
+    Grass: '#3fa129',
+    Electric: '#fac000',
+    Ice: '#3dcef3',
+    Fighting: '#ff8000',
+    Poison: '#9141cb',
+    Ground: '#915121',
+    Flying: '#81b9ef',
+    Psychic: '#ef4179',
+    Bug: '#91a119',
+    Rock: '#afa981',
+    Ghost: '#704170',
+    Dragon: '#5060e1',
+    Dark: '#624d4e',
+    Steel: '#60a1b8',
+    Fairy: '#ef70ef',
+};
+
 /** PokeAPI's game folder names → what people call the games (also their order, oldest first). */
 export const GAME_NAMES: Record<string, string> = {
     'red-blue': 'Red / Blue',

@@ -1,6 +1,6 @@
 // src/features/layout/layout.ts
 // ─────────────────────────────────────────────────────────────────────────────
-//  The screen layout: the two views (tier list and studio), where the pool goes
+//  The screen layout: the views (tier list, grid and studio), where the pool goes
 //  (beside the tiers, below them, or hidden: the Pool menu), hiding the top bar
 //  (both remembered for next time, for every list), and dragging the pool's edge to resize.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -17,28 +17,36 @@ import { renderStudio } from '../studio/studio';
 import { measureRowWidth, placeAllTiles, syncSelection } from '../tier-board/board';
 import { hideTip } from '../tier-board/hover-tip';
 
-// ── the two views ──
-/** Shows the tier list or the studio (the top bar always shows in the studio). */
+// ── the views ──
+/** Draws the grid (features/grid registers it when it first loads, so its code downloads only when wanted). */
+export const gridView: { render: (() => void) | null } = { render: null };
+
+/**
+ * Shows the tier list, the grid (Pokémon lists) or the studio. The top bar always shows outside the tier list;
+ * of its tier-list buttons (.tvo), the grid keeps those marked .gvo.
+ */
 export function switchView(view: ListState['view']): void {
+    if (view === 'grid' && (!isPokemonList() || !gridView.render)) view = 'tier';
     const isTier = view === 'tier';
     state.view = view;
     hideTip();
     closePopovers();
-    byId('tab-tier').classList.toggle('on', isTier);
-    byId('tab-studio').classList.toggle('on', !isTier);
+    for (const shown of ['tier', 'grid', 'studio'] as const) byId('tab-' + shown).classList.toggle('on', view === shown);
     byId('main').classList.toggle('hid', !isTier);
-    byId('studio').classList.toggle('hid', isTier);
+    byId('gridview').classList.toggle('hid', view !== 'grid');
+    byId('studio').classList.toggle('hid', view !== 'studio');
     byId('htoggle').classList.toggle('hid', !isTier);
     byId('findbox').classList.toggle('hid', !isTier);
     document.querySelectorAll('.tvo').forEach((el) => {
-        el.classList.toggle('hid', !isTier);
+        el.classList.toggle('hid', !isTier && !(view === 'grid' && el.classList.contains('gvo')));
     });
     if (isTier) {
         placeAllTiles();
         if (readView()?.bar && !state.topBarHidden) toggleTopBar(true);
     } else {
         if (state.topBarHidden) toggleTopBar(false);
-        if (isPokemonList()) renderStudio();
+        if (view === 'grid') gridView.render?.();
+        else if (isPokemonList()) renderStudio();
         else renderCustomStudio();
     }
     syncSelection();

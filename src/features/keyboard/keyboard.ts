@@ -121,11 +121,11 @@ const fileShortcuts: KeyLayer = (e, typing) => {
 };
 
 const editShortcuts: KeyLayer = (e, typing) => {
-    if (typing || !withModifier(e) || state.view !== 'tier' || quickPicker.id) return false;
+    if (typing || !withModifier(e) || state.view === 'studio' || quickPicker.id) return false;
     const key = e.key.toLowerCase();
     if (key === 'z') undo(e.shiftKey);
     else if (key === 'y') undo(true);
-    else if (key === 'a') selectAllIn(pointer.area);
+    else if (key === 'a' && state.view === 'tier') selectAllIn(pointer.area);
     else return false;
     e.preventDefault();
     return true;
@@ -148,7 +148,12 @@ const singleKeys: KeyLayer = (e, typing) => {
             click('expbtn');
         },
         i: () => click('statsbtn'), // stats load on first use
-        t: () => switchView(state.view === 'tier' ? 'studio' : 'tier'),
+        t: () => switchView(state.view === 'studio' ? 'tier' : 'studio'),
+        g: () => {
+            // Pokémon lists; the grid's code loads on first use
+            if (state.view === 'grid') switchView('tier');
+            else if (isPokemonList()) click('tab-grid');
+        },
     };
     if (key === 'q' && state.view === 'tier') startQuickRank();
     else if (key === 'v' && state.view === 'tier') click('streambtn');

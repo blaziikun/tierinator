@@ -1,15 +1,17 @@
 // src/core/history.ts
 // ─────────────────────────────────────────────────────────────────────────────
-//  Undo / redo for anything that changes the tiers, the variant families or the
-//  list's look and layout. Each step is a JSON copy of those, at most 80 steps back.
+//  Undo / redo for anything that changes the tiers, the variant families, the
+//  list's look and layout, or its grids. Each step is a JSON copy of those, at
+//  most 80 steps back.
 //  A step can also mark a deletion of items, so stepping across it brings them back
 //  (or deletes them again); the items themselves are kept by features/items.
 // ─────────────────────────────────────────────────────────────────────────────
 import { isRecord } from '../lib/checks';
-import { byId } from '../lib/dom';
+import { byId, randomId } from '../lib/dom';
 import { toast } from '../lib/ui';
 import { CHART_COLUMNS } from './defaults';
-import { rebuildAliases } from './items';
+import { readGrids } from './grid-format';
+import { entryById, rebuildAliases } from './items';
 import { autosave, sanitizeTiers } from './persist';
 import { onListReset, state } from './state';
 import { isTileFit, isTileShape } from './tile-box';
@@ -51,6 +53,7 @@ const undoSnapshot = (side?: DeletionSide): string =>
         lc: state.chartColumns,
         ts: state.tileShape,
         tf: state.tileFit,
+        g: state.grids,
         ...(side ? { del: side.deletion, kept: side.itemsExist } : {}),
     });
 
@@ -115,6 +118,11 @@ export function undo(redo: boolean): void {
         // tile shape and fit (older steps have neither)
         if (isTileShape(saved.ts)) state.tileShape = saved.ts;
         if (isTileFit(saved.tf)) state.tileFit = saved.tf;
+        // the grids and their pins (older steps have none)
+        if (Array.isArray(saved.g)) {
+            state.grids = readGrids(saved.g, (id) => entryById.has(id), randomId);
+            if (!state.grids.some((grid) => grid.id === state.gridId)) state.gridId = state.grids[0]?.id ?? null;
+        }
     }
     restoreListeners.forEach((listener) => {
         listener();

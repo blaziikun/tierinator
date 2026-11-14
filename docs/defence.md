@@ -7,7 +7,7 @@
 ---
 
 Each section names its files and functions, so any claim can be checked in the code. Every number is from the code or
-from a measured `pnpm build` (7 November 2026); if the code changes, the code wins. Each section ends with its weak
+from a measured `pnpm build` (14 November 2026); if the code changes, the code wins. Each section ends with its weak
 spots, and {26} gathers them in the order I'd fix them.
 
 **Contents**
@@ -29,6 +29,8 @@ spots, and {26} gathers them in the order I'd fix them.
 14. [Stream mode](#stream-mode-14)
 15. [Quick rank and head to head](#quick-rank-and-head-to-head-15)
 16. [Stats](#stats-16)
+27. [Focus and the grid](#focus-and-the-grid-27) (numbered last because it came last; it sits here with the other
+    ways of looking at a ranking)
 17. [Offline and installable](#offline-and-installable-17)
 18. [Security](#security-18)
 19. [Keeping my name out of it: the identity guard](#keeping-my-name-out-of-it-the-identity-guard-19)
@@ -214,7 +216,8 @@ the pool: not stored ── every rankable entry not in a tier, shown in poolOrd
   variants' names (`rebuildAliases`). Chains (a → b → c) are flattened when read.
 - **Drawing:** `renderTiers` builds the rows; `placeAllTiles` moves existing tiles into a fragment per row and the rest
   into the pool. Tiles are created once (`ensureTile`). Images are `loading="lazy"`, so a 1,343-tile pool downloads only
-  what's on screen. Filters hide tiles with `display: none`.
+  what's on screen. Filters hide tiles with `display: none`: search and tags in the pool, Focus in the pool and the
+  tiers ({27}).
 - **Dragging** (`tier-board/drag.ts`): pointer events. A press becomes a drag after 6 px; `elementFromPoint` finds the
   row and tile under the pointer, and before/after is half the tile's width. Near an edge (60 px) the area scrolls. On
   touch a moving finger scrolls; you tap to select, then tap a tier label. Empty space starts a box selection.
@@ -544,7 +547,8 @@ list is open, through `onListOpen` in `main.ts`.)
 ## Undo and history {8}
 
 **How it works:** `core/history.ts`. Before a change, `pushHistory()` pushes a JSON string of
-`{ t: tiers, f: familyOf, m: combinedFamilies, th: theme, ly: layout, lc: chartColumns, ts: tileShape, tf: tileFit }`.
+`{ t: tiers, f: familyOf, m: combinedFamilies, th: theme, ly: layout, lc: chartColumns, ts: tileShape, tf: tileFit,
+g: grids }` (grids are read back through `readGrids`, {27}).
 Undo pops it, pushes the current state onto redo, and puts it back through `sanitizeTiers` (unknown ids dropped);
 `onHistoryRestore` listeners redraw. At most 80 steps; a new change empties redo; another list empties both.
 `asOneUndoStep` makes several changes one step (a slider drag counts once).
@@ -892,16 +896,105 @@ some consistent order from the answers given. Items are added to the tier meanwh
 
 ## Stats {16}
 
-**How it works:** `features/stats` loads on first use (23.8 KB, 10.2 KB gzipped). `breakdowns.ts` sorts every ranked
+**How it works:** `features/stats` loads on first use (16.4 KB, 6.9 KB gzipped). `breakdowns.ts` sorts every ranked
 item into values (type, generation, tags, a pack's own categories, sprite source…), counts each value per tier and scores
 it by average tier (top 100, bottom 0). Pokémon facts the pack doesn't carry (evolution stage, legendary group, body
-colour, base stat total) are packed into strings in `pokedex-extras.ts`, one or two characters per species. Nothing is
+colour, base stat total) are packed into strings in `pokemon/pokedex-extras.ts`, one or two characters per species
+(shared with Focus and the grid since they arrived, so it's in the start-up download: about 3 KB gzipped). Nothing is
 fetched. The last page viewed is `pt_statk`.
 
 **Why this and not that:** a few hundred bytes of packed strings instead of a stats API call: works offline and tells
 no one what you're looking at.
 
 **Where it fails:** the packed Pokémon facts must be updated by hand when new species arrive.
+
+---
+
+## Focus and the grid {27}
+
+Two ways of looking at a Pokémon ranking that a tier list alone doesn't give: **Focus** shows one set (the Electric
+types, the starters) in the pool and the tiers at once, so their order among themselves can be checked; the **grid**
+turns the ranking into favourites per generation, type or group, with pins for when "the best" and "my favourite" differ.
+
+**How it works**
+
+```
+pokemon/facets.ts     FACETS: type · gen · stage · group · form   each: values + of(entry) → the values it has
+                      (stage and group come from pokemon/pokedex-extras.ts; a form counts as its species)
+                      matchesFocus(entry, focus): any value within a facet, every facet across; `only` = set ids
+Focus (not saved)     state.focus ──▶ board.applyFilters: pool tiles and tier tiles not in focus get display:none
+                      #focusbar (sticky, first child of #tsec) says what's shown and "N of M ranked"
+Grid (saved)          state.grids: SavedGrid[] { rows, rowValues, cols|null, colValues, layer, layerValue, focus, pins }
+                      grid/cells.ts buildGrid(grid, rankable entries, rankPlaces(tiers)) → cells
+                      a cell's pick = its pin if it still fits, else the best-ranked Pokémon that fits
+```
+
+- **Focus** (`features/focus`): the picker builds chips per facet with how many of the list's Pokémon have each value,
+  and works on any focus it's given (the board's, or a grid's), so the grid reuses it. Changing focus drops hidden items
+  from the selection. It isn't saved: a list always opens showing everything, so nothing is ever hidden by surprise.
+- **Moving while focused** (`tier-board/placement.ts`): only shown items can be pointed at, so a drop lands next to the
+  shown item it was dropped against; between two shown ones, straight after the left one; before the first, right
+  before it; on empty space, after the last shown one. Alt+← → step past the next *shown* item with the same rule,
+  Alt+↑ ↓ keep the place among what's shown. A number key, a tier label, Quick rank and Stream mode put items after
+  the last one shown. Head to head (⇅) sorts only what's shown (enabled from two shown) and puts the result back into
+  the places those items had (`reorderShown`). With nothing hidden all of these reduce to the ordinary behaviour, which
+  the unit tests check.
+- **Quick rank and Stream mode** go through what the pool shows, so they follow Focus; Stream's "All, from scratch"
+  empties only what Focus shows and leaves the rest of the ranking in place.
+- **The grid** (`features/grid`, a chunk of its own: 14.4 KB, 5.9 KB gzipped, loaded the first time Grid or G is used):
+  each Pokémon goes into the cell of every (row, column) value pair it has: a dual type sits under both types; Type ×
+  Type puts single types on the diagonal and dual types in both pairings; the grid's own focus and the layer value
+  filter first. Cells sort by place in the ranking (top tier first, left to right), the unranked after in Pokédex order.
+  Pins are `{ "layer|row|col": id }`. A cell's **Show in the tiers** sets the board's focus to `only` that cell's ids and
+  switches view; **Quick rank** does the same, then quick ranks what the pool now shows.
+- **Saved** with the list as `grids` and `gsel` (stored only once a list has a grid, so older files and lists without
+  grids are byte-for-byte as before), and carried by share links; read back by `core/grid-format.ts readGrids`. Undo steps carry the grids, so a pin,
+  an axis change or a deleted grid is one Ctrl/⌘ Z.
+- **The picture** (`grid/grid-export.ts`): a canvas at up to 2× drawn with the tier export's `drawPicture`, so crops and
+  pixel art match; type headings get black or white text, whichever contrasts more (`clearestTextOn`).
+
+**Why this and not that**
+
+- **One focus for the pool and the tiers, not a second filter:** the old Generation and Type dropdowns filtered only the
+  pool; two filters that disagree would be worse than one that applies everywhere.
+- **Hide, not dim:** 92 Electric types among 1,200 dimmed tiles still can't be read in order; hidden, they close up.
+- **"After the left one" as the drop rule:** it's the only rule where what you see is what you get for both neighbours,
+  and it's predictable without seeing the hidden items. Dropping right before the right one would be equally valid; I
+  picked one and applied it everywhere (drag, keys, tier labels, Quick rank, Stream mode, head to head).
+- **The grid is worked out, not kept:** the ranking is the one source of truth; a separate grid would drift from it. Pins
+  are the one deliberate exception, because a favourite isn't always the best-ranked, and the cell says when they differ.
+- **Rows and columns of facets, not a fixed set of grids:** seven ready-made grids plus axes, values, a layer and focus
+  cover "favourite starter of each type per gen", "legendary per gen", "every type pairing" without code per grid.
+- **A layer instead of a 3D grid:** a cube hides most of its cells; one slice at a time shows all of each.
+- **Lazy-loaded:** most visits never open the grid; the matching code it shares with Focus is small and already loaded.
+
+**What happens if…**
+
+- **A file says `rows: "height"`, pins point at items that don't exist, or 10,000 grids:** `readGrids` drops a grid
+  with an unknown facet anywhere, and values and pins it doesn't recognise; a layer equal to an axis is dropped, the same
+  facet both ways (except types) becomes one column; it keeps at most 30 grids (New grid stops there too) and the newest
+  5,000 pins each (Type × Type across a generation layer is 3,240 cells); a grid's saved focus never keeps `only`.
+  Unit-tested.
+- **A pinned Pokémon stops fitting** (a form merged back, the grid's focus changed): the pin is ignored, not deleted, so
+  changing back brings it back.
+- **A custom list:** facets give nothing for own items, so Focus and the Grid tab are hidden; opening one while on the
+  grid goes back to the tier list.
+- **Focus hides something selected:** it's let go, so a drag never moves things you can't see.
+
+**Where it fails:** the grid redraws every cell on any change (fine at 18 × 18); the picture draws one Pokémon at a time,
+so the first export of a 324-cell grid waits on each picture in turn. Exports of the tier list ignore Focus (they show
+the whole list), except that Export's "Unranked items" follows what the pool shows, as before.
+
+**Common questions**
+
+- **"Where does 'favourite' come from?"** From the order: the best-ranked Pokémon that fits the cell. If you disagree,
+  pin your own; the cell shows both.
+- **"Why doesn't a Mega count for Gen 1?"** A form counts for the generation it came in (Mega Charizard X: Gen 6), as
+  in Stats; its stage and group are its species'.
+- **"What does Unevolved include?"** Babies, first stages and Pokémon that don't evolve; Fully evolved is final stages
+  and Pokémon that don't evolve. The individual stages are there too.
+- **"Why isn't Focus saved?"** A list that opens with half its tiers hidden looks broken. The grids, which you build on
+  purpose, are saved.
 
 ---
 
@@ -1094,21 +1187,21 @@ person's browser at human speed, and every request already carries the site's `O
 
 ## Speed and memory {21}
 
-**How it works** (measured with `pnpm build` on 7 November 2026; gzip as Vite reports it)
+**How it works** (measured with `pnpm build` on 14 November 2026; gzip as Vite reports it)
 
 | Downloads when | Files | Size (gzipped) |
 | --- | --- | --- |
-| The page opens | `app-*.js` + the shared chunk `items-*.js` + `preload-helper` | 224 KB (82.4 KB) of JavaScript |
-| | `app-*.css`, `index.html` | 62.4 KB (13.3 KB), 55.2 KB (15.6 KB) |
+| The page opens | `app-*.js` + the shared chunk `items-*.js` + `preload-helper` | 241 KB (89.4 KB) of JavaScript |
+| | `app-*.css`, `index.html` | 68.0 KB (14.2 KB), 59.3 KB (16.1 KB) |
 | | Playfair Display, Instrument Sans (woff2); Geist Mono once a shortcut or Pokédex number shows | 68.5 KB; 23.1 KB |
 | A Pokémon list first opens | `packs/pokemon.json` | 363 KB (about 72 KB) |
-| Templates, Stream, wiki import, Export, Combine, pack builder, Stats | each its own chunk | 7.7 to 23.8 KB (3.4 to 10.2 KB) each |
+| Templates, Stream, wiki import, Export, Combine, pack builder, Stats, Grid | each its own chunk | 7.7 to 19.9 KB (3.4 to 7.7 KB) each |
 | The wiki engine (import, pack builder) | `engine-*.js` | 23.3 KB (9.2 KB) |
 | A zip is opened or saved | fflate | 11.2 KB (5.6 KB) |
 | A PDF is exported | jsPDF | 392.8 KB (126.6 KB) |
-| After the first visit, quietly | everything the service worker keeps (28 files) | about 1.01 MB (422 KB) |
+| After the first visit, quietly | everything the service worker keeps (29 files) | about 1.05 MB (436 KB) |
 
-So a first visit is about 172 KB over the wire before any picture. The shared chunk is called `items-*.js` only because
+So a first visit is about 188 KB over the wire before any picture. The shared chunk is called `items-*.js` only because
 Rollup names a shared chunk after one of its modules; it holds most of the app.
 
 **Memory:** uploads shrunk to 1,024 px; `blob:` addresses revoked when a picture is replaced or another list opens
@@ -1126,7 +1219,7 @@ code most visits don't use; the offline copy takes every chunk, used or not ({17
 
 **Common questions**
 
-- **"How big is it?"** About 82 KB of gzipped JavaScript to start, 172 KB in all before pictures.
+- **"How big is it?"** About 89 KB of gzipped JavaScript to start, 188 KB in all before pictures.
 - **"What would you split next?"** The studio and the pack-related code into their own chunks.
 
 ---
@@ -1243,8 +1336,9 @@ against (same lock file, so in practice the same).
 | Sprite restore | 4 at a time, 3 tries | `restorePickedSprites` |
 | Wiki pacing | one request per ~260 ms, slower on 429 or 5xx | `wiki/engine.ts` |
 | Wikipedia lookups | 50 titles a request, 300 ms apart | `wiki-pictures.ts` |
-| Start-up JavaScript | 82.4 KB gzipped | `pnpm build` |
-| Offline copy | 27 files, about 379 KB gzipped | `dist/sw.js` `APP_FILES` |
+| Start-up JavaScript | 89.4 KB gzipped | `pnpm build` |
+| Offline copy | 29 files, about 436 KB gzipped | `dist/sw.js` `APP_FILES` |
+| Grids | 30 a list, 5,000 pins each; 5 facets, 7 ready-made | `core/grid-format.ts`, `pokemon/facets.ts` |
 
 ---
 
@@ -1263,9 +1357,11 @@ against (same lock file, so in practice the same).
 7. **Dark only:** no automatic light look for people who read better on light ({9}).
 8. **`NEVER_LOADED` is hand-kept** ({17}); template pictures download one at a time ({6}).
 9. **The identity guard** can't see misspellings, initials, nicknames, encoded text or anything outside git ({19}).
-10. **Fields drawn by script** (the top-bar list, the pack builder, Combine rankings) don't carry `autocomplete="off"`;
-    browsers restore the fields the page's HTML makes, these appear later, and none of them saves anything on its own, but a new one that
-    did would need the same care as the Style panel ({9}).
+10. **Fields drawn by script** (the top-bar list, the pack builder, Combine rankings, the grid's axis menus) don't carry
+    `autocomplete="off"`; browsers restore the fields the page's HTML makes, these appear later, and none of them saves
+    anything on its own, but a new one that did would need the same care as the Style panel ({9}).
+11. **The grid's picture draws one Pokémon at a time** ({27}); the first export of a full Type × Type grid waits on up to
+    324 pictures in turn.
 
 **Not done on purpose:** an `Api-User-Agent` header on Wikimedia requests; it would add a CORS preflight to every
 request, and `Origin` already says where they come from ({20}).

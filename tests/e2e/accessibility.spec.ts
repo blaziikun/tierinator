@@ -69,3 +69,24 @@ test('an alignment chart passes, and so do its Layout and Columns controls in St
     expect(await seriousProblems(page, '#ap-colsrow')).toEqual([]);
     expect(errors).toEqual([]);
 });
+
+test('the Focus picker, the grid and a cell of it pass the automatic checks', async ({ page, errors }) => {
+    await openSite(page);
+    await page.click('#startpk');
+    await page.waitForFunction(() => window.__app.state.state.kind === 'pokemon' && !!window.__app.data.pokedex.pack);
+    await page.evaluate(() => {
+        window.__app.state.state.tiers[0].items.push(25, 26, 6);
+        window.__app.board.placeAllTiles();
+    });
+    await page.click('#focusbtn');
+    await page.click('#focuspop .chip[data-f="type"][data-v="Electric"]');
+    expect(await seriousProblems(page, '#focuspop')).toEqual([]);
+    await page.keyboard.press('Escape');
+    expect(await seriousProblems(page, '#focusbar')).toEqual([]);
+    await page.click('#tab-grid');
+    await expect(page.locator('#gtable .gcell').first()).toBeVisible();
+    expect(await seriousProblems(page, '#gridview')).toEqual([]);
+    await page.locator('#gtable .gcell[data-key="*|1|Electric"]').click();
+    expect(await seriousProblems(page, '#gcellpop')).toEqual([]);
+    expect(errors).toEqual([]);
+});

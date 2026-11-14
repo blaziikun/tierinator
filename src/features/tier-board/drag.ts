@@ -15,8 +15,9 @@ import type { ItemId } from '../../core/types';
 import { byId } from '../../lib/dom';
 import { openItemEditor } from '../items/item-editor';
 import { openQuickPicker } from '../quick-picker/quick-picker';
-import { clearSelection, onTileClick, placeAllTiles, removeFromTiers, selectedInOrder, syncSelection } from './board';
+import { clearSelection, inFocus, onTileClick, placeAllTiles, removeFromTiers, selectedInOrder, syncSelection } from './board';
 import { hideTip } from './hover-tip';
+import { insertionIndex } from './placement';
 
 /** Pixels the pointer must move before a press becomes a drag. */
 const DRAG_START_PX = 6;
@@ -138,12 +139,8 @@ function drop(drag: TileDrag): void {
     removeFromTiers(drag.ids);
     if ('tierId' in target) {
         const tier = findTier(target.tierId)!;
-        let at = tier.items.length;
-        if (target.nextTo != null) {
-            const i = tier.items.indexOf(target.nextTo);
-            if (i >= 0) at = i + (target.after ? 1 : 0);
-        }
-        tier.items.splice(at, 0, ...drag.ids);
+        // beside the shown item dropped against (placement.ts: what the Focus bar hides keeps its place)
+        tier.items.splice(insertionIndex(tier.items, inFocus, target), 0, ...drag.ids);
     }
     clearSelection();
     placeAllTiles();

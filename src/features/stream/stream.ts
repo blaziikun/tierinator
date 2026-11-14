@@ -14,8 +14,9 @@ import { html, setHtml } from '../../lib/html';
 import { closePopovers, toast } from '../../lib/ui';
 import { labelTextColor, rowBackground } from '../appearance/theme';
 import { switchView } from '../layout/layout';
-import { clearSelection, ensureTile, placeAllTiles, rankedIds, removeFromTiers } from '../tier-board/board';
+import { clearSelection, ensureTile, inFocus, isFocused, placeAllTiles, rankedIds, removeFromTiers } from '../tier-board/board';
 import { isChart } from '../tier-board/chart';
+import { insertionIndex } from '../tier-board/placement';
 import { checkStreamOptions, defaultStreamOptions, nextToRank, orderQueue, type StreamOptions } from './stream-queue';
 
 const stream = {
@@ -98,7 +99,7 @@ function startStream(): void {
     saveOptions();
     if (!stream.options.fromScratch && !poolShown().length) {
         toast(
-            state.searchQuery || state.tagFilter !== 'all' || state.generationFilter !== 'all' || state.typeFilter !== 'all'
+            state.searchQuery || state.tagFilter !== 'all' || isFocused()
                 ? 'Nothing unranked in the pool: clear the search or filters, or choose “All, from scratch”'
                 : 'Everything is ranked: choose “All, from scratch” to rank it again',
             4000,
@@ -109,9 +110,10 @@ function startStream(): void {
     const rankedBefore = state.tiers.map((tier) => tier.items.slice());
     const emptied = stream.options.fromScratch && rankedIds().size > 0;
     if (emptied) {
-        // one undo step, so a single Ctrl/⌘+Z after leaving puts the old ranking back
+        // one undo step, so a single Ctrl/⌘+Z after leaving puts the old ranking back. With Focus on, only what it
+        // shows starts again; the rest of the ranking stays where it is
         pushHistory();
-        for (const tier of state.tiers) tier.items = [];
+        for (const tier of state.tiers) tier.items = tier.items.filter((id) => !inFocus(id));
         placeAllTiles();
     }
     const queue = poolShown();
@@ -281,14 +283,14 @@ function nextPosition(): number {
     return nextToRank(stream.queue, stream.position, (id) => ranked.has(id));
 }
 
-/** Puts the item shown into this tier (at its end) and moves on. */
+/** Puts the item shown into this tier (at its end; with Focus on, after the last one shown) and moves on. */
 function placeCurrent(tierId: string): void {
     const id = currentItem();
     const tier = findTier(tierId);
     if (id == null || !tier) return;
     pushHistory();
     removeFromTiers([id]);
-    tier.items.push(id);
+    tier.items.splice(insertionIndex(tier.items, inFocus, {}), 0, id);
     noteChange(id);
     placeAllTiles();
     autosave();

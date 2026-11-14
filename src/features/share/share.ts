@@ -54,6 +54,8 @@ const SHARED_FIELDS = [
     'formCats',
     'formOv',
     'tags',
+    'grids',
+    'gsel',
 ] as const;
 
 /** Pictures that live only in this browser (your uploads, gallery, text tiles) can't travel in a link. */

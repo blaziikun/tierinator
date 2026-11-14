@@ -1,7 +1,7 @@
 // The packed species facts decode to the right values.
 import { describe, expect, it } from 'vitest';
 import type { Entry } from '../../src/core/types';
-import { baseStatTotal, bodyColor, evolutionStage, specialCategory } from '../../src/features/stats/pokedex-extras';
+import { baseStatTotal, bodyColor, evolutionStage, specialCategory } from '../../src/pokemon/pokedex-extras';
 
 const species = (dex: number, id = dex): Entry => ({ id, dex, name: '', gen: 1, types: [], lc: '', form: null });
 

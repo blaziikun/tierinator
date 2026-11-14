@@ -11,6 +11,7 @@ import type { ItemId, Tier } from '../../core/types';
 import { byId } from '../../lib/dom';
 import { html, type SafeHtml, setHtml } from '../../lib/html';
 import { closePopovers } from '../../lib/ui';
+import { baseStatTotal } from '../../pokemon/pokedex-extras';
 import { labelTextColor } from '../appearance/theme';
 import { spriteSrc } from '../sprites/sprites';
 import { rankedIds } from '../tier-board/board';
@@ -23,7 +24,6 @@ import {
     tierAtScore,
     withSpriteInfoCache,
 } from './breakdowns';
-import { baseStatTotal } from './pokedex-extras';
 
 type TableMode = 'count' | 'row' | 'tier';
 

@@ -14,6 +14,7 @@ import { setupPictureCredits } from './features/credits/credits';
 import { setupFiles } from './features/files/files';
 import { setupSpritePacks } from './features/files/sprite-packs';
 import { setupFind } from './features/find/find';
+import { setupFocus } from './features/focus/focus';
 import { setupForms } from './features/forms/forms';
 import { setupHeadToHead } from './features/head-to-head/head-to-head';
 import { setupItemDeletion } from './features/items/delete-items';
@@ -79,6 +80,7 @@ for (const setup of [
     setupHoverTip,
     setupTierEditor,
     setupFind,
+    setupFocus,
     setupTags,
     setupVariants,
     setupForms,
@@ -121,6 +123,7 @@ loadOnFirstUse(['addtab-wiki'], () => import('./features/wiki/category-import').
 loadOnFirstUse(['streambtn', 'lstream'], () => import('./features/stream/stream').then((module) => module.setupStream()));
 loadOnFirstUse(['startgal', 'ltpl'], () => import('./features/templates/templates').then((module) => module.setupTemplates()));
 loadOnFirstUse(['lgroup'], () => import('./features/group/group').then((module) => module.setupGroup()));
+loadOnFirstUse(['tab-grid'], () => import('./features/grid/grid').then((module) => module.setupGrid()));
 
 // ── start-up ──
 async function start(): Promise<void> {

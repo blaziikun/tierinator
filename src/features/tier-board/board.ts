@@ -15,7 +15,7 @@ import { byId, randomId, setStatus } from '../../lib/dom';
 import { html, setHtml } from '../../lib/html';
 import { markPixelArt } from '../../lib/images';
 import { ask, toast } from '../../lib/ui';
-import { POKEMON_TYPES } from '../../pokemon/data';
+import { focusSummary, isFocusEmpty, matchesFocus } from '../../pokemon/facets';
 import { labelTextColor, rowBackground } from '../appearance/theme';
 import { finder, updateFindCount } from '../find/find';
 import { startHeadToHead } from '../head-to-head/head-to-head';
@@ -23,6 +23,7 @@ import { healSprite, showFallbackSprite, spriteCrop, spriteSrc, tryNextDefaultMi
 import { updateTagDots } from '../tags/tags';
 import { applyBoardLayout, isChart } from './chart';
 import { hideTip } from './hover-tip';
+import { insertionIndex } from './placement';
 import { nextShuffleSeed, orderPool, POOL_SORT_LABELS } from './pool-order';
 import { openTierEditor, palette } from './tier-editor';
 import { pictureFit } from './tile-shape';
@@ -146,10 +147,14 @@ export function measureRowWidth(): void {
 //  TIERS AND POOL
 // ═════════════════════════════════════════════════════════════════════════════
 
+/** The Focus bar's line above the tiers (kept when the rows are rebuilt). */
+let focusBar: HTMLElement | null = null;
+
 /** Rebuilds every tier row, then puts the tiles in place. */
 export function renderTiers(): void {
     const section = byId('tsec');
-    section.replaceChildren();
+    focusBar ??= byId('focusbar');
+    section.replaceChildren(focusBar);
     applyBoardLayout();
     // a chart adds cells with Add tier: a + between cells would take up a grid cell of its own
     const chart = isChart();
@@ -202,6 +207,7 @@ function tierRow(tier: Tier, index: number): HTMLElement {
         button('✎', 'Edit', false, (e) => openTierEditor(tier.id, e.currentTarget as Element)),
         button('⇅', 'Sort this tier head-to-head (this or that?)', tier.items.length < 3, () => void startHeadToHead(tier.id)),
     );
+    controls.lastElementChild!.classList.add('h2hbtn'); // applyFilters keeps it in step with what Focus shows
     row.append(label, tiles, controls);
     return row;
 }
@@ -286,7 +292,20 @@ export const removeFromTiers = (ids: Iterable<ItemId>): void => {
 /** Ranked items matching the search (so they can be found in the tiers), and which one is shown. */
 export const search = { hits: [] as ItemId[], index: -1 };
 
-/** Applies the search box, generation, type and tag filters to the pool, and highlights ranked matches. */
+/** A Pokémon list with something chosen in the Focus bar (features/focus). */
+export const isFocused = (): boolean => isPokemonList() && !isFocusEmpty(state.focus);
+
+/** False for an item the Focus bar hides (in the pool and in the tiers). */
+export function inFocus(id: ItemId): boolean {
+    if (!isFocused()) return true;
+    const entry = entryById.get(id);
+    return !!entry && matchesFocus(entry, state.focus);
+}
+
+/**
+ * Applies the search box, the Focus bar and the tag filter to the pool, hides what the Focus bar leaves out of the
+ * tiers, and highlights ranked search matches.
+ */
 export function applyFilters(): void {
     const query = state.searchQuery.trim().toLowerCase().replace(/^#/, '');
     const isNumber = /^\d+$/.test(query);
@@ -294,8 +313,7 @@ export function applyFilters(): void {
     const matches = (entry: Entry | undefined): boolean =>
         !!entry &&
         (!query || entry.lc.includes(query) || !!entry.alias?.includes(query) || (isNumber && String(entry.dex).startsWith(query))) &&
-        (state.generationFilter === 'all' || String(entry.gen) === state.generationFilter) &&
-        (state.typeFilter === 'all' || entry.types.includes(state.typeFilter)) &&
+        inFocus(entry.id) &&
         (!tag || (state.tags[entry.id] || []).includes(tag) || !!entry.ftags?.includes(tag));
     let shown = 0;
     for (const tile of byId('pgrid').children as HTMLCollectionOf<HTMLElement>) {
@@ -304,15 +322,30 @@ export function applyFilters(): void {
         if (show) shown++;
     }
     byId('pcount').textContent = `${shown} shown`;
-    // highlight matches that are already ranked, so nothing gets lost
+    // the tiers show only what's in focus; search matches among them are highlighted, so nothing gets lost
     search.hits = [];
     const searching = !!query || !!tag;
-    for (const tier of state.tiers)
+    let ranked = 0;
+    let rankedShown = 0;
+    const focused = isFocused();
+    for (const tier of state.tiers) {
+        let shownHere = 0;
         for (const id of tier.items) {
+            const tile = tileById.get(id);
+            const show = inFocus(id);
+            ranked++;
+            if (show) shownHere++;
+            if (tile) tile.style.display = show ? '' : 'none';
             const hit = searching && matches(entryById.get(id));
-            tileById.get(id)?.classList.toggle('hit', hit);
+            tile?.classList.toggle('hit', hit);
             if (hit) search.hits.push(id);
         }
+        rankedShown += shownHere;
+        // ⇅ sorts what's shown: two or more with Focus on, three or more otherwise
+        const sortButton = document.querySelector<HTMLButtonElement>(`.trow[data-tid="${CSS.escape(tier.id)}"] .h2hbtn`);
+        if (sortButton) sortButton.disabled = shownHere < (focused ? 2 : 3);
+    }
+    showFocusBar(rankedShown, ranked);
     search.index = -1;
     const hitButton = byId('hitbtn');
     hitButton.classList.toggle('hid', !search.hits.length);
@@ -320,6 +353,24 @@ export function applyFilters(): void {
     finder.pool = shown;
     updateFindCount();
 }
+
+/** The line above the tiers while the Focus bar hides some of them: what's shown, and how many. */
+function showFocusBar(shown: number, ranked: number): void {
+    const bar = focusBar ?? byId('focusbar');
+    const focused = isFocused();
+    bar.classList.toggle('hid', !focused);
+    document.body.classList.toggle('focused', focused);
+    if (!focused) {
+        shownLine = '';
+        return;
+    }
+    // it's a live region: rewrite it only when it says something new (search keystrokes and drags call this too)
+    const line = `${focusSummary(state.focus)}|${shown}|${ranked}`;
+    if (line === shownLine) return;
+    shownLine = line;
+    setHtml(byId('focustext'), html`Showing <b>${focusSummary(state.focus)}</b><span class="note">${shown} of ${ranked} ranked</span>`);
+}
+let shownLine = '';
 
 /** Scrolls to the next (or previous) ranked match and flashes it. */
 export function jumpToNextHit(direction = 1): void {
@@ -351,13 +402,13 @@ export interface TileClick {
 }
 let lastClick: { id: ItemId; src: string } | null = null;
 
-/** Item ids in screen order for 'pool' (visible tiles only) or a tier. */
+/** Item ids in screen order for 'pool' or a tier (shown ones only). */
 export function orderedIds(where: string): ItemId[] {
     if (where === 'pool')
         return [...(byId('pgrid').children as HTMLCollectionOf<HTMLElement>)]
             .filter((tile) => tile.style.display !== 'none')
             .map((tile) => Number(tile.dataset.id));
-    return (findTier(where)?.items || []).slice();
+    return (findTier(where)?.items || []).filter(inFocus);
 }
 
 /** Click selects/unselects; Shift+click selects a range; Ctrl/⌘+click adds from another area. */
@@ -368,7 +419,9 @@ export function onTileClick(click: TileClick): void {
         let from = ids.indexOf(lastClick.id);
         let to = ids.indexOf(id);
         if (from > to) [from, to] = [to, from];
-        if (from >= 0)
+        // the range's start may have been hidden by Focus since: then just this one
+        if (from < 0) state.selection.add(id);
+        else
             ids.slice(from, to + 1).forEach((x) => {
                 state.selection.add(x);
             });
@@ -423,7 +476,7 @@ export function selectedInOrder(): ItemId[] {
 export function selectAllIn(area: 'tiers' | 'pool'): void {
     state.selection.clear();
     if (area === 'tiers') {
-        for (const tier of state.tiers) for (const id of tier.items) state.selection.add(id);
+        for (const tier of state.tiers) for (const id of tier.items) if (inFocus(id)) state.selection.add(id);
         state.selectionSource = 'mixed';
     } else {
         orderedIds('pool').forEach((id) => {
@@ -439,7 +492,8 @@ export function moveSelectionTo(tierId: string): void {
     pushHistory();
     const ids = selectedInOrder();
     removeFromTiers(ids);
-    findTier(tierId)!.items.push(...ids);
+    const tier = findTier(tierId)!;
+    tier.items.splice(insertionIndex(tier.items, inFocus, {}), 0, ...ids); // after the last one shown
     clearSelection();
     placeAllTiles();
     autosave();
@@ -533,8 +587,9 @@ export function syncHoverButton(): void {
 }
 
 export function setupBoard(): void {
+    focusBar = byId('focusbar');
     onListReset(() => {
-        byId('tsec').replaceChildren();
+        byId('tsec').replaceChildren(focusBar!);
         byId('pgrid').replaceChildren();
     });
     onHistoryRestore(() => {
@@ -608,17 +663,8 @@ export function setupBoard(): void {
     };
     byId('hitbtn').onclick = () => jumpToNextHit();
 
-    // filters
-    byId<HTMLSelectElement>('gensel').onchange = (e) => {
-        state.generationFilter = (e.target as HTMLSelectElement).value;
-        applyFilters();
-    };
-    byId<HTMLSelectElement>('typesel').onchange = (e) => {
-        state.typeFilter = (e.target as HTMLSelectElement).value;
-        applyFilters();
-    };
-    for (let gen = 1; gen <= 9; gen++) for (const select of ['gensel', 'stgen']) byId(select).append(new Option('Gen ' + gen, String(gen)));
-    for (const type of POKEMON_TYPES) byId('typesel').append(new Option(type, type));
+    // the studio list's generation filter
+    for (let gen = 1; gen <= 9; gen++) byId('stgen').append(new Option('Gen ' + gen, String(gen)));
 
     // select all / none in the pool
     byId('selallbtn').onclick = () => selectAllIn('pool');

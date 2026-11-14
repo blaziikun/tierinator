@@ -2,7 +2,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 //  ⇅ Head to head (#h2h): sorts a tier by asking "this or that?". Each item is
 //  slotted into the sorted part by binary search, so a tier of n items takes
-//  about n·log₂n questions. Stopping leaves the tier as it was.
+//  about n·log₂n questions. Stopping leaves the tier as it was. With the Focus
+//  bar on it sorts only what's shown, in the places those already had.
 // ─────────────────────────────────────────────────────────────────────────────
 import { pushHistory } from '../../core/history';
 import { entryById } from '../../core/items';
@@ -12,7 +13,8 @@ import type { ItemId } from '../../core/types';
 import { byId } from '../../lib/dom';
 import { toast } from '../../lib/ui';
 import { spriteSrc } from '../sprites/sprites';
-import { placeAllTiles } from '../tier-board/board';
+import { inFocus, isFocused, placeAllTiles } from '../tier-board/board';
+import { reorderShown } from '../tier-board/placement';
 
 /** 'first' = the left one is better, null = stopped. */
 type Answer = 'first' | 'second' | null;
@@ -62,22 +64,32 @@ async function sortByAsking(items: readonly ItemId[]): Promise<ItemId[] | null> 
     return sorted;
 }
 
+/**
+ * Sorts a tier, or with the Focus bar on, just what it shows: those are sorted among themselves into the places
+ * they already had, and the hidden ones don't move.
+ */
 export async function startHeadToHead(tierId: string): Promise<void> {
     const tier = findTier(tierId);
-    if (!tier || tier.items.length < 3) return toast('Put at least 3 in a tier to sort it');
+    const focused = isFocused();
+    const items = tier?.items.filter(inFocus) ?? [];
+    if (!tier || items.length < (focused ? 2 : 3))
+        return toast(focused ? 'Fewer than 2 shown in this tier: change the focus to sort it' : 'Put at least 3 in a tier to sort it');
     headToHead.questionsAsked = 0;
-    headToHead.expectedQuestions = tier.items.slice(1).reduce((total, _, k) => total + Math.ceil(Math.log2(k + 2)), 0);
-    byId('h2htitle').textContent = `Which is better? (${tier.label})`;
+    headToHead.expectedQuestions = items.slice(1).reduce((total, _, k) => total + Math.ceil(Math.log2(k + 2)), 0);
+    byId('h2htitle').textContent = `Which is better? (${tier.label}${focused ? ", what's shown" : ''})`;
     byId('h2h').classList.add('show');
-    const sorted = await sortByAsking(tier.items);
+    const sorted = await sortByAsking(items);
     if (!sorted) return;
     byId('h2h').classList.remove('show');
     const current = findTier(tierId);
     if (!current) return;
     pushHistory();
-    // anything added to the tier meanwhile stays, after the sorted ones
-    const inSorted = new Set(sorted);
-    current.items = [...sorted, ...current.items.filter((id) => !inSorted.has(id))];
+    if (focused) current.items = reorderShown(current.items, sorted);
+    else {
+        // anything added to the tier meanwhile stays, after the sorted ones
+        const inSorted = new Set(sorted);
+        current.items = [...sorted, ...current.items.filter((id) => !inSorted.has(id))];
+    }
     placeAllTiles();
     autosave();
     toast(`${current.label} sorted in ${headToHead.questionsAsked} questions. Ctrl/⌘ Z undoes it`, 4000);

@@ -7,11 +7,19 @@
 import { entryById, rankableEntries } from '../../core/items';
 import { isPokemonList, state } from '../../core/state';
 import type { Entry, FormCategory, ItemId, Tier } from '../../core/types';
-import { describeSpriteDir, findLoreEntry, parseGoIcon, spriteDirByPath } from '../../pokemon/data';
+import { describeSpriteDir, findLoreEntry, parseGoIcon, spriteDirByPath, TYPE_COLORS } from '../../pokemon/data';
+import {
+    BODY_COLOR_NAMES,
+    baseStatTotal,
+    bodyColor,
+    CATEGORY_NAMES,
+    evolutionStage,
+    STAGE_NAMES,
+    specialCategory,
+} from '../../pokemon/pokedex-extras';
 import { picturesOf } from '../items/items';
 import { genericPacks } from '../packs/packs';
 import { allTags, tagColor } from '../tags/tags';
-import { BODY_COLOR_NAMES, baseStatTotal, bodyColor, CATEGORY_NAMES, evolutionStage, STAGE_NAMES, specialCategory } from './pokedex-extras';
 
 export interface Breakdown {
     key: string;
@@ -57,26 +65,6 @@ const TYPE_ORDER = [
     'Steel',
     'Fairy',
 ];
-const TYPE_COLORS: Record<string, string> = {
-    Normal: '#9fa19f',
-    Fire: '#e62829',
-    Water: '#2980ef',
-    Grass: '#3fa129',
-    Electric: '#fac000',
-    Ice: '#3dcef3',
-    Fighting: '#ff8000',
-    Poison: '#9141cb',
-    Ground: '#915121',
-    Flying: '#81b9ef',
-    Psychic: '#ef4179',
-    Bug: '#91a119',
-    Rock: '#afa981',
-    Ghost: '#704170',
-    Dragon: '#5060e1',
-    Dark: '#624d4e',
-    Steel: '#60a1b8',
-    Fairy: '#ef70ef',
-};
 const CATEGORY_COLORS: Record<string, string> = {
     Regular: '#8b93a7',
     'Starter line': '#4dabf7',

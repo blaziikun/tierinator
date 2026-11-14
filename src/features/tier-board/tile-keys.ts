@@ -16,7 +16,8 @@ import { findTier, state, tileById } from '../../core/state';
 import type { ItemId } from '../../core/types';
 import { byId } from '../../lib/dom';
 import { toast } from '../../lib/ui';
-import { onTileClick, placeAllTiles, removeFromTiers } from './board';
+import { inFocus, onTileClick, placeAllTiles, removeFromTiers } from './board';
+import { insertionIndex } from './placement';
 
 const AREAS = ['tsec', 'pgrid'] as const;
 
@@ -62,15 +63,16 @@ function refocus(id: ItemId): void {
     requestAnimationFrame(() => focusTile(tileById.get(id)));
 }
 
+/** One place along its tier, past the next shown item (what the Focus bar hides keeps its place). */
 function moveWithinTier(id: ItemId, tierId: string, step: number): void {
     const tier = findTier(tierId);
     if (!tier) return;
-    const from = tier.items.indexOf(id);
-    const to = from + step;
-    if (from < 0 || to < 0 || to >= tier.items.length) return;
+    const shown = tier.items.filter(inFocus);
+    const passing = shown[shown.indexOf(id) + step];
+    if (passing == null || !tier.items.includes(id)) return;
     pushHistory();
-    tier.items.splice(from, 1);
-    tier.items.splice(to, 0, id);
+    tier.items.splice(tier.items.indexOf(id), 1);
+    tier.items.splice(insertionIndex(tier.items, inFocus, { nextTo: passing, after: step > 0 }), 0, id);
     placeAllTiles();
     autosave();
     refocus(id);
@@ -87,10 +89,11 @@ function moveToNextTier(id: ItemId, src: string, step: number, { toPool }: { toP
     if (Math.abs(step) === 1 && state.layout === 'chart' && Math.floor(index / columns) !== Math.floor((index + step) / columns)) return;
     const target = state.tiers[index + step];
     if (!target && !toPool) return;
-    const place = state.tiers[index]!.items.indexOf(id);
+    // the same place among what's shown
+    const place = state.tiers[index]!.items.filter(inFocus).indexOf(id);
     pushHistory();
     removeFromTiers([id]);
-    if (target) target.items.splice(Math.min(place, target.items.length), 0, id);
+    if (target) target.items.splice(insertionIndex(target.items, inFocus, { nextTo: target.items.filter(inFocus)[place] }), 0, id);
     placeAllTiles();
     autosave();
     toast(target ? `Moved to ${target.label}` : 'Back in the pool');

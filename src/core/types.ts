@@ -275,9 +275,40 @@ export interface ListState {
     /** Where the selection is: 'pool', a tier id, or 'mixed'. */
     selectionSource: string | null;
     searchQuery: string;
-    generationFilter: string;
-    typeFilter: string;
-    view: 'tier' | 'studio';
+    /** Pokémon lists: which Pokémon the pool and the tiers show (not saved). */
+    focus: Focus;
+    /** Pokémon lists: the saved grids (Grid view), and which one is open. */
+    grids: SavedGrid[];
+    gridId: string | null;
+    view: 'tier' | 'grid' | 'studio';
+}
+
+/** What a Pokémon can be sorted by: the Focus bar's facets and the grid's axes (pokemon/facets.ts). */
+export type FacetKey = 'type' | 'gen' | 'stage' | 'group' | 'form';
+
+/**
+ * Which Pokémon to show. Within a facet any value matches (Electric or Ghost); across facets all must
+ * (Electric, and from Gen 4). `only` narrows it to set items, such as one grid cell's.
+ */
+export type Focus = Partial<Record<FacetKey, string[]>> & { only?: { ids: ItemId[]; label: string } };
+
+/** One saved grid: what runs down and across, an optional layer, its own focus, and the cells you pinned. */
+export interface SavedGrid {
+    id: string;
+    name: string;
+    rows: FacetKey;
+    /** Which of the facet's values to show; empty means all. */
+    rowValues: string[];
+    /** Null: a single column (your favourite per row). */
+    cols: FacetKey | null;
+    colValues: string[];
+    /** A third facet seen one value at a time, like slices of a cube. */
+    layer: FacetKey | null;
+    /** The slice shown; null shows them all together. */
+    layerValue: string | null;
+    focus: Focus;
+    /** Your own pick for a cell, whatever the ranking says ("layer|row|col" → item). */
+    pins: Record<string, ItemId>;
 }
 
 /** One row of the list menu (the list itself is stored separately under its id). */

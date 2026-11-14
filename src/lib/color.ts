@@ -37,6 +37,10 @@ export function contrastRatio(a: string, b: string): number {
 /** Near-black or white, whichever reads better on this background. */
 export const readableTextOn = (hex: string): string => (luminance(hex) * 255 > 145 ? '#111111' : '#ffffff');
 
+/** Black or white, whichever contrasts more with `hex` (small text on a coloured badge: pure black, as mid reds need it). */
+export const clearestTextOn = (hex: string): string =>
+    contrastRatio(hex, '#ffffff') >= contrastRatio(hex, '#000000') ? '#ffffff' : '#000000';
+
 /** `a` moved toward `b` by `amount` (0 = a, 1 = b). */
 export const mixRgb = (a: string, b: string, amount: number): Rgb => {
     const from = hexToRgb(a);

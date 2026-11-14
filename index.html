@@ -32,11 +32,11 @@
   <div class="tbg" data-bar="logo"><div class="logo two" id="logo"></div></div>
   <div class="tbg" data-bar="list"><button id="listbtn" title="Your tier lists, new list, packs [L]">Tier list ▾</button></div>
   <div class="tbg" data-bar="file"><button id="filebtn" title="Save, load, share or export this list; back up all lists">File ▾</button><input type="file" id="loadinp" accept=".json,.zip,application/json,application/zip" class="hid"></div>
-  <div class="tbg" data-bar="tabs"><div class="tabs"><button id="tab-tier" class="on">Tier list</button><button id="tab-studio" title="Browse every item's picture choices [T]">Studio</button></div></div>
-  <div class="tbg tvo" data-bar="size"><span class="tbl">Tiers</span><input autocomplete="off" type="range" id="szsl" title="Sprite size in your tiers" min="28" max="160" value="64" step="4"><span id="szval" style="font-size:11px;color:var(--muted);min-width:38px">64px</span></div>
+  <div class="tbg" data-bar="tabs"><div class="tabs"><button id="tab-tier" class="on">Tier list</button><button id="tab-grid" class="pkonly" title="Your favourite in each type, generation and more, from your ranking or your own picks [G]">Grid</button><button id="tab-studio" title="Browse every item's picture choices [T]">Studio</button></div></div>
+  <div class="tbg tvo gvo" data-bar="size"><span class="tbl">Tiers</span><input autocomplete="off" type="range" id="szsl" title="Sprite size in your tiers" min="28" max="160" value="64" step="4"><span id="szval" style="font-size:11px;color:var(--muted);min-width:38px">64px</span></div>
   <div class="tbg tvo" data-bar="labels"><select autocomplete="off" id="lblsel" title="Labels under sprites"><option value="off">Labels: off</option><option value="name">Labels: name</option><option value="num">Labels: No.</option><option value="both">Labels: both</option></select></div>
   <div class="tbg tvo" data-bar="hover"><button id="hoverbtn" title="Show name and number when hovering a sprite">Hover: Off</button></div>
-  <div class="tbg tvo" data-bar="undo"><button id="undobtn" title="Undo (Ctrl/⌘+Z)">↶</button><button id="redobtn" title="Redo (Ctrl/⌘+Shift+Z)">↷</button></div>
+  <div class="tbg tvo gvo" data-bar="undo"><button id="undobtn" title="Undo (Ctrl/⌘+Z)">↶</button><button id="redobtn" title="Redo (Ctrl/⌘+Shift+Z)">↷</button></div>
   <div class="tbg tvo" data-bar="tier"><button id="addtbtn" title="Add a tier at the bottom (hover the gap between two tier labels to insert one there)">Add tier</button></div>
   <div class="tbg tvo" data-bar="stream"><button id="streambtn" title="Rank live on video: just the tiers, big, one item at a time [V]">Stream mode</button></div>
   <div class="tbg" data-bar="style"><button id="stylebtn" title="Theme, fonts, sizes, presets, top bar layout [S]">Style</button></div>
@@ -79,7 +79,7 @@
     </div>
     <p class="note" id="startlinks"><button id="startempty" class="link">Start with an empty list</button><button class="link" data-open="aboutm">About &amp; privacy</button></p>
   </div></div>
-  <div id="tsec" tabindex="0" role="region" aria-label="Tiers" aria-describedby="tsechint"></div><p id="tsechint" class="hid">Use the arrow keys to move between items, Space to select, a number to send to a tier.</p>
+  <div id="tsec" tabindex="0" role="region" aria-label="Tiers" aria-describedby="tsechint"><div id="focusbar" class="hid" role="status"><span id="focustext"></span><button id="focusedit">Change</button><button id="focusclr">Show all</button></div></div><p id="tsechint" class="hid">Use the arrow keys to move between items, Space to select, a number to send to a tier.</p>
   <div id="psplit" title="Drag to resize; double-click to reset"></div>
   <div id="psec">
     <div id="pfilt">
@@ -87,8 +87,7 @@
       <button id="psortbtn" aria-haspopup="menu" aria-expanded="false" aria-controls="psortmenu" title="The order the pool shows items in (your ranking doesn't change)">Order added ▾</button>
       <button id="addbtn" class="accent" title="Upload, paste, type or search the web for items">Add items</button>
       <button id="varbtn" class="cstonly" title="Variants of the same character: combine or split them, like Pokémon forms">Variants ▾</button><button id="tagdotbtn" class="chip" title="Show or hide the coloured tag dots on pictures">Tags</button><button id="qrbtn" title="Rank what the pool is showing, one at a time [Q]">Quick rank</button><button id="statsbtn" title="Stats: favourite types, gens, legendaries, sprites… [I]">Stats</button>
-      <select autocomplete="off" id="gensel" class="pkonly" aria-label="Generation"><option value="all">All generations</option></select>
-      <select autocomplete="off" id="typesel" class="pkonly" aria-label="Type"><option value="all">All types</option></select>
+      <button id="focusbtn" class="pkonly" aria-haspopup="dialog" title="Show only some Pokémon: by type, generation, stage, group or form">Focus ▾</button>
       <button id="hitbtn" class="cbtn hid" title="Jump to matching ranked Pokémon (Enter)"></button>
       <select autocomplete="off" id="tagsel" class="hid" title="Filter by tag"></select>
       <button id="selallbtn" title="Select every item the pool is showing">Select visible</button>
@@ -100,6 +99,36 @@
     </div>
     <div id="pgrid" tabindex="0" role="region" aria-label="Pool: items not ranked yet"></div>
   </div>
+</div>
+
+<!-- Focus picker (features/focus): the tiers' and pool's focus, or a grid's -->
+<div id="focuspop" class="pop" role="dialog" aria-label="Show only"><div id="focusbody"></div></div>
+
+<!-- ═════════ GRID VIEW (features/grid, Pokémon lists) ═════════ -->
+<div id="gridview" class="hid">
+  <div id="gbar">
+    <div class="tabs" id="gtabs"></div>
+    <button id="gnew" aria-haspopup="menu" title="Another grid: ready-made ones, or a copy of this one">New grid ▾</button>
+    <span class="gsep"></span>
+    <label class="gaxis"><span class="tbl">Down</span><select autocomplete="off" id="grows"></select></label><button id="growsv"></button>
+    <label class="gaxis"><span class="tbl">Across</span><select autocomplete="off" id="gcols"></select></label><button id="gcolsv"></button>
+    <label class="gaxis" title="A third way to slice it, seen one value at a time"><span class="tbl">Layers</span><select autocomplete="off" id="glayer"></select></label>
+    <button id="gfocus" aria-haspopup="dialog"></button>
+    <button id="gmore" aria-haspopup="menu" title="Rename, delete or export this grid">⋯ ▾</button>
+  </div>
+  <div id="glayers" class="tabs hid"></div>
+  <p id="gnote" class="note"></p>
+  <div id="gscroll"><table id="gtable"></table></div>
+</div>
+<div id="gnewpop" class="pop menu" role="menu" aria-label="New grid"></div>
+<div id="gvalpop" class="pop" role="dialog" aria-label="Which values"></div>
+<div id="gcellpop" class="pop" role="dialog" aria-label="This cell"></div>
+<div id="gmorepop" class="pop menu" role="menu" aria-label="This grid">
+  <button id="gren">Rename…</button>
+  <button id="gpng" title="Download the grid as a picture to share">Download picture (PNG)</button>
+  <button id="gcopy" title="Copy the grid as a picture, to paste into a chat">Copy picture</button>
+  <hr>
+  <button id="gdel" class="danger">Delete this grid…</button>
 </div>
 
 <!-- ═════════ STUDIO VIEW ═════════ -->
@@ -381,7 +410,7 @@
 <div id="keysm" class="modal"><div class="mbox" id="keysbox"><h3>Keyboard shortcuts</h3><div class="kgrid">
   <span class="keys"><kbd>H</kbd></span><span>Hide / show top bar</span><span class="keys"><kbd>P</kbd></span><span>Hide / show pool</span><span class="keys"><kbd>B</kbd></span><span>Pool beside / below the tiers</span>
   <span class="keys"><kbd>S</kbd></span><span>Style panel</span><span class="keys"><kbd>A</kbd></span><span>Add items</span><span class="keys"><kbd>L</kbd></span><span>Your lists</span><span class="keys"><kbd>E</kbd></span><span>Export</span>
-  <span class="keys"><kbd>/</kbd> <kbd>F</kbd></span><span>Search the pool (Enter jumps to ranked matches); with the pool hidden, find in your tiers</span><span class="keys"><kbd>T</kbd></span><span>Switch between the Tier list and Studio</span>
+  <span class="keys"><kbd>/</kbd> <kbd>F</kbd></span><span>Search the pool (Enter jumps to ranked matches); with the pool hidden, find in your tiers</span><span class="keys"><kbd>T</kbd></span><span>Switch between the Tier list and Studio</span><span class="keys"><kbd>G</kbd></span><span>Pokémon lists: the Grid of favourites, and back to the tiers</span>
   <span class="keys"><kbd>Tab</kbd> <kbd>← → ↑ ↓</kbd></span><span>Go to the tiers or pool, then move between items (<kbd>Home</kbd> <kbd>End</kbd>: first and last)</span><span class="keys"><kbd>Space</kbd></span><span>Select the item (Shift: a range)</span><span class="keys"><kbd>Alt</kbd> <kbd>← → ↑ ↓</kbd></span><span>Move the item along its tier, or up / down a tier (in a chart: to the next cell; Shift for along it)</span><span class="keys"><kbd>1</kbd>–<kbd>9</kbd></span><span>Move selected (or the focused item) to tier 1–9</span><span class="keys"><kbd>0</kbd></span><span>Send selected back to pool (also Delete)</span>
   <span class="keys"><kbd>Ctrl/⌘ A</kbd></span><span>Select everything in the area under the mouse</span><span class="keys"><kbd>Ctrl/⌘ Z</kbd></span><span>Undo (add Shift, or press Ctrl/⌘ Y, to redo)</span><span class="keys"><kbd>Menu</kbd> <kbd>Shift F10</kbd></span><span>The focused item's picture choices or editor, as right-click</span>
   <span class="keys"><kbd>Ctrl/⌘ S</kbd></span><span>Save</span><span class="keys"><kbd>Ctrl/⌘ O</kbd></span><span>Load</span><span class="keys"><kbd>Esc</kbd></span><span>Close / clear selection / show top bar</span>

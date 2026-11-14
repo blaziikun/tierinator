@@ -8,6 +8,7 @@
 @import "./base.css";
 @import "../features/layout/top-bar.css";
 @import "../features/find/find.css";
+@import "../features/focus/focus.css";
 @import "../features/tier-board/board.css";
 @import "../features/tier-board/chart.css";
 @import "../features/tags/tags.css";
@@ -16,6 +17,7 @@
 @import "../features/quick-rank/ranking-tools.css";
 @import "../features/stream/stream.css";
 @import "../features/stats/stats.css";
+@import "../features/grid/grid.css";
 @import "../features/studio/studio.css";
 @import "../features/quick-picker/quick-picker.css";
 @import "../features/lists/lists.css";
