@@ -1,0 +1,23 @@
+# Weekly pull requests for dependency updates. Every one runs the full CI, and
+# nothing merges itself: read the changelog, let the checks pass, then merge.
+version: 2
+updates:
+    - package-ecosystem: npm # also reads pnpm-lock.yaml
+      directory: /
+      schedule:
+          interval: weekly
+      # new releases wait a week before being proposed (most bad releases are pulled by then)
+      cooldown:
+          default-days: 7
+      groups:
+          tooling:
+              dependency-type: development
+              update-types: [minor, patch]
+      open-pull-requests-limit: 5
+
+    - package-ecosystem: github-actions
+      directory: /
+      schedule:
+          interval: monthly
+      cooldown:
+          default-days: 7

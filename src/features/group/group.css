@@ -1,0 +1,213 @@
+/*
+ * src/features/group/group.css
+ *
+ * Combine rankings: adding people's links and files, then the group's results.
+ */
+
+.grpbox {
+    width: min(640px, calc(100vw - 24px));
+    max-width: none;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    text-align: left;
+    gap: 12px;
+}
+
+.grpbox .addhead .grpclose {
+    margin-left: auto;
+}
+
+.grpbox .mbtns {
+    justify-content: flex-end;
+    margin-top: 2px;
+}
+
+.grplabel {
+    font-size: 0.846rem;
+    color: var(--muted);
+    margin-bottom: -6px;
+}
+
+#grplinks {
+    width: 100%;
+    min-height: 74px;
+    font-size: 0.846rem;
+    padding: 8px 10px;
+    resize: vertical;
+    /* links are one long word: break anywhere rather than scroll sideways */
+    word-break: break-all;
+}
+
+.grpadd {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.grpmsg {
+    border: 1px solid color-mix(in srgb, #c62828 45%, var(--border));
+    background: color-mix(in srgb, #c62828 9%, transparent);
+    border-radius: var(--r-panel);
+    padding: 8px 12px;
+    font-size: 0.846rem;
+    line-height: 1.5;
+}
+
+.grpmsg ul {
+    margin: 0;
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.grphead {
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+.grppeople {
+    list-style: none;
+    margin: -4px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.grpperson {
+    display: grid;
+    grid-template-columns: minmax(0, 180px) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-top: 1px solid var(--border);
+}
+
+.grpperson:last-child {
+    border-bottom: 1px solid var(--border);
+}
+
+.grpperson input {
+    width: 100%;
+}
+
+.grpfrom {
+    overflow-wrap: anywhere;
+}
+
+.grpnone {
+    padding: 6px 0;
+}
+
+/* ── results ── */
+
+.grpresbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.grpresbody p {
+    font-size: 0.923rem;
+    line-height: 1.55;
+}
+
+.grpclosest b {
+    color: var(--cyan);
+}
+
+.grptables {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.grptable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.846rem;
+}
+
+.grptable caption {
+    text-align: left;
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    font-size: 1rem;
+    padding-bottom: 6px;
+}
+
+.grptable thead th {
+    font-weight: var(--w-ui);
+    color: var(--muted);
+    text-align: left;
+    font-size: 0.846rem;
+    padding: 0 6px 6px;
+}
+
+.grptable tbody th,
+.grptable td {
+    padding: 5px 6px;
+    border-top: 1px solid var(--border);
+    vertical-align: middle;
+    text-align: left;
+}
+
+.grptable tbody th {
+    font-weight: var(--w-strong);
+    overflow-wrap: anywhere;
+}
+
+.grptable .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.grptier {
+    display: inline-block;
+    border-radius: var(--r-chip);
+    padding: 1px 7px;
+    font-family: var(--font-head);
+    font-weight: var(--w-label);
+    font-size: 0.846rem;
+    line-height: 1.4;
+    max-width: 8em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+    background: var(--s3);
+}
+
+@media (max-width: 600px) {
+    .grpbox {
+        padding: 16px;
+    }
+
+    .grpperson {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 4px 8px;
+    }
+
+    .grpperson .grpfrom {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .grpadd button {
+        flex: 1 1 auto;
+    }
+
+    .grptable {
+        font-size: 0.846rem;
+    }
+
+    .grptable tbody th,
+    .grptable td,
+    .grptable thead th {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+}

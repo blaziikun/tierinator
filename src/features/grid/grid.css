@@ -1,0 +1,355 @@
+/*
+ * src/features/grid/grid.css
+ *
+ * The Grid view (#gridview): its bar of grids and axes, the layer strip, and the
+ * table of cells (headings stay in view as it scrolls both ways). A cell's
+ * picture is shaped and cropped like a tile (.gpic follows .pi .pimg).
+ * Then the cell pop-up's list.
+ */
+
+#gridview {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+#gbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--s1);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+#gtabs {
+    max-width: min(560px, 100%);
+}
+
+#gtabs button.on,
+#glayers button.on {
+    background: var(--s2);
+    color: var(--text);
+    border-color: var(--border2);
+}
+
+.gsep {
+    width: 1px;
+    height: 20px;
+    background: var(--border2);
+    margin: 0 4px;
+}
+
+.gaxis {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#gfocus.on {
+    background: color-mix(in srgb, var(--cyan) 12%, var(--s2));
+    border-color: color-mix(in srgb, var(--cyan) 45%, transparent);
+    color: var(--cyan);
+}
+
+#gmore {
+    margin-left: auto;
+}
+
+#glayers {
+    margin: 8px 12px 0;
+    align-self: flex-start;
+}
+
+#gnote {
+    margin: 8px 12px 0;
+    flex-shrink: 0;
+}
+
+#gscroll {
+    flex: 1;
+    overflow: auto;
+    min-height: 0;
+    padding: 8px 12px 16px;
+}
+
+#gtable {
+    border-collapse: separate;
+    border-spacing: 4px;
+}
+
+#gtable th {
+    font-weight: var(--w-strong);
+    font-size: 0.846rem;
+    color: var(--muted);
+    background: var(--bg);
+    white-space: nowrap;
+}
+
+/* the column headings stay at the top, the row headings at the left */
+#gtable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 2px 0 4px;
+}
+
+#gtable tbody th {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    text-align: left;
+    padding-right: 8px;
+}
+
+#gtable thead th:first-child {
+    left: 0;
+    z-index: 3;
+}
+
+.gax {
+    display: inline-block;
+}
+
+.gtype {
+    color: #ffffff;
+    border-radius: var(--r-chip);
+    padding: 2px 9px;
+    font-size: 0.769rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+#gtable thead .gtype {
+    min-width: 64px;
+    text-align: center;
+}
+
+.gcell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    width: calc(var(--sz) * var(--tile-wf, 1) + 16px);
+    min-height: calc(var(--sz) * var(--tile-hf, 1) + 34px);
+    padding: 6px;
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: var(--r-ctl);
+    color: var(--text);
+}
+
+.gcell:hover {
+    border-color: var(--border2);
+    background: color-mix(in srgb, var(--text) 4%, var(--s1));
+}
+
+.gcell.pinned {
+    border-color: color-mix(in srgb, var(--cyan) 45%, transparent);
+}
+
+.gcell.empty,
+.gcell.empty:hover {
+    background: transparent;
+    border-style: dashed;
+    border-color: var(--border);
+    cursor: default;
+}
+
+.gdash,
+.gwait {
+    color: var(--muted);
+    font-size: 0.846rem;
+}
+
+.gcell.unranked {
+    background: transparent;
+    border-style: dashed;
+    border-color: var(--border2);
+}
+
+.gpic {
+    position: relative;
+    display: block;
+    width: calc(var(--sz) * var(--tile-wf, 1));
+    aspect-ratio: var(--tile-ratio, 1);
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.gpic img {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--tile-fit, contain);
+    display: block;
+}
+
+.gpic img.whole {
+    object-fit: contain;
+}
+
+.gpic img.crop {
+    position: absolute;
+    object-fit: fill;
+    max-width: none;
+}
+
+.gpic img.gone {
+    visibility: hidden;
+}
+
+.gname {
+    font-size: 0.769rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.25;
+}
+
+/* your pick: a small mark in the corner */
+.gpin {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 0 2px var(--s1);
+}
+
+.gtop {
+    font-size: 0.692rem;
+    color: var(--muted);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* one column: a wrapping set of cards, heading above each */
+#gtable.one,
+#gtable.one tbody {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#gtable.one tr {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+#gtable.one tbody th {
+    position: static;
+    padding: 0;
+}
+
+#gtable.one td {
+    display: block;
+}
+
+/* ── a cell's pop-up ── */
+#gcellpop {
+    width: 400px;
+}
+
+#gcellpop h3 {
+    margin: 0;
+}
+
+#gcellpop .glist {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: min(52vh, 420px);
+    overflow-y: auto;
+    margin: 0 -6px;
+    padding: 0 6px;
+}
+
+.gli {
+    display: grid;
+    grid-template-columns: 26px 36px minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 4px;
+    border-radius: var(--r-ctl);
+}
+
+.gli:hover {
+    background: var(--hover);
+}
+
+.gli.pinned {
+    background: color-mix(in srgb, var(--cyan) 9%, transparent);
+}
+
+.gli img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.gplace {
+    color: var(--muted);
+    font-size: 0.769rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.gliname {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gli button {
+    padding: 2px 10px;
+}
+
+.gtier {
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-weight: 700;
+    font-size: 0.769rem;
+    max-width: 7em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gsub {
+    font-size: 0.769rem;
+    color: var(--muted);
+    margin: 8px 4px 2px;
+    font-weight: var(--w-strong);
+}
+
+#gvalpop {
+    width: 420px;
+}
+
+#gvalpop .fchips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+@media (max-width: 640px) {
+    .gsep {
+        display: none;
+    }
+
+    #gmore {
+        margin-left: 0;
+    }
+}

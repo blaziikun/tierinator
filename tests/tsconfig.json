@@ -1,0 +1,8 @@
+{
+    // Type-checks the tests, the build scripts and the config files (they run in Node, not the browser).
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "types": ["node", "vite/client"]
+    },
+    "include": ["./**/*.ts", "../src", "../scripts", "../*.ts"]
+}

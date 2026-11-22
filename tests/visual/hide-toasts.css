@@ -1,0 +1,5 @@
+/* tests/visual/hide-toasts.css: toasts come and go on their own clock, so whether one is still showing depends on the
+   computer's speed. Screenshots leave them out. */
+#toast {
+    display: none !important;
+}

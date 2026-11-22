@@ -1,0 +1,205 @@
+/*
+ * src/styles/template-pages.css
+ *
+ * The static template pages (/t/ and /t/<id>/, made by scripts/template-pages.ts): one
+ * readable column in the default theme's fonts and colours (dark, like the app).
+ */
+
+@font-face {
+    font-family: "Playfair Display";
+    font-style: normal;
+    font-weight: 400 900;
+    font-display: swap;
+    src: url("./fonts/playfair-display-latin-wght-normal.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url("./fonts/instrument-sans-latin-wght-normal.woff2") format("woff2");
+}
+
+:root {
+    --bg: #0b0b0c;
+    --s1: #141416;
+    --s3: #26262a;
+    --accent: #ededee;
+    --on-accent: #111111;
+    --text: #ededee;
+    --muted: #8c8c93;
+    --border: color-mix(in srgb, var(--text) 8%, transparent);
+    --border2: color-mix(in srgb, var(--text) 14%, transparent);
+    /* the app's measures (styles/base.css) at the built-in roundness */
+    --r-ctl: 7px;
+    --r-panel: 12px;
+    color-scheme: dark;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font:
+        15px / 1.6 "Instrument Sans",
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 16px 64px;
+}
+
+h1,
+h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
+}
+
+h1 {
+    font-size: clamp(2.4rem, 7vw, 3.4rem);
+    margin: 28px 0 12px;
+}
+
+h2 {
+    font-size: 1.6rem;
+    margin: 48px 0 14px;
+}
+
+p {
+    margin: 0 0 12px;
+}
+
+a {
+    color: var(--text);
+    text-decoration-color: color-mix(in srgb, var(--text) 35%, transparent);
+    text-underline-offset: 3px;
+}
+
+a:hover {
+    text-decoration-color: currentColor;
+}
+
+:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+}
+
+::selection {
+    background: color-mix(in srgb, var(--text) 25%, transparent);
+}
+
+.back,
+.note,
+footer {
+    color: var(--muted);
+    font-size: 0.867rem;
+}
+
+.lead {
+    color: var(--muted);
+    font-size: 1.067rem;
+    max-width: 60ch;
+}
+
+/* the one thing to do here, styled like the app's accent button */
+.rank {
+    display: inline-block;
+    margin: 12px 0 6px;
+    padding: 10px 20px;
+    border-radius: var(--r-ctl);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.12s;
+}
+
+.rank:hover {
+    background: color-mix(in srgb, var(--accent) 86%, var(--bg));
+}
+
+/* the items: plain names in columns, so a long list stays short */
+.items {
+    columns: 3 150px; /* two on a phone */
+    column-gap: 24px;
+    margin: 0;
+    padding: 0 0 0 20px;
+}
+
+.items li {
+    break-inside: avoid;
+    padding: 1px 0;
+}
+
+.items li::marker {
+    color: var(--muted);
+}
+
+/* other templates: cards like the gallery's */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cards a {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 100%;
+    padding: 14px;
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    background: var(--s1);
+    text-decoration: none;
+    transition:
+        border-color 0.12s,
+        background 0.12s;
+}
+
+.cards a:hover {
+    border-color: color-mix(in srgb, var(--text) 40%, transparent);
+    background: color-mix(in srgb, var(--text) 3%, var(--s1));
+}
+
+.cards b {
+    font-weight: 600;
+}
+
+.cards span {
+    color: var(--muted);
+    font-size: 0.867rem;
+    line-height: 1.45;
+}
+
+.cards .count {
+    margin-top: auto;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+}
+
+footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin-top: 56px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}

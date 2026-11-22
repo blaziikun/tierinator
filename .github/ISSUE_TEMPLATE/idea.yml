@@ -1,0 +1,11 @@
+name: Idea
+description: A feature, a new source of pictures, a pack…
+labels: [idea]
+body:
+    - type: textarea
+      id: idea
+      attributes:
+          label: The idea
+          description: What you'd like to do that you can't now.
+      validations:
+          required: true

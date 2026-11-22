@@ -1,0 +1,33 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "web-browsers",
+    "title": "Web browsers",
+    "category": "Technology",
+    "description": "Today’s browsers and the ones that came before them.",
+    "items": [
+        { "name": "Google Chrome", "wiki": "Google Chrome" },
+        { "name": "Firefox", "wiki": "Firefox" },
+        { "name": "Safari", "wiki": "Safari (web browser)" },
+        { "name": "Microsoft Edge", "wiki": "Microsoft Edge" },
+        { "name": "Opera", "wiki": "Opera (web browser)" },
+        { "name": "Brave", "wiki": "Brave (web browser)" },
+        { "name": "Vivaldi", "wiki": "Vivaldi (web browser)" },
+        { "name": "Arc", "wiki": "Arc (web browser)" },
+        { "name": "Samsung Internet", "wiki": "Samsung Internet" },
+        { "name": "UC Browser", "wiki": "UC Browser" },
+        { "name": "Chromium", "wiki": "Chromium (web browser)" },
+        { "name": "Waterfox", "wiki": "Waterfox" },
+        { "name": "Pale Moon", "wiki": "Pale Moon" },
+        { "name": "SeaMonkey", "wiki": "SeaMonkey" },
+        { "name": "GNOME Web", "wiki": "GNOME Web" },
+        { "name": "Konqueror", "wiki": "Konqueror" },
+        { "name": "Maxthon", "wiki": "Maxthon" },
+        { "name": "Yandex Browser", "wiki": "Yandex Browser" },
+        { "name": "Ladybird", "wiki": "Ladybird (web browser)" },
+        { "name": "Internet Explorer", "wiki": "Internet Explorer" },
+        { "name": "Netscape Navigator", "wiki": "Netscape Navigator" },
+        { "name": "Mosaic", "wiki": "Mosaic (web browser)" },
+        { "name": "Lynx", "wiki": "Lynx (web browser)" }
+    ]
+}

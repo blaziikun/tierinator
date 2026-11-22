@@ -1,0 +1,56 @@
+/*
+ * src/features/share/share.css
+ *
+ * The bar above a shared list you're previewing, and the About window.
+ */
+
+#sharebar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding: 8px 14px;
+    background: var(--s1);
+    border-bottom: 1px solid var(--border2);
+    font-size: 0.923rem;
+}
+
+#sharebar span {
+    flex: 1 1 260px;
+}
+
+#sharebar.hid {
+    display: none;
+}
+
+#aboutbox {
+    max-width: 560px;
+    max-height: 86vh;
+    overflow-y: auto;
+    text-align: left;
+}
+
+#aboutbox h3 {
+    text-align: center;
+}
+
+#aboutbox h4 {
+    margin-top: 6px;
+    font-size: 1rem;
+    font-weight: var(--w-strong);
+}
+
+#aboutbox p {
+    font-size: 0.923rem;
+}
+
+#aboutbox a {
+    color: var(--text);
+    text-underline-offset: 3px;
+}
+
+#aboutlinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+}

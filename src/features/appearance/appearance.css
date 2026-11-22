@@ -1,0 +1,204 @@
+/*
+ * src/features/appearance/appearance.css
+ *
+ * The Appearance drawer: presets, colours, fonts, sizes.
+ */
+
+#appear {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(380px, 100vw);
+    z-index: 1700;
+    background: var(--s1);
+    border-left: 1px solid var(--border2);
+    box-shadow: -30px 0 80px -10px var(--shadow);
+    overflow-y: auto;
+    transform: translateX(105%);
+    transition: transform 0.24s var(--ease);
+    padding: 0 20px 32px;
+}
+
+#appear.open {
+    transform: none;
+}
+
+.dhead {
+    position: sticky;
+    top: 0;
+    background: var(--s1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0 12px;
+    z-index: 2;
+    border-bottom: 1px solid var(--border);
+}
+
+.dhead h3 {
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    font-size: 1.385rem;
+    letter-spacing: -0.01em;
+}
+
+.dsec {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* each section's name: the text colour at a semibold weight, so the panel reads as a few labelled parts */
+.dsec h4 {
+    font-size: 0.923rem;
+    color: var(--text);
+    font-weight: var(--w-strong);
+    margin-bottom: 2px;
+}
+
+.dsec .edr > label {
+    min-width: 96px;
+}
+
+.dsec input[type="range"] {
+    flex: 1;
+    width: auto;
+}
+
+.dsec .val {
+    font-size: 0.846rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 42px;
+    text-align: right;
+}
+
+.presets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.preset {
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 0;
+    overflow: hidden;
+    text-align: left;
+    background: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.preset .pn em {
+    font-style: normal;
+    color: var(--accent);
+}
+
+.preset .pact {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.preset:hover .pact {
+    opacity: 1;
+}
+
+.preset .pact button {
+    padding: 0 6px;
+    font-size: 0.846rem;
+    line-height: 1.5;
+}
+
+.preset.on {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 1px var(--cyan);
+}
+
+.preset .pv {
+    height: 64px;
+    padding: 9px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.preset .pv .aa {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.preset .pv .dots {
+    display: flex;
+    gap: 4px;
+}
+
+.preset .pv .dots i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: block;
+}
+
+.preset .pn {
+    display: block;
+    padding: 6px 10px;
+    font-size: 0.846rem;
+    border-top: 1px solid var(--border);
+    background: var(--s2);
+}
+
+.cgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.cgrid label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.923rem;
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-ctl);
+    padding: 5px 8px;
+    cursor: pointer;
+}
+
+.cgrid input[type="color"] {
+    width: 26px;
+    height: 22px;
+    padding: 0;
+    border: none;
+}
+
+.sample {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    padding: 8px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-ctl);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.dfoot {
+    display: flex;
+    gap: 8px;
+    padding-top: 16px;
+}
+
+.dfoot button {
+    flex: 1;
+}

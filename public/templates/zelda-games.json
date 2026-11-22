@@ -1,0 +1,28 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "zelda-games",
+    "title": "Legend of Zelda games",
+    "category": "Games",
+    "description": "Link’s adventures, from the 1986 original to Echoes of Wisdom.",
+    "items": [
+        { "name": "The Legend of Zelda", "wiki": "The Legend of Zelda (video game)" },
+        { "name": "Zelda II", "wiki": "Zelda II: The Adventure of Link" },
+        { "name": "A Link to the Past", "wiki": "The Legend of Zelda: A Link to the Past" },
+        { "name": "Link’s Awakening", "wiki": "The Legend of Zelda: Link's Awakening" },
+        { "name": "Ocarina of Time", "wiki": "The Legend of Zelda: Ocarina of Time" },
+        { "name": "Majora’s Mask", "wiki": "The Legend of Zelda: Majora's Mask" },
+        { "name": "Oracle of Seasons and Ages", "wiki": "The Legend of Zelda: Oracle of Seasons and Oracle of Ages" },
+        { "name": "The Wind Waker", "wiki": "The Legend of Zelda: The Wind Waker" },
+        { "name": "The Minish Cap", "wiki": "The Legend of Zelda: The Minish Cap" },
+        { "name": "Twilight Princess", "wiki": "The Legend of Zelda: Twilight Princess" },
+        { "name": "Phantom Hourglass", "wiki": "The Legend of Zelda: Phantom Hourglass" },
+        { "name": "Spirit Tracks", "wiki": "The Legend of Zelda: Spirit Tracks" },
+        { "name": "Skyward Sword", "wiki": "The Legend of Zelda: Skyward Sword" },
+        { "name": "A Link Between Worlds", "wiki": "The Legend of Zelda: A Link Between Worlds" },
+        { "name": "Tri Force Heroes", "wiki": "The Legend of Zelda: Tri Force Heroes" },
+        { "name": "Breath of the Wild", "wiki": "The Legend of Zelda: Breath of the Wild" },
+        { "name": "Tears of the Kingdom", "wiki": "The Legend of Zelda: Tears of the Kingdom" },
+        { "name": "Echoes of Wisdom", "wiki": "The Legend of Zelda: Echoes of Wisdom" }
+    ]
+}

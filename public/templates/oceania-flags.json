@@ -1,0 +1,24 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "oceania-flags",
+    "title": "Flags of Oceania",
+    "category": "Places",
+    "description": "The national flags of Australia, New Zealand and the Pacific islands.",
+    "items": [
+        { "name": "Australia", "wiki": "Flag of Australia" },
+        { "name": "Fiji", "wiki": "Flag of Fiji" },
+        { "name": "Kiribati", "wiki": "Flag of Kiribati" },
+        { "name": "Marshall Islands", "wiki": "Flag of the Marshall Islands" },
+        { "name": "Micronesia", "wiki": "Flag of the Federated States of Micronesia" },
+        { "name": "Nauru", "wiki": "Flag of Nauru" },
+        { "name": "New Zealand", "wiki": "Flag of New Zealand" },
+        { "name": "Palau", "wiki": "Flag of Palau" },
+        { "name": "Papua New Guinea", "wiki": "Flag of Papua New Guinea" },
+        { "name": "Samoa", "wiki": "Flag of Samoa" },
+        { "name": "Solomon Islands", "wiki": "Flag of the Solomon Islands" },
+        { "name": "Tonga", "wiki": "Flag of Tonga" },
+        { "name": "Tuvalu", "wiki": "Flag of Tuvalu" },
+        { "name": "Vanuatu", "wiki": "Flag of Vanuatu" }
+    ]
+}

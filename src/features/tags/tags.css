@@ -1,0 +1,79 @@
+/*
+ * src/features/tags/tags.css
+ *
+ * Tags: chips, the dots on tiles, the tag popover.
+ */
+
+.ptags {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    display: flex;
+    gap: 2px;
+    pointer-events: none;
+}
+
+.ptags i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+
+body.notagdots .ptags {
+    display: none;
+}
+
+.tagrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.tchip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 999px;
+    padding: 1px 4px 1px 9px;
+    font-size: 0.846rem;
+    border: 1px solid var(--border2);
+    background: var(--s2);
+}
+
+.tchip i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.tchip button {
+    border: none;
+    background: none;
+    padding: 0 4px;
+    font-size: 0.846rem;
+    color: var(--muted);
+}
+
+.tagrow input {
+    width: 110px;
+    padding: 2px 8px;
+    font-size: 0.846rem;
+}
+
+.tchip.tog {
+    cursor: pointer;
+    padding-right: 9px;
+}
+
+.tchip.tog.on {
+    border-color: var(--cyan);
+    color: var(--cyan);
+}
+
+.tchip.tog.part {
+    border-style: dashed;
+}

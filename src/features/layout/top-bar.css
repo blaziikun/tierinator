@@ -1,0 +1,288 @@
+/*
+ * src/features/layout/top-bar.css
+ *
+ * The top bar: button groups, the logo / list button, sizes and wrapping,
+ * and the "Show bar" pill that brings it back.
+ */
+
+#toolbar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--s1);
+    border-bottom: 1px solid var(--border);
+    padding: 0 10px;
+    height: 52px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    transition:
+        height 0.2s,
+        opacity 0.2s;
+}
+
+#toolbar input[type="range"] {
+    width: 68px;
+}
+
+/* the bar's buttons and menus are quiet until the pointer is on them: words in a row, not a row of boxes.
+   The view switch keeps its track and the list button its name in the heading face, so the bar still has a shape. */
+#toolbar button,
+#toolbar select {
+    padding-left: 9px;
+    padding-right: 9px;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+#toolbar select {
+    padding-right: 24px;
+}
+
+#toolbar button:hover,
+#toolbar select:hover {
+    background-color: var(--hover);
+    border-color: transparent;
+}
+
+/* a switch that's on (Hover: On) stays lit */
+#toolbar button.cbtn {
+    background-color: var(--chosen);
+    border-color: transparent;
+}
+
+#toolbar .tabs button {
+    padding: 2px 10px;
+}
+
+#toolbar .tabs button.on {
+    background-color: var(--chosen);
+    border-color: transparent;
+}
+
+/* phones: the bar is taller, so its 44 px buttons have room above and below */
+@media (pointer: coarse) and (max-width: 720px) {
+    #toolbar {
+        height: 60px;
+    }
+}
+
+/* the size slider's value lines its digits up, so the number doesn't shuffle the bar while you drag */
+#szval {
+    font-variant-numeric: tabular-nums;
+}
+
+#toolbar.hbar {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    border: none;
+}
+
+#toolbar .tbg {
+    order: var(--o, 0);
+}
+
+body.bar-s #toolbar {
+    height: 40px;
+}
+
+body.bar-s #toolbar button,
+body.bar-s #toolbar select {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    font-size: 0.846rem;
+}
+
+body.bar-s .tbg {
+    padding: 0 3px;
+    gap: 3px;
+}
+
+body.bar-s #toolbar input[type="range"] {
+    width: 56px;
+}
+
+body.bar-l #toolbar {
+    height: 62px;
+}
+
+body.bar-l #toolbar button,
+body.bar-l #toolbar select {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 1rem;
+}
+
+body.bar-l .tbg {
+    padding: 0 7px;
+    gap: 7px;
+}
+
+body.bar-wrap #toolbar {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 52px;
+    padding: 5px 8px;
+    row-gap: 5px;
+    overflow: visible;
+}
+
+body.bar-wrap.bar-s #toolbar {
+    min-height: 40px;
+}
+
+body.bar-wrap.bar-l #toolbar {
+    min-height: 62px;
+}
+
+body.bar-wrap #toolbar.hbar {
+    height: 0;
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#listbtn.aslogo {
+    background: none;
+    border-color: transparent;
+    max-width: 360px;
+    padding: 2px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#listbtn.aslogo:hover {
+    background: var(--hover);
+    border-color: transparent;
+}
+
+#listbtn.aslogo .logo {
+    padding: 0;
+}
+
+#listbtn .caret {
+    color: var(--muted);
+    font-family: var(--font-ui);
+    font-size: 0.769rem;
+}
+
+.barlist {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-ctl);
+    padding: 4px;
+}
+
+.barrow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 4px;
+    border-radius: calc(var(--r-ctl) - 3px);
+    font-size: 0.923rem;
+}
+
+.barrow:hover {
+    background: var(--hover);
+}
+
+.barrow .bn {
+    flex: 1;
+}
+
+.barrow.off .bn {
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.barrow button {
+    padding: 0 6px;
+    font-size: 0.846rem;
+    line-height: 1.5;
+}
+
+.tbg {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 4px;
+    flex-shrink: 0;
+}
+
+.tbl {
+    color: var(--muted);
+    font-size: 0.846rem;
+}
+
+.logo {
+    font-family: var(--font-head);
+    font-size: var(--fs-logo);
+    font-weight: var(--w-logo);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.logo .l1 {
+    color: var(--accent);
+}
+
+.logo .l2 {
+    color: var(--cyan);
+}
+
+.logo.accent span {
+    color: var(--accent);
+}
+
+.logo.text span {
+    color: var(--text);
+}
+
+.logo.gradient span {
+    background: linear-gradient(100deg, var(--accent), var(--cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+#status {
+    font-size: 0.846rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* show-bars pill: only visible while bars are hidden */
+
+#htoggle {
+    position: fixed;
+    right: 14px;
+    top: 12px;
+    z-index: 900;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: var(--s1);
+    color: var(--text);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 6px 12px 6px 14px;
+    font-size: 0.923rem;
+    box-shadow: var(--lift);
+    opacity: 0.55;
+    transition: opacity 0.18s;
+}
+
+#htoggle:hover {
+    opacity: 1;
+}
+
+body.barsoff #htoggle {
+    display: flex;
+}

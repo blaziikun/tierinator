@@ -1,0 +1,16 @@
+# dependencies and build output: always re-creatable, never committed
+node_modules/
+dist/
+# test run leftovers
+test-results/
+playwright-report/
+# local secrets and editor/OS clutter (this project has no secrets, this is a safety net)
+.env*
+*.local
+.wrangler/
+.DS_Store
+tests/visual/*-snapshots/
+.dev.vars*
+# personal exports (lists, backups, sprite packs) never belong in the repository
+backups/
+*backup*.json

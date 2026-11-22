@@ -1,0 +1,30 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "smartphone-brands",
+    "title": "Smartphone brands",
+    "category": "Technology",
+    "description": "Apple, Samsung, Google and the rest of the phone makers.",
+    "items": [
+        { "name": "iPhone", "wiki": "iPhone" },
+        { "name": "Samsung Galaxy", "wiki": "Samsung Galaxy" },
+        { "name": "Google Pixel", "wiki": "Google Pixel" },
+        { "name": "OnePlus", "wiki": "OnePlus" },
+        { "name": "Xiaomi", "wiki": "Xiaomi" },
+        { "name": "Huawei", "wiki": "Huawei" },
+        { "name": "Honor", "wiki": "Honor (brand)" },
+        { "name": "Oppo", "wiki": "Oppo" },
+        { "name": "Vivo", "wiki": "Vivo (technology company)" },
+        { "name": "Realme", "wiki": "Realme" },
+        { "name": "Motorola", "wiki": "Motorola Mobility" },
+        { "name": "Nokia", "wiki": "Nokia" },
+        { "name": "Sony Xperia", "wiki": "Sony Xperia" },
+        { "name": "BlackBerry", "wiki": "BlackBerry" },
+        { "name": "HTC", "wiki": "HTC" },
+        { "name": "LG", "wiki": "LG Electronics" },
+        { "name": "Fairphone", "wiki": "Fairphone" },
+        { "name": "Asus", "wiki": "Asus" },
+        { "name": "ZTE", "wiki": "ZTE" },
+        { "name": "Tecno", "wiki": "Tecno Mobile" }
+    ]
+}

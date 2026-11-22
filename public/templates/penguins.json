@@ -1,0 +1,28 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "penguins",
+    "title": "Penguins",
+    "category": "Animals",
+    "description": "All eighteen species, from the emperor to the little penguin.",
+    "items": [
+        { "name": "Emperor penguin", "wiki": "Emperor penguin" },
+        { "name": "King penguin", "wiki": "King penguin" },
+        { "name": "Adélie penguin", "wiki": "Adélie penguin" },
+        { "name": "Chinstrap penguin", "wiki": "Chinstrap penguin" },
+        { "name": "Gentoo penguin", "wiki": "Gentoo penguin" },
+        { "name": "Macaroni penguin", "wiki": "Macaroni penguin" },
+        { "name": "Royal penguin", "wiki": "Royal penguin" },
+        { "name": "Southern rockhopper penguin", "wiki": "Southern rockhopper penguin" },
+        { "name": "Northern rockhopper penguin", "wiki": "Northern rockhopper penguin" },
+        { "name": "Fiordland penguin", "wiki": "Fiordland penguin" },
+        { "name": "Snares penguin", "wiki": "Snares penguin" },
+        { "name": "Erect-crested penguin", "wiki": "Erect-crested penguin" },
+        { "name": "Yellow-eyed penguin", "wiki": "Yellow-eyed penguin" },
+        { "name": "Little penguin", "wiki": "Little penguin" },
+        { "name": "African penguin", "wiki": "African penguin" },
+        { "name": "Humboldt penguin", "wiki": "Humboldt penguin" },
+        { "name": "Magellanic penguin", "wiki": "Magellanic penguin" },
+        { "name": "Galápagos penguin", "wiki": "Galápagos penguin" }
+    ]
+}

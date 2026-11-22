@@ -1,0 +1,145 @@
+/*
+ * src/features/templates/templates.css
+ *
+ * The template gallery: search, category, and a grid of text cards.
+ */
+
+#tplbox {
+    width: min(920px, calc(100vw - 24px));
+    max-width: none;
+    /* a fixed height, so the window doesn't jump while you type a search */
+    height: min(780px, calc(100dvh - 24px));
+    text-align: left;
+    gap: 12px;
+}
+
+#tplbox #tplx {
+    margin-left: auto;
+}
+
+.tplfilters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tplfilters input {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+.tplfilters select {
+    flex: 0 1 220px;
+}
+
+/* how many match, and where to ask for one that's missing */
+.tplstatus {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 16px;
+}
+
+.tplstatus a {
+    color: var(--text);
+    text-underline-offset: 3px;
+}
+
+.tplstatus a:hover {
+    color: var(--cyan);
+}
+
+#tplgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+    align-content: start;
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    /* room for the focus ring of the cards at the edges */
+    padding: 3px;
+    margin: -3px;
+}
+
+#tplgrid .empty {
+    grid-column: 1 / -1;
+}
+
+.tplcard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px;
+    text-align: left;
+    white-space: normal;
+    border-radius: var(--r-panel);
+    border-color: var(--border2);
+    background: var(--s1);
+}
+
+.tplcard:hover {
+    border-color: var(--cyan);
+    background: var(--s1);
+}
+
+.tplcard.tplfeatured {
+    border-color: color-mix(in srgb, var(--cyan) 45%, transparent);
+}
+
+.tpltop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.tpltop b {
+    font-size: 1.077rem;
+    color: var(--cyan);
+}
+
+.tpldesc {
+    font-size: 0.846rem;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+.tplmeta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 2px;
+    font-size: 0.846rem;
+    color: var(--muted);
+}
+
+.tplcat,
+.tplbadge {
+    font-size: 0.769rem;
+    padding: 1px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.tplcat {
+    background: color-mix(in srgb, var(--muted) 18%, transparent);
+    color: color-mix(in srgb, var(--text) 75%, var(--muted));
+}
+
+.tplbadge {
+    background: color-mix(in srgb, var(--cyan) 15%, transparent);
+    color: var(--cyan);
+}
+
+@media (max-width: 600px) {
+    #tplbox {
+        padding: 16px;
+    }
+
+    .tplfilters select {
+        flex-basis: 100%;
+    }
+}

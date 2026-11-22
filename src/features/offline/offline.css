@@ -1,0 +1,39 @@
+/*
+ * src/features/offline/offline.css
+ *
+ * The "A new version is ready" notice: bottom right, out of the way of the tiers,
+ * under any open window. Across the bottom on a phone.
+ */
+
+#updatebox {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 1900;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 8px 8px 16px;
+    max-width: calc(100vw - 24px);
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    box-shadow: var(--lift);
+    font-size: 0.923rem;
+}
+
+#updatebox span {
+    margin-right: 6px;
+}
+
+@media (max-width: 600px) {
+    #updatebox {
+        right: 12px;
+        bottom: 12px;
+        left: 12px;
+    }
+
+    #updatebox span {
+        flex: 1;
+    }
+}

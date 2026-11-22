@@ -1,0 +1,22 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "taylor-swift-albums",
+    "title": "Taylor Swift albums",
+    "category": "Music",
+    "description": "Every studio album, from the debut to The Life of a Showgirl.",
+    "items": [
+        { "name": "Taylor Swift", "wiki": "Taylor Swift (album)" },
+        { "name": "Fearless", "wiki": "Fearless (Taylor Swift album)" },
+        { "name": "Speak Now", "wiki": "Speak Now" },
+        { "name": "Red", "wiki": "Red (Taylor Swift album)" },
+        { "name": "1989", "wiki": "1989 (album)" },
+        { "name": "Reputation", "wiki": "Reputation (album)" },
+        { "name": "Lover", "wiki": "Lover (album)" },
+        { "name": "Folklore", "wiki": "Folklore (Taylor Swift album)" },
+        { "name": "Evermore", "wiki": "Evermore (Taylor Swift album)" },
+        { "name": "Midnights", "wiki": "Midnights" },
+        { "name": "The Tortured Poets Department", "wiki": "The Tortured Poets Department" },
+        { "name": "The Life of a Showgirl", "wiki": "The Life of a Showgirl" }
+    ]
+}

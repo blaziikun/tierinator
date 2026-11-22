@@ -1,0 +1,488 @@
+/*
+ * src/features/tier-board/board.css
+ *
+ * The tier board's place in Tierinator's page. The board's own look (rows, labels,
+ * tiles, drop marks, charts) is the engine's (tier-engine/board.css, imported just
+ * before this); here: where the tiers and the pool sit (bottom bar or sidebar) and
+ * the pool's resize handle, the label modes, the drag ghost and box selection by
+ * their ids, the selection bar, the hover tip, the tier editor's swatches, and a
+ * chart's cells (#tsec.chart, chart.ts) as they were before the engine had them.
+ */
+
+#main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+#main.sb {
+    flex-direction: row;
+}
+
+#tsec {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--rowgap);
+    min-height: 0;
+}
+
+body.lbl-name .pl,
+body.lbl-num .pl,
+body.lbl-both .pl {
+    display: block;
+}
+
+body.lbl-name .pnum,
+body.lbl-num .pname {
+    display: none;
+}
+
+body.lbl-both .pnum {
+    margin-right: 3px;
+    opacity: 0.7;
+}
+
+#pgrid .pi {
+    width: calc(var(--psz) * var(--tile-wf, 1));
+}
+
+#pgrid:empty[data-empty="new"]::before {
+    content: "Nothing here yet. Use Add items to upload pictures, type a list, search the web or pull in a whole wiki category (Bakugan, Ben 10, Beyblade…). You can also drop or paste images anywhere on the page.";
+    color: var(--muted);
+    font-size: 0.923rem;
+    padding: 18px 8px;
+    line-height: 1.6;
+}
+
+#psplit {
+    flex-shrink: 0;
+    height: 7px;
+    margin: -3px 0;
+    cursor: ns-resize;
+    position: relative;
+    z-index: 5;
+    touch-action: none;
+}
+
+#psplit::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 2px;
+    width: 36px;
+    height: 3px;
+    margin-left: -18px;
+    border-radius: 2px;
+    background: var(--border2);
+    transition: background 0.15s;
+}
+
+#psplit:hover::after,
+#psplit.on::after {
+    background: var(--cyan);
+}
+
+#main.sb #psplit {
+    height: auto;
+    width: 7px;
+    margin: 0 -3px;
+    cursor: ew-resize;
+}
+
+#main.sb #psplit::after {
+    left: 2px;
+    top: 50%;
+    width: 3px;
+    height: 36px;
+    margin: -18px 0 0;
+}
+
+body.barsoff #psplit {
+    display: none;
+}
+
+#main.resizing #psec {
+    transition: none;
+}
+
+#main.resizing,
+#main.resizing * {
+    cursor: inherit !important;
+    user-select: none;
+}
+
+#psec {
+    flex-shrink: 0;
+    border-top: 1px solid var(--border);
+    background: var(--s1);
+    display: flex;
+    flex-direction: column;
+    height: var(--poolh, 38vh);
+    transition:
+        height 0.2s,
+        opacity 0.2s;
+    min-height: 0;
+}
+
+#psec.hbar {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    border: none;
+}
+
+#psec.dov {
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--cyan) 55%, transparent);
+}
+
+#main.sb #psec {
+    height: auto;
+    /* on a phone the pool never takes more than about half the screen */
+    width: min(var(--poolw, 320px), 46vw);
+    min-width: 150px;
+    border-top: none;
+    border-left: 1px solid var(--border);
+}
+
+#main.sb #psec.hbar {
+    width: 0;
+    min-width: 0;
+}
+
+#pfilt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+#psearch {
+    width: 150px;
+}
+
+/* beside the tiers the pool is narrow: the search takes its own line, full width */
+#main.sb #psearch {
+    flex: 1 1 100%;
+}
+
+/* the Tags switch sits among buttons, so it's their size rather than a small chip's */
+#pfilt .chip {
+    padding: 4px 10px;
+    font-size: 0.923rem;
+    border-radius: var(--r-ctl);
+}
+
+/* the order menu's button keeps one width whichever order it names, so the buttons after it don't jump */
+#psortbtn {
+    min-width: 15ch;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+#pcount {
+    color: var(--muted);
+    font-size: 0.846rem;
+    font-variant-numeric: tabular-nums;
+    margin-left: auto;
+}
+
+#pgrid {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 2px;
+    padding: 7px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+#dghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-ctl);
+    padding: 5px 12px;
+    font-size: 0.923rem;
+    color: var(--text);
+    box-shadow: var(--lift);
+}
+
+body.dragging,
+body.dragging * {
+    cursor: grabbing !important;
+}
+
+#marq {
+    position: fixed;
+    z-index: 9998;
+    display: none;
+    pointer-events: none;
+    border: 1.5px solid var(--cyan);
+    background: color-mix(in srgb, var(--cyan) 12%, transparent);
+    border-radius: 3px;
+}
+
+#tsec,
+#pgrid {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+@keyframes flash {
+    50% {
+        transform: scale(1.18);
+        box-shadow: 0 0 0 4px var(--cyan);
+    }
+}
+
+#psec.phid {
+    display: none !important;
+}
+
+body.pooloff #psplit {
+    display: none;
+}
+
+#selbar {
+    position: fixed;
+    top: 62px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 5px 5px 5px 14px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    z-index: 800;
+    box-shadow: var(--lift);
+    font-size: 0.923rem;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+#selcount {
+    font-weight: var(--w-strong);
+    font-variant-numeric: tabular-nums;
+    margin-right: 4px;
+}
+
+#selbar.show {
+    display: flex;
+}
+
+#selbar .hint {
+    color: var(--muted);
+    margin-right: 6px;
+}
+
+/* phones: the buttons matter more than the hint; closer together so they fit on one row, a second if they must */
+@media (max-width: 720px) {
+    #selbar {
+        width: max-content;
+        max-width: calc(100vw - 16px);
+        gap: 4px;
+        padding: 4px 4px 4px 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #selbar button {
+        padding: 4px 8px;
+    }
+
+    #selbar .hint {
+        display: none;
+    }
+}
+
+@media (pointer: coarse) and (max-width: 720px) {
+    /* with finger-sized buttons the bar is too tall to sit over the first tier: it goes to the bottom, under the
+       thumb, and the toast moves up above it while it shows */
+    #selbar {
+        top: auto;
+        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+
+    body:has(#selbar.show) #toast {
+        bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* with finger-sized controls the pool's tools would fill half the pool: one row that scrolls sideways,
+       like the top bar, so the pictures keep the room */
+    #pfilt {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    #pfilt > * {
+        flex-shrink: 0;
+    }
+
+    #pfilt > #psearch {
+        flex: 0 0 170px;
+    }
+}
+
+#tip {
+    position: fixed;
+    z-index: 9000;
+    pointer-events: none;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 8px 12px 8px 8px;
+    box-shadow: var(--lift);
+}
+
+/* the tile's shape, but always the whole picture: the tip shows what a filled tile crops off */
+#tip img {
+    width: calc(72px * var(--tile-wf, 1));
+    height: calc(72px * var(--tile-hf, 1));
+    object-fit: contain;
+}
+
+#tip b {
+    display: block;
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    font-size: 1.077rem;
+}
+
+#tip span {
+    font-size: 0.846rem;
+    color: var(--muted);
+}
+@media (max-width: 720px) {
+    #tsec {
+        padding: 8px;
+    }
+}
+/* every cell takes two grid rows (band, tiles) through a subgrid, so the bands in a row line up even when one wraps or has a subtitle */
+#tsec.chart {
+    display: grid;
+    /* a cell is never narrower than one tile; past that the grid scrolls sideways rather than losing its shape */
+    grid-template-columns: repeat(var(--chart-cols, 3), minmax(calc(var(--sz) * var(--tile-wf, 1) + 34px), 1fr));
+    /* max-content: cells clip (overflow: hidden), so auto rows would shrink to fit the screen instead of scrolling */
+    grid-auto-rows: max-content;
+    align-content: start;
+    column-gap: max(var(--rowgap), 6px);
+    row-gap: 0;
+    overflow-x: auto;
+}
+
+#tsec.chart .trow {
+    grid-row: span 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: subgrid;
+    min-width: 0;
+    min-height: 0;
+    margin-bottom: max(var(--rowgap), 6px);
+}
+
+#tsec.chart .tlbl {
+    grid-column: 1 / -1;
+    width: auto;
+    min-width: 0;
+    min-height: 36px;
+    padding: 6px 10px;
+}
+
+#tsec.chart .tcont {
+    min-height: calc(var(--sz) * var(--tile-hf, 1) * 1.5 + 20px);
+}
+
+#tsec.chart .tctrl {
+    justify-content: flex-start;
+}
+
+@media (max-width: 720px) {
+    #tsec.chart {
+        grid-template-columns: repeat(var(--chart-cols, 3), minmax(calc(var(--sz) * var(--tile-wf, 1) + 30px), 1fr));
+    }
+    #tsec.chart .tcont {
+        min-height: calc(var(--sz) * var(--tile-hf, 1) + 24px);
+    }
+    /* a column of buttons would take a fifth of a phone-sized cell: they sit in its corner instead */
+    #tsec.chart .trow {
+        grid-template-columns: minmax(0, 1fr);
+        position: relative;
+    }
+    #tsec.chart .tctrl {
+        position: absolute;
+        right: 3px;
+        bottom: 3px;
+        flex-direction: row;
+        padding: 2px;
+        border-left: 0;
+        border-radius: var(--r);
+        background: color-mix(in srgb, var(--s1) 85%, transparent);
+    }
+}
+
+/* ── the tier editor's swatches ── */
+.swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.sw {
+    width: 22px;
+    height: 22px;
+    border-radius: calc(var(--r) * 0.6);
+    cursor: pointer;
+    border: 2px solid var(--border);
+}
+
+.sw:hover,
+.sw.act {
+    border-color: var(--text);
+}
+
+.sw.act {
+    box-shadow: 0 0 0 2px var(--cyan);
+}
+
+.sw.swadd {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--muted);
+    border-style: dashed;
+}
+
+/* while the selection bar floats over the page (at the top; on a phone, the bottom), keyboard moves scroll a focused
+   tile clear of it (WCAG 2.2, focus not obscured): scrollIntoView keeps this much space on that side */
+body:has(#selbar.show) #tsec,
+body:has(#selbar.show) #pgrid {
+    scroll-padding-top: 56px;
+}
+
+@media (pointer: coarse) and (max-width: 720px) {
+    body:has(#selbar.show) #tsec,
+    body:has(#selbar.show) #pgrid {
+        scroll-padding-top: 0;
+        scroll-padding-bottom: 72px;
+    }
+}

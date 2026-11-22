@@ -1,0 +1,379 @@
+/*
+ * src/styles/windows.css
+ *
+ * Popovers and windows: menus, modals, the question box, progress, toasts,
+ * keyboard shortcuts, tips and the backup reminder. Everything that floats is one
+ * family: the panel grey, a firm edge, a long soft shadow, and more roundness the bigger it is.
+ */
+
+/* ── popovers and menus ── */
+
+.pop {
+    position: fixed;
+    z-index: 850;
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 16px;
+    box-shadow: var(--lift);
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 250px;
+    /* never taller or wider than the screen: scroll inside instead */
+    max-height: calc(100dvh - 16px);
+    max-width: calc(100vw - 16px);
+    overflow: auto;
+}
+
+/* opening answers the click: a quick fade, settling a couple of pixels down from where it was pressed */
+.pop.open {
+    display: flex;
+    animation: float-in 0.14s var(--ease);
+}
+
+@keyframes float-in {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+}
+
+/* panels of settings and notes stay a readable width instead of stretching across the screen */
+#exppanel,
+#formpanel,
+#varpop,
+#tagpop {
+    width: min(360px, calc(100vw - 16px));
+}
+
+/* a panel's section heading: quiet, sentence case, the size of a note */
+.pop h3 {
+    font-size: 0.846rem;
+    color: var(--muted);
+    font-weight: var(--w-strong);
+}
+
+.pop.menu {
+    min-width: 232px;
+    padding: 5px;
+    gap: 1px;
+}
+
+/* menu items: full width, one height, the shortcut pushed to the right edge */
+.pop.menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 32px;
+    padding: 5px 10px;
+    text-align: left;
+    background: none;
+    border-color: transparent;
+    border-radius: calc(var(--r-panel) - 5px);
+    font-size: 0.923rem;
+}
+
+.pop.menu button:hover {
+    background: var(--hover);
+    border-color: transparent;
+}
+
+.pop.menu button:focus-visible {
+    outline-offset: -2px;
+}
+
+/* separators run the menu's full width, with the same air above and below */
+.pop.menu hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4px -5px;
+}
+
+.pop.menu h3 {
+    padding: 8px 10px 4px;
+}
+
+/* radio-like choices (lib/choice-menu.ts): a tick beside the one in use */
+.pop.menu [role="menuitemradio"]::before {
+    content: "";
+    width: 1em;
+    flex-shrink: 0;
+    color: var(--cyan);
+    text-align: center;
+}
+
+.pop.menu [role="menuitemradio"][aria-checked="true"]::before {
+    content: "✓";
+}
+
+.pop.menu kbd {
+    margin-left: auto;
+}
+
+/* ── hover tips with a note ── */
+
+.tipnote {
+    display: block;
+    font-style: normal;
+    font-size: 0.846rem;
+    margin-top: 4px;
+    max-width: 280px;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+/* ── the backup reminder, at the bottom of the page ── */
+
+#nudge {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 60;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: min(760px, 94vw);
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 10px 10px 10px 16px;
+    box-shadow: var(--lift);
+    font-size: 0.923rem;
+}
+
+#nudge span {
+    flex: 1;
+    min-width: 220px;
+}
+
+#tipsbox {
+    width: min(520px, 94vw);
+    max-width: none;
+    text-align: left;
+}
+
+.tips {
+    padding-left: 20px;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tips li::marker {
+    color: var(--muted);
+}
+
+/* ── windows ── */
+
+#ov {
+    position: fixed;
+    inset: 0;
+    z-index: 840;
+    display: none;
+}
+
+#ov.show {
+    display: block;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: var(--overlay);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.mbox {
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-win);
+    padding: 24px;
+    text-align: center;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: var(--lift-win);
+    animation: float-in 0.16s var(--ease);
+}
+
+/* a window's title: the heading face, the one place in a window it appears */
+.mbox > :is(h3, h4):first-child {
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    font-size: 1.385rem;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.mbox p {
+    line-height: 1.55;
+}
+
+/* a window's close (✕): a quiet square the height of a control, in the top corner */
+#addx,
+#pbx,
+#apclose,
+#tplx,
+#pcx,
+.grpclose,
+.qrhead > button:last-child {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--h-ctl);
+    height: var(--h-ctl);
+    padding: 0;
+    background: none;
+    border-color: transparent;
+    color: var(--muted);
+    line-height: 1;
+}
+
+#addx:hover,
+#pbx:hover,
+#apclose:hover,
+#tplx:hover,
+#pcx:hover,
+.grpclose:hover,
+.qrhead > button:last-child:hover {
+    background: var(--hover);
+    border-color: transparent;
+    color: var(--text);
+}
+
+.mbtns {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.mbtns button {
+    min-width: 88px;
+}
+
+/* ── progress ── */
+
+#progbox {
+    min-width: 320px;
+}
+
+#progbar {
+    width: 100%;
+    height: 4px;
+    background: var(--s3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+#progfill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.1s;
+}
+
+#progtxt {
+    font-size: 0.846rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── the toast: one line at the bottom, in the same family as the windows ── */
+
+#toast {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translate(-50%, 6px);
+    background: var(--s1);
+    border: 1px solid var(--border2);
+    border-radius: var(--r-panel);
+    padding: 9px 16px;
+    font-size: 0.923rem;
+    color: var(--text);
+    z-index: 3000;
+    opacity: 0;
+    transition:
+        opacity 0.2s,
+        transform 0.2s var(--ease);
+    pointer-events: none;
+    max-width: 90vw;
+    text-align: center;
+    box-shadow: var(--lift);
+}
+
+#toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* a toast with a button (Undo): clickable while it shows, out of reach (and out of the Tab order) once it fades */
+#toast.acts {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 5px 5px 16px;
+    text-align: left;
+}
+
+#toast.acts.show {
+    pointer-events: auto;
+}
+
+#toast:not(.show) {
+    visibility: hidden;
+    transition:
+        opacity 0.2s,
+        transform 0.2s var(--ease),
+        visibility 0s 0.2s;
+}
+
+#toast button {
+    flex-shrink: 0;
+    padding: 3px 12px;
+    background: var(--s3);
+    font-weight: var(--w-strong);
+}
+
+/* ── keyboard shortcuts ── */
+
+#keysbox {
+    text-align: left;
+    max-width: 600px;
+    width: 94vw;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+}
+
+.kgrid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    align-items: baseline;
+    font-size: 0.923rem;
+}
+
+/* each shortcut's keys in one cell, so the descriptions line up in the second column */
+.kgrid .keys {
+    white-space: nowrap;
+    color: var(--muted);
+}
+
+.kgrid .keys kbd {
+    color: var(--text);
+}

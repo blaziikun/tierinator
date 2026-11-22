@@ -1,0 +1,11 @@
+# pnpm settings (pnpm reads them here)
+
+# exact versions only: an update is always a deliberate change, made through Dependabot
+saveExact: true
+# refuse to install on a Node.js older than package.json's "engines" says
+engineStrict: true
+# no package runs install scripts (the usual way a malicious package strikes); none of these need theirs here
+allowBuilds:
+    core-js: false
+    esbuild: false
+    workerd: false

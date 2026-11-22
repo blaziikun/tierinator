@@ -1,0 +1,126 @@
+/*
+ * src/features/lists/lists.css
+ *
+ * The list menu: your lists, new ones, this one, and the installed packs.
+ */
+
+#listpop {
+    width: min(340px, calc(100vw - 16px));
+}
+
+/* each part of the menu (New, This list, Packs) starts under a rule */
+#gplist:empty {
+    display: none;
+}
+
+#listpop .lhead {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 2px;
+}
+
+.gprow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+}
+
+.gprow > span {
+    flex: 1;
+    min-width: 0;
+}
+
+.gprow button {
+    padding: 3px 8px;
+}
+
+#listbtn {
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kbadge {
+    font-family: var(--font-ui);
+    font-size: 0.769rem;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--muted) 18%, transparent);
+    color: color-mix(in srgb, var(--text) 75%, var(--muted));
+    margin-left: 4px;
+    vertical-align: 1px;
+}
+
+.lrows {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.lrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 9px;
+    border-radius: var(--r-ctl);
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: none;
+    color: inherit;
+    text-align: left;
+    font: inherit;
+}
+
+.lrow:hover {
+    background: var(--hover);
+}
+
+/* the list that's open: raised a step, with a firm edge */
+.lrow.on {
+    background: var(--s2);
+    border-color: var(--edge);
+}
+
+.lrow .lname {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#needpack {
+    position: fixed;
+    inset: 52px 0 0 0;
+    z-index: 700;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#needpack.hid {
+    display: none !important;
+}
+
+#needpack h3 {
+    font-family: var(--font-head);
+    font-weight: var(--w-head);
+    font-size: 1.385rem;
+}
+
+/* the browser stopped saving (core/persist.ts): it stays marked until a save works again */
+html[data-unsaved] #listbtn::after {
+    content: "Not saved";
+    margin-left: 8px;
+    padding: 1px 6px;
+    border-radius: var(--r-chip);
+    background: #b3261e;
+    color: #ffffff;
+    font: 600 0.72rem var(--font-ui);
+}

@@ -1,0 +1,22 @@
+{
+    "format": "tierinator-template",
+    "version": 1,
+    "id": "mario-kart-games",
+    "title": "Mario Kart games",
+    "category": "Games",
+    "description": "Every main Mario Kart, from the SNES original to Mario Kart World.",
+    "items": [
+        { "name": "Super Mario Kart", "wiki": "Super Mario Kart" },
+        { "name": "Mario Kart 64", "wiki": "Mario Kart 64" },
+        { "name": "Mario Kart: Super Circuit", "wiki": "Mario Kart: Super Circuit" },
+        { "name": "Mario Kart: Double Dash", "wiki": "Mario Kart: Double Dash" },
+        { "name": "Mario Kart DS", "wiki": "Mario Kart DS" },
+        { "name": "Mario Kart Wii", "wiki": "Mario Kart Wii" },
+        { "name": "Mario Kart 7", "wiki": "Mario Kart 7" },
+        { "name": "Mario Kart 8", "wiki": "Mario Kart 8" },
+        { "name": "Mario Kart Tour", "wiki": "Mario Kart Tour" },
+        { "name": "Mario Kart Live: Home Circuit", "wiki": "Mario Kart Live: Home Circuit" },
+        { "name": "Mario Kart World", "wiki": "Mario Kart World" },
+        { "name": "Mario Kart Arcade GP", "wiki": "Mario Kart Arcade GP" }
+    ]
+}
